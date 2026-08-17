@@ -1,0 +1,134 @@
+// ======================================================
+// ADMIN DEPOSIT REQUESTS
+// ======================================================
+
+app.get(
+    "/admin/deposits",
+    authenticateToken,
+    authenticateAdmin,
+    (req, res) => {
+
+        try {
+
+            const users =
+                getUsers();
+
+            const deposits = [];
+
+            for (
+                const user of users
+            ) {
+
+                normalizeUser(user);
+
+                if (
+                    !Array.isArray(
+                        user.deposits
+                    )
+                ) {
+                    continue;
+                }
+
+                for (
+                    const deposit of user.deposits
+                ) {
+
+                    deposits.push({
+
+                        id:
+                            deposit.id,
+
+                        userId:
+                            user.id,
+
+                        userName:
+                            user.name,
+
+                        userEmail:
+                            user.email,
+
+                        amount:
+                            roundMoney(
+                                deposit.amount
+                            ),
+
+                        type:
+                            deposit.type ||
+                            "DEPOSIT",
+
+                        status:
+                            deposit.status ||
+                            "SUBMITTED",
+
+                        method:
+                            deposit.method ||
+                            "",
+
+                        reference:
+                            deposit.reference ||
+                            "",
+
+                        createdAt:
+                            deposit.createdAt ||
+                            "",
+
+                        processedAt:
+                            deposit.processedAt ||
+                            null,
+
+                        adminNote:
+                            deposit.adminNote ||
+                            ""
+
+                    });
+
+                }
+
+            }
+
+            deposits.sort(
+                (a, b) =>
+                    new Date(
+                        b.createdAt
+                    ) -
+                    new Date(
+                        a.createdAt
+                    )
+            );
+
+            return res.json({
+
+                success:
+                    true,
+
+                total:
+                    deposits.length,
+
+                deposits:
+                    deposits
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Admin deposits error:",
+                error
+            );
+
+            return res.status(
+                500
+            ).json({
+
+                success:
+                    false,
+
+                message:
+                    "Unable to load admin deposits."
+
+            });
+
+        }
+
+    }
+);

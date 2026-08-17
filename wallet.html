@@ -1,0 +1,2513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin - Wallet</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #050505;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        header {
+            height: 70px;
+            background: #0b0b0b;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #00ff88;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .balance-small {
+            background: #111;
+            border: 1px solid #252525;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .balance-small span {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            border: 1px solid #333;
+            background: #151515;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #222;
+        }
+
+        /* ==============================
+           LAYOUT
+        ============================== */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 220px;
+            background: #090909;
+            border-right: 1px solid #202020;
+            padding: 20px 12px;
+        }
+
+        .sidebar-title {
+            color: #777;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin: 5px 12px 12px;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            display: block;
+            text-decoration: none;
+            color: #aaa;
+            padding: 13px 14px;
+            border-radius: 9px;
+            margin-bottom: 5px;
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #151515;
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: #00ff88;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            max-width: 1400px;
+        }
+
+        /* ==============================
+           PAGE TITLE
+        ============================== */
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* ==============================
+           BALANCE CARD
+        ============================== */
+
+        .balance-card {
+            background: linear-gradient(
+                135deg,
+                #0b1c14,
+                #0b0b0b
+            );
+
+            border: 1px solid #164b35;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .balance-label {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .main-balance {
+            font-size: 38px;
+            font-weight: 800;
+            color: #00ff88;
+        }
+
+        .balance-note {
+            margin-top: 8px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* ==============================
+           TABS
+        ============================== */
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: #111;
+            color: #aaa;
+            border: 1px solid #282828;
+            padding: 11px 17px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+        }
+
+        .tab-section {
+            display: none;
+        }
+
+        .tab-section.active {
+            display: block;
+        }
+
+        /* ==============================
+           CARDS
+        ============================== */
+
+        .card {
+            background: #0c0c0c;
+            border: 1px solid #222;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 19px;
+            margin-bottom: 7px;
+        }
+
+        .card-subtitle {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        /* ==============================
+           FORM
+        ============================== */
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .form-control {
+            width: 100%;
+            background: #050505;
+            color: #fff;
+            border: 1px solid #303030;
+            border-radius: 9px;
+            padding: 13px 14px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #00ff88;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            background: #00ff88;
+            color: #000;
+            font-weight: 800;
+            padding: 14px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .submit-btn:hover {
+            background: #00e67a;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .danger-btn {
+            background: #ff3b3b;
+            color: #fff;
+        }
+
+        .danger-btn:hover {
+            background: #e83232;
+        }
+
+        /* ==============================
+           PAYMENT DETAILS
+        ============================== */
+
+        .payment-box {
+            background: #101010;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .payment-row:last-child {
+            border-bottom: none;
+        }
+
+        .payment-row .label {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .payment-row .value {
+            color: #fff;
+            text-align: right;
+            word-break: break-word;
+            font-weight: 600;
+        }
+
+        .instruction-box {
+            background: #07150e;
+            border: 1px solid #174b34;
+            color: #b9dccc;
+            padding: 15px;
+            border-radius: 10px;
+            line-height: 1.6;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        /* ==============================
+           HISTORY
+        ============================== */
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            background: #111;
+            border: 1px solid #242424;
+            border-radius: 11px;
+            padding: 15px;
+        }
+
+        .history-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .history-title {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .history-amount {
+            font-weight: 800;
+            color: #00ff88;
+        }
+
+        .history-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            color: #777;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .status.pending,
+        .status.submitted {
+            background: #3b2e05;
+            color: #ffd75a;
+        }
+
+        .status.approved,
+        .status.completed {
+            background: #06391f;
+            color: #00ff88;
+        }
+
+        .status.rejected,
+        .status.failed {
+            background: #3a0b0b;
+            color: #ff7070;
+        }
+
+        /* ==============================
+           EMPTY / LOADING
+        ============================== */
+
+        .empty {
+            text-align: center;
+            padding: 35px 15px;
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        /* ==============================
+           ALERT
+        ============================== */
+
+        .alert {
+            display: none;
+            padding: 13px 15px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert.success {
+            background: #06391f;
+            border: 1px solid #0d7140;
+            color: #00ff88;
+        }
+
+        .alert.error {
+            background: #3a0b0b;
+            border: 1px solid #7d2222;
+            color: #ff8c8c;
+        }
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media (max-width: 800px) {
+
+            header {
+                padding: 0 14px;
+            }
+
+            .balance-small {
+                display: none;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #222;
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                gap: 5px;
+            }
+
+            .sidebar-title {
+                display: none;
+            }
+
+            .nav-item {
+                white-space: nowrap;
+                margin: 0;
+                padding: 10px 13px;
+            }
+
+            .content {
+                padding: 18px 14px;
+            }
+
+            .page-title h1 {
+                font-size: 25px;
+            }
+
+            .main-balance {
+                font-size: 31px;
+            }
+
+            .payment-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .payment-row .value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo"><img src="logo.png" alt="KrakenCoin" class="logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+
+    <div class="header-right">
+
+        <div class="balance-small">
+            Balance:
+            <span id="headerBalance">$0.00</span>
+        </div>
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            Navigation
+        </div>
+
+        <a
+            href="/dashboard.html"
+            class="nav-item"
+        >
+            Dashboard
+        </a>
+
+        <a
+            href="/market.html"
+            class="nav-item"
+        >
+            Markets
+        </a>
+
+        <a
+            href="/profile.html"
+            class="nav-item"
+        >
+            Profile
+        </a>
+
+        <a
+            href="/wallet.html"
+            class="nav-item active"
+        >
+            Wallet
+        </a>
+
+        <a
+            href="/transactions.html"
+            class="nav-item"
+        >
+            Transactions
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="content">
+
+        <div class="page-title">
+
+            <h1>
+                Wallet
+            </h1>
+
+            <p>
+                Manage your balance, deposits and withdrawals.
+            </p>
+
+        </div>
+
+
+        <!-- ALERT -->
+
+        <div
+            id="alert"
+            class="alert"
+        ></div>
+
+
+        <!-- BALANCE -->
+
+        <div class="balance-card">
+
+            <div class="balance-label">
+                Available Balance
+            </div>
+
+            <div
+                id="mainBalance"
+                class="main-balance"
+            >
+                $0.00
+            </div>
+
+            <div class="balance-note">
+                Your available KrakenCoin balance
+            </div>
+
+        </div>
+
+
+        <!-- TABS -->
+
+        <div class="tabs">
+
+            <button
+                class="tab-btn active"
+                onclick="showTab('depositTab', this)"
+            >
+                Add Amount
+            </button>
+
+            <button
+                class="tab-btn"
+                onclick="showTab('withdrawTab', this)"
+            >
+                Withdraw
+            </button>
+
+            <button
+                class="tab-btn"
+                onclick="showTab('depositHistoryTab', this)"
+            >
+                Deposit History
+            </button>
+
+            <button
+                class="tab-btn"
+                onclick="showTab('withdrawHistoryTab', this)"
+            >
+                Withdrawal History
+            </button>
+
+            <button
+                class="tab-btn"
+                onclick="showTab('transactionTab', this)"
+            >
+                Transactions
+            </button>
+
+        </div>
+
+
+        <!-- ==========================================
+             DEPOSIT
+        =========================================== -->
+
+        <section
+            id="depositTab"
+            class="tab-section active"
+        >
+
+            <div class="card">
+
+                <h2>
+                    Add Amount
+                </h2>
+
+                <div class="card-subtitle">
+                    Transfer the amount to the payment account below and submit your payment reference.
+                </div>
+
+
+                <div
+                    id="paymentLoading"
+                    class="loading"
+                >
+                    Loading payment details...
+                </div>
+
+
+                <div
+                    id="paymentDetails"
+                    style="display:none;"
+                >
+
+                    <div class="payment-box">
+
+                        <div class="payment-row">
+
+                            <div class="label">
+                                Method
+                            </div>
+
+                            <div
+                                class="value"
+                                id="paymentMethod"
+                            >
+                                -
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-row">
+
+                            <div class="label">
+                                Account Title
+                            </div>
+
+                            <div
+                                class="value"
+                                id="accountTitle"
+                            >
+                                -
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-row">
+
+                            <div class="label">
+                                Account Number
+                            </div>
+
+                            <div
+                                class="value"
+                                id="accountNumber"
+                            >
+                                -
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-row">
+
+                            <div class="label">
+                                Wallet Address
+                            </div>
+
+                            <div
+                                class="value"
+                                id="walletAddress"
+                            >
+                                -
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-row">
+
+                            <div class="label">
+                                Network
+                            </div>
+
+                            <div
+                                class="value"
+                                id="network"
+                            >
+                                -
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="instruction-box"
+                        id="instructions"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <form
+                    id="depositForm"
+                >
+
+                    <div class="form-group">
+
+                        <label>
+                            Deposit Amount
+                        </label>
+
+                        <input
+                            id="depositAmount"
+                            class="form-control"
+                            type="number"
+                            min="1"
+                            step="0.01"
+                            placeholder="Enter amount"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Payment Method
+                        </label>
+
+                        <input
+                            id="depositMethod"
+                            class="form-control"
+                            type="text"
+                            placeholder="e.g. Bank Transfer / USDT"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Payment Reference / Transaction ID
+                        </label>
+
+                        <input
+                            id="depositReference"
+                            class="form-control"
+                            type="text"
+                            placeholder="Enter transaction ID / reference"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        id="depositBtn"
+                        class="submit-btn"
+                        type="submit"
+                    >
+                        Submit Deposit
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             WITHDRAW
+        =========================================== -->
+
+        <section
+            id="withdrawTab"
+            class="tab-section"
+        >
+
+            <div class="card">
+
+                <h2>
+                    Withdraw Funds
+                </h2>
+
+                <div class="card-subtitle">
+                    Submit a withdrawal request using your preferred payment method.
+                </div>
+
+
+                <form
+                    id="withdrawForm"
+                >
+
+                    <div class="form-group">
+
+                        <label>
+                            Withdrawal Amount
+                        </label>
+
+                        <input
+                            id="withdrawAmount"
+                            class="form-control"
+                            type="number"
+                            min="1"
+                            step="0.01"
+                            placeholder="Enter amount"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Withdrawal Method
+                        </label>
+
+                        <input
+                            id="withdrawMethod"
+                            class="form-control"
+                            type="text"
+                            placeholder="e.g. Bank Transfer / USDT"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Account / Wallet Address
+                        </label>
+
+                        <textarea
+                            id="withdrawAccount"
+                            class="form-control"
+                            placeholder="Enter your bank account, wallet address or payment account"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        id="withdrawBtn"
+                        class="submit-btn danger-btn"
+                        type="submit"
+                    >
+                        Submit Withdrawal
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             DEPOSIT HISTORY
+        =========================================== -->
+
+        <section
+            id="depositHistoryTab"
+            class="tab-section"
+        >
+
+            <div class="card">
+
+                <h2>
+                    Deposit History
+                </h2>
+
+                <div class="card-subtitle">
+                    Your submitted deposits.
+                </div>
+
+                <div
+                    id="depositHistory"
+                    class="history-list"
+                >
+                    <div class="loading">
+                        Loading...
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             WITHDRAWAL HISTORY
+        =========================================== -->
+
+        <section
+            id="withdrawHistoryTab"
+            class="tab-section"
+        >
+
+            <div class="card">
+
+                <h2>
+                    Withdrawal History
+                </h2>
+
+                <div class="card-subtitle">
+                    Your withdrawal requests and their status.
+                </div>
+
+                <div
+                    id="withdrawHistory"
+                    class="history-list"
+                >
+                    <div class="loading">
+                        Loading...
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             TRANSACTIONS
+        =========================================== -->
+
+        <section
+            id="transactionTab"
+            class="tab-section"
+        >
+
+            <div class="card">
+
+                <h2>
+                    Transactions
+                </h2>
+
+                <div class="card-subtitle">
+                    Complete wallet transaction history.
+                </div>
+
+                <div
+                    id="transactionHistory"
+                    class="history-list"
+                >
+                    <div class="loading">
+                        Loading...
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    // ==================================================
+    // CONFIG
+    // ==================================================
+
+    const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : "http://localhost:3000";
+
+
+    // ==================================================
+    // AUTH
+    // ==================================================
+
+    function getToken() {
+
+        return (
+            localStorage.getItem("tradeXToken") ||
+            localStorage.getItem("token") ||
+            ""
+        );
+
+    }
+
+
+    function getStoredUser() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem(
+                    "tradeXUser"
+                ) || "null"
+            );
+
+        } catch {
+
+            return null;
+
+        }
+
+    }
+
+
+    function checkLogin() {
+
+        const token =
+            getToken();
+
+        const user =
+            getStoredUser();
+
+
+        if (
+            !token ||
+            !user
+        ) {
+
+            window.location.href =
+                "/login.html";
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+
+    function logout() {
+
+        localStorage.removeItem(
+            "tradeXToken"
+        );
+
+        localStorage.removeItem(
+            "token"
+        );
+
+        localStorage.removeItem(
+            "tradeXUser"
+        );
+
+        window.location.href =
+            "/login.html";
+
+    }
+
+
+    // ==================================================
+    // API HELPER
+    // ==================================================
+
+    async function apiFetch(
+        url,
+        options = {}
+    ) {
+
+        const token =
+            getToken();
+
+
+        const headers = {
+
+            "Content-Type":
+                "application/json",
+
+            ...(options.headers || {})
+
+        };
+
+
+        if (token) {
+
+            headers.Authorization =
+                "Bearer " + token;
+
+        }
+
+
+        const response =
+            await fetch(
+
+                API_URL + url,
+
+                {
+
+                    ...options,
+
+                    headers
+
+                }
+
+            );
+
+
+        let data;
+
+
+        try {
+
+            data =
+                await response.json();
+
+        } catch {
+
+            throw new Error(
+                "Server returned an invalid response."
+            );
+
+        }
+
+
+        if (
+            response.status === 401
+        ) {
+
+            logout();
+
+            throw new Error(
+                "Session expired. Please login again."
+            );
+
+        }
+
+
+        if (
+            !response.ok ||
+            data.success === false
+        ) {
+
+            throw new Error(
+
+                data.message ||
+                "Request failed."
+
+            );
+
+        }
+
+
+        return data;
+
+    }
+
+
+    // ==================================================
+    // ALERT
+    // ==================================================
+
+    let alertTimer;
+
+
+    function showAlert(
+        message,
+        type = "success"
+    ) {
+
+        const alert =
+            document.getElementById(
+                "alert"
+            );
+
+
+        alert.className =
+            "alert show " +
+            type;
+
+
+        alert.textContent =
+            message;
+
+
+        clearTimeout(
+            alertTimer
+        );
+
+
+        alertTimer =
+            setTimeout(
+
+                () => {
+
+                    alert.classList.remove(
+                        "show"
+                    );
+
+                },
+
+                5000
+
+            );
+
+    }
+
+
+    // ==================================================
+    // MONEY
+    // ==================================================
+
+    function money(
+        value
+    ) {
+
+        const number =
+            Number(
+                value || 0
+            );
+
+
+        return "$" +
+            number.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    // ==================================================
+    // DATE
+    // ==================================================
+
+    function formatDate(
+        value
+    ) {
+
+        if (!value) {
+            return "-";
+        }
+
+
+        const date =
+            new Date(
+                value
+            );
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return value;
+
+        }
+
+
+        return date.toLocaleString();
+
+    }
+
+
+    // ==================================================
+    // BALANCE
+    // ==================================================
+
+    function updateBalance(
+        balance
+    ) {
+
+        const formatted =
+            money(
+                balance
+            );
+
+
+        document.getElementById(
+            "mainBalance"
+        ).textContent =
+            formatted;
+
+
+        document.getElementById(
+            "headerBalance"
+        ).textContent =
+            formatted;
+
+
+        const user =
+            getStoredUser();
+
+
+        if (user) {
+
+            user.balance =
+                Number(
+                    balance || 0
+                );
+
+
+            localStorage.setItem(
+
+                "tradeXUser",
+
+                JSON.stringify(
+                    user
+                )
+
+            );
+
+        }
+
+    }
+
+
+    async function loadWallet() {
+
+        try {
+
+            const data =
+                await apiFetch(
+                    "/wallet"
+                );
+
+
+            updateBalance(
+                data.balance
+            );
+
+
+            renderDeposits(
+                data.deposits || []
+            );
+
+
+            renderWithdrawals(
+                data.withdrawals || []
+            );
+
+
+            renderTransactions(
+                data.transactions || []
+            );
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            showAlert(
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // ==================================================
+    // PAYMENT SETTINGS
+    // ==================================================
+
+    async function loadPaymentSettings() {
+
+        const loading =
+            document.getElementById(
+                "paymentLoading"
+            );
+
+        const details =
+            document.getElementById(
+                "paymentDetails"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    API_URL +
+                    "/payment-settings"
+
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load payment details."
+                );
+
+            }
+
+
+            const settings =
+                data.settings;
+
+
+            loading.style.display =
+                "none";
+
+
+            if (
+                !settings.enabled
+            ) {
+
+                details.style.display =
+                    "block";
+
+
+                details.innerHTML = `
+
+                    <div class="instruction-box">
+
+                        Deposits are currently disabled by admin.
+
+                    </div>
+
+                `;
+
+
+                document.getElementById(
+                    "depositBtn"
+                ).disabled =
+                    true;
+
+
+                return;
+
+            }
+
+
+            details.style.display =
+                "block";
+
+
+            document.getElementById(
+                "paymentMethod"
+            ).textContent =
+                settings.method ||
+                "-";
+
+
+            document.getElementById(
+                "accountTitle"
+            ).textContent =
+                settings.accountTitle ||
+                "-";
+
+
+            document.getElementById(
+                "accountNumber"
+            ).textContent =
+                settings.accountNumber ||
+                "-";
+
+
+            document.getElementById(
+                "walletAddress"
+            ).textContent =
+                settings.walletAddress ||
+                "-";
+
+
+            document.getElementById(
+                "network"
+            ).textContent =
+                settings.network ||
+                "-";
+
+
+            document.getElementById(
+                "instructions"
+            ).textContent =
+                settings.instructions ||
+                "Follow the payment instructions provided by admin.";
+
+
+            const amountInput =
+                document.getElementById(
+                    "depositAmount"
+                );
+
+
+            if (
+                Number(
+                    settings.minDeposit
+                ) > 0
+            ) {
+
+                amountInput.min =
+                    settings.minDeposit;
+
+            }
+
+
+            if (
+                Number(
+                    settings.maxDeposit
+                ) > 0
+            ) {
+
+                amountInput.max =
+                    settings.maxDeposit;
+
+            }
+
+
+        } catch (error) {
+
+            loading.style.display =
+                "none";
+
+
+            details.style.display =
+                "block";
+
+
+            details.innerHTML = `
+
+                <div class="instruction-box">
+
+                    Unable to load payment details.
+
+                </div>
+
+            `;
+
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==================================================
+    // DEPOSIT SUBMIT
+    // ==================================================
+
+    document.getElementById(
+        "depositForm"
+    ).addEventListener(
+
+        "submit",
+
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const button =
+                document.getElementById(
+                    "depositBtn"
+                );
+
+
+            const amount =
+                Number(
+                    document.getElementById(
+                        "depositAmount"
+                    ).value
+                );
+
+
+            const method =
+                document.getElementById(
+                    "depositMethod"
+                ).value.trim();
+
+
+            const reference =
+                document.getElementById(
+                    "depositReference"
+                ).value.trim();
+
+
+            if (
+                !Number.isFinite(
+                    amount
+                ) ||
+                amount <= 0
+            ) {
+
+                showAlert(
+                    "Please enter a valid deposit amount.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!method) {
+
+                showAlert(
+                    "Please enter payment method.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!reference) {
+
+                showAlert(
+                    "Please enter payment reference.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Submitting...";
+
+
+            try {
+
+                const data =
+                    await apiFetch(
+
+                        "/wallet/deposit",
+
+                        {
+
+                            method:
+                                "POST",
+
+                            body:
+                                JSON.stringify({
+
+                                    amount:
+                                        amount,
+
+                                    method:
+                                        method,
+
+                                    reference:
+                                        reference
+
+                                })
+
+                        }
+
+                    );
+
+
+                showAlert(
+                    data.message ||
+                    "Deposit submitted successfully.",
+                    "success"
+                );
+
+
+                document.getElementById(
+                    "depositForm"
+                ).reset();
+
+
+                if (
+                    data.balance !== undefined
+                ) {
+
+                    updateBalance(
+                        data.balance
+                    );
+
+                }
+
+
+                await loadWallet();
+
+
+            } catch (error) {
+
+                showAlert(
+                    error.message,
+                    "error"
+                );
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Submit Deposit";
+
+            }
+
+        }
+
+    );
+
+
+    // ==================================================
+    // WITHDRAW SUBMIT
+    // ==================================================
+
+    document.getElementById(
+        "withdrawForm"
+    ).addEventListener(
+
+        "submit",
+
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const button =
+                document.getElementById(
+                    "withdrawBtn"
+                );
+
+
+            const amount =
+                Number(
+                    document.getElementById(
+                        "withdrawAmount"
+                    ).value
+                );
+
+
+            const method =
+                document.getElementById(
+                    "withdrawMethod"
+                ).value.trim();
+
+
+            const account =
+                document.getElementById(
+                    "withdrawAccount"
+                ).value.trim();
+
+
+            if (
+                !Number.isFinite(
+                    amount
+                ) ||
+                amount <= 0
+            ) {
+
+                showAlert(
+                    "Please enter a valid withdrawal amount.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!method) {
+
+                showAlert(
+                    "Please enter withdrawal method.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!account) {
+
+                showAlert(
+                    "Please enter your account or wallet address.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Submitting...";
+
+
+            try {
+
+                const data =
+                    await apiFetch(
+
+                        "/wallet/withdraw",
+
+                        {
+
+                            method:
+                                "POST",
+
+                            body:
+                                JSON.stringify({
+
+                                    amount:
+                                        amount,
+
+                                    method:
+                                        method,
+
+                                    account:
+                                        account
+
+                                })
+
+                        }
+
+                    );
+
+
+                showAlert(
+                    data.message ||
+                    "Withdrawal request submitted.",
+                    "success"
+                );
+
+
+                document.getElementById(
+                    "withdrawForm"
+                ).reset();
+
+
+                if (
+                    data.balance !== undefined
+                ) {
+
+                    updateBalance(
+                        data.balance
+                    );
+
+                }
+
+
+                await loadWallet();
+
+
+            } catch (error) {
+
+                showAlert(
+                    error.message,
+                    "error"
+                );
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Submit Withdrawal";
+
+            }
+
+        }
+
+    );
+
+
+    // ==================================================
+    // DEPOSIT HISTORY
+    // ==================================================
+
+    function renderDeposits(
+        deposits
+    ) {
+
+        const container =
+            document.getElementById(
+                "depositHistory"
+            );
+
+
+        if (
+            !Array.isArray(
+                deposits
+            ) ||
+            deposits.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty">
+                    No deposits found.
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            deposits.map(
+
+                deposit => {
+
+                    const status =
+                        String(
+                            deposit.status ||
+                            "SUBMITTED"
+                        ).toLowerCase();
+
+
+                    return `
+
+                        <div class="history-item">
+
+                            <div class="history-top">
+
+                                <div class="history-title">
+                                    Deposit
+                                </div>
+
+                                <div class="history-amount">
+                                    ${money(deposit.amount)}
+                                </div>
+
+                            </div>
+
+
+                            <div class="history-meta">
+
+                                <span>
+                                    Method: ${escapeHtml(deposit.method || "-")}
+                                </span>
+
+                                <span>
+                                    Reference: ${escapeHtml(deposit.reference || "-")}
+                                </span>
+
+                                <span>
+                                    ${formatDate(deposit.createdAt)}
+                                </span>
+
+                                <span class="status ${status}">
+                                    ${escapeHtml(deposit.status || "SUBMITTED")}
+                                </span>
+
+                            </div>
+
+                            ${
+                                deposit.adminNote
+                                    ? `
+                                        <div
+                                            style="
+                                                margin-top:10px;
+                                                color:#aaa;
+                                                font-size:12px;
+                                            "
+                                        >
+                                            Admin Note:
+                                            ${escapeHtml(deposit.adminNote)}
+                                        </div>
+                                      `
+                                    : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+            ).join("");
+
+    }
+
+
+    // ==================================================
+    // WITHDRAWAL HISTORY
+    // ==================================================
+
+    function renderWithdrawals(
+        withdrawals
+    ) {
+
+        const container =
+            document.getElementById(
+                "withdrawHistory"
+            );
+
+
+        if (
+            !Array.isArray(
+                withdrawals
+            ) ||
+            withdrawals.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty">
+                    No withdrawal requests found.
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            withdrawals.map(
+
+                withdrawal => {
+
+                    const status =
+                        String(
+                            withdrawal.status ||
+                            "PENDING"
+                        ).toLowerCase();
+
+
+                    return `
+
+                        <div class="history-item">
+
+                            <div class="history-top">
+
+                                <div class="history-title">
+                                    Withdrawal
+                                </div>
+
+                                <div
+                                    class="history-amount"
+                                    style="color:#ff7070;"
+                                >
+                                    -${money(withdrawal.amount)}
+                                </div>
+
+                            </div>
+
+
+                            <div class="history-meta">
+
+                                <span>
+                                    Method: ${escapeHtml(withdrawal.method || "-")}
+                                </span>
+
+                                <span>
+                                    Account: ${escapeHtml(withdrawal.account || "-")}
+                                </span>
+
+                                <span>
+                                    ${formatDate(withdrawal.createdAt)}
+                                </span>
+
+                                <span class="status ${status}">
+                                    ${escapeHtml(withdrawal.status || "PENDING")}
+                                </span>
+
+                            </div>
+
+
+                            ${
+                                withdrawal.adminNote
+                                    ? `
+                                        <div
+                                            style="
+                                                margin-top:10px;
+                                                color:#aaa;
+                                                font-size:12px;
+                                            "
+                                        >
+                                            Admin Note:
+                                            ${escapeHtml(withdrawal.adminNote)}
+                                        </div>
+                                      `
+                                    : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+            ).join("");
+
+    }
+
+
+    // ==================================================
+    // TRANSACTIONS
+    // ==================================================
+
+    function renderTransactions(
+        transactions
+    ) {
+
+        const container =
+            document.getElementById(
+                "transactionHistory"
+            );
+
+
+        if (
+            !Array.isArray(
+                transactions
+            ) ||
+            transactions.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty">
+                    No transactions found.
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            transactions.map(
+
+                transaction => {
+
+                    const direction =
+                        String(
+                            transaction.direction ||
+                            ""
+                        ).toUpperCase();
+
+
+                    const credit =
+                        direction ===
+                        "CREDIT";
+
+
+                    const amountClass =
+                        credit
+                            ? ""
+                            : "style=\"color:#ff7070;\"";
+
+
+                    const sign =
+                        credit
+                            ? "+"
+                            : "-";
+
+
+                    const status =
+                        String(
+                            transaction.status ||
+                            ""
+                        ).toLowerCase();
+
+
+                    return `
+
+                        <div class="history-item">
+
+                            <div class="history-top">
+
+                                <div class="history-title">
+
+                                    ${escapeHtml(
+                                        transaction.description ||
+                                        transaction.type ||
+                                        "Transaction"
+                                    )}
+
+                                </div>
+
+                                <div
+                                    class="history-amount"
+                                    ${amountClass}
+                                >
+                                    ${sign}${money(transaction.amount)}
+                                </div>
+
+                            </div>
+
+
+                            <div class="history-meta">
+
+                                <span>
+                                    Type:
+                                    ${escapeHtml(transaction.type || "-")}
+                                </span>
+
+                                <span>
+                                    ${formatDate(transaction.createdAt)}
+                                </span>
+
+                                ${
+                                    transaction.status
+                                        ? `
+                                            <span class="status ${status}">
+                                                ${escapeHtml(transaction.status)}
+                                            </span>
+                                          `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+            ).join("");
+
+    }
+
+
+    // ==================================================
+    // ESCAPE HTML
+    // ==================================================
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(
+            value ?? ""
+        )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    // ==================================================
+    // TABS
+    // ==================================================
+
+    function showTab(
+        tabId,
+        button
+    ) {
+
+        document
+            .querySelectorAll(
+                ".tab-section"
+            )
+            .forEach(
+
+                section => {
+
+                    section.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            );
+
+
+        document
+            .querySelectorAll(
+                ".tab-btn"
+            )
+            .forEach(
+
+                btn => {
+
+                    btn.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            );
+
+
+        document.getElementById(
+            tabId
+        ).classList.add(
+            "active"
+        );
+
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    // ==================================================
+    // INITIALIZE
+    // ==================================================
+
+    async function initialize() {
+
+        if (
+            !checkLogin()
+        ) {
+
+            return;
+
+        }
+
+
+        const user =
+            getStoredUser();
+
+
+        if (user) {
+
+            updateBalance(
+                user.balance || 0
+            );
+
+        }
+
+
+        await Promise.all([
+
+            loadWallet(),
+
+            loadPaymentSettings()
+
+        ]);
+
+    }
+
+
+    initialize();
+
+</script>
+
+</body>
+</html>

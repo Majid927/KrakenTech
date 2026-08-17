@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="krakenRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff3b3b" />
+      <stop offset="100%" stop-color="#c40000" />
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="#111111" stroke="#ff1f1f" stroke-width="3"/>
+  <path d="M30 25 L30 75 M30 50 L65 25 M45 40 L72 75" 
+        stroke="url(#krakenRed)" 
+        stroke-width="9" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  <circle cx="70" cy="27" r="4.5" fill="#ff4d4d"/>
+  <circle cx="77" cy="73" r="4.5" fill="#ff4d4d"/>
+</svg>

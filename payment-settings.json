@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "method": "Bank / Wallet",
+  "accountTitle": "KrakenCoin",
+  "accountNumber": "",
+  "walletAddress": "",
+  "network": "",
+  "instructions": "Make your payment using the details above and keep your payment reference.",
+  "minDeposit": 1,
+  "maxDeposit": 1000000,
+  "updatedAt": null
+}

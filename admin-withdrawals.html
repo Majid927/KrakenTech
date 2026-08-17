@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin - Admin Withdrawals</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+
+        .withdrawal-card {
+            background: #111;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .withdrawal-card h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .withdrawal-info {
+            color: #aaa;
+            line-height: 1.8;
+        }
+
+        .withdrawal-info strong {
+            color: #fff;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #4a3b00;
+            color: #ffcc00;
+        }
+
+        .approved {
+            background: #0b3d22;
+            color: #00ff88;
+        }
+
+        .rejected {
+            background: #4a1010;
+            color: #ff5555;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 16px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .approve-btn {
+            background: #00c853;
+        }
+
+        .approve-btn:hover {
+            background: #00a844;
+        }
+
+        .reject-btn {
+            background: #d60000;
+        }
+
+        .reject-btn:hover {
+            background: #b00000;
+        }
+
+        .refresh-btn {
+            background: #333;
+        }
+
+        .refresh-btn:hover {
+            background: #444;
+        }
+
+        .loading {
+            color: #ffd54f;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .empty {
+            color: #888;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .error {
+            background: #351010;
+            border: 1px solid #8b2020;
+            color: #ff7777;
+            padding: 15px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="logo">
+      KraKencoin.live Admin
+    </div>
+
+    <button
+        class="logout"
+        onclick="logout()"
+    >
+        Logout
+    </button>
+
+</header>
+
+
+<div class="layout">
+
+
+    <aside class="sidebar">
+
+        <a href="/admin.html">
+            Admin Dashboard
+        </a>
+
+        <a href="/admin-users.html">
+            Users
+        </a>
+
+        <a href="/admin-deposits.html">
+            Deposits
+        </a>
+
+        <a
+            class="active"
+            href="/admin-withdrawals.html"
+        >
+            Withdrawals
+        </a>
+
+    </aside>
+
+
+    <main class="main">
+
+
+        <div class="panel">
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    gap:10px;
+                    flex-wrap:wrap;
+                "
+            >
+
+                <div>
+
+                    <h2>
+                        Withdrawal Requests
+                    </h2>
+
+                    <p
+                        style="
+                            color:#888;
+                            margin-top:5px;
+                        "
+                    >
+                        Review and process user withdrawal requests.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn refresh-btn"
+                    onclick="loadWithdrawals()"
+                >
+                    Refresh 🔄
+                </button>
+
+            </div>
+
+
+            <div
+                id="message"
+                style="margin-top:15px;"
+            ></div>
+
+
+            <div
+                id="list"
+                style="margin-top:20px;"
+            >
+
+                <div class="loading">
+                    Loading withdrawals...
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="/script.js"></script>
+
+
+<script>
+
+    /* =====================================================
+       SAFE HELPERS
+    ===================================================== */
+
+    function safeMoney(value) {
+
+        if (
+            typeof money === "function"
+        ) {
+
+            return money(value);
+
+        }
+
+        const amount =
+            Number(value || 0);
+
+        return (
+            "$" +
+            amount.toFixed(2)
+        );
+
+    }
+
+
+    function safeEsc(value) {
+
+        if (
+            typeof esc === "function"
+        ) {
+
+            return esc(value);
+
+        }
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+    function showPageMessage(
+        text,
+        type = "error"
+    ) {
+
+        const element =
+            document.getElementById(
+                "message"
+            );
+
+        if (!element) {
+            return;
+        }
+
+        if (!text) {
+
+            element.innerHTML =
+                "";
+
+            return;
+
+        }
+
+
+        if (type === "success") {
+
+            element.innerHTML =
+                `
+                <div
+                    style="
+                        background:#0b3d22;
+                        border:1px solid #116b3a;
+                        color:#00ff88;
+                        padding:12px;
+                        border-radius:7px;
+                    "
+                >
+                    ${safeEsc(text)}
+                </div>
+                `;
+
+        } else {
+
+            element.innerHTML =
+                `
+                <div class="error">
+                    ${safeEsc(text)}
+                </div>
+                `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       STATUS BADGE
+    ===================================================== */
+
+    function statusBadge(status) {
+
+        const clean =
+            String(
+                status || ""
+            ).toUpperCase();
+
+        let className =
+            "pending";
+
+        if (
+            clean === "APPROVED"
+        ) {
+
+            className =
+                "approved";
+
+        }
+
+
+        if (
+            clean === "REJECTED"
+        ) {
+
+            className =
+                "rejected";
+
+        }
+
+
+        return `
+
+            <span
+                class="status-badge ${className}"
+            >
+                ${safeEsc(clean || "UNKNOWN")}
+            </span>
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       LOAD WITHDRAWALS
+    ===================================================== */
+
+    async function loadWithdrawals() {
+
+        const list =
+            document.getElementById(
+                "list"
+            );
+
+
+        list.innerHTML =
+            `
+            <div class="loading">
+                Loading withdrawals...
+            </div>
+            `;
+
+
+        showPageMessage(
+            ""
+        );
+
+
+        try {
+
+            /*
+             * adminApi must come from script.js
+             */
+
+            if (
+                typeof adminApi !==
+                "function"
+            ) {
+
+                throw new Error(
+                    "adminApi() is missing from script.js."
+                );
+
+            }
+
+
+            const data =
+                await adminApi(
+                    "/admin/withdrawals"
+                );
+
+
+            const withdrawals =
+                Array.isArray(
+                    data.withdrawals
+                )
+                    ? data.withdrawals
+                    : [];
+
+
+            if (
+                withdrawals.length === 0
+            ) {
+
+                list.innerHTML =
+                    `
+                    <div class="empty">
+                        No withdrawal requests found.
+                    </div>
+                    `;
+
+                return;
+
+            }
+
+
+            list.innerHTML =
+                "";
+
+
+            withdrawals.forEach(
+                function(item) {
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    card.className =
+                        "withdrawal-card";
+
+
+                    const status =
+                        String(
+                            item.status || ""
+                        ).toUpperCase();
+
+
+                    let actionHtml =
+                        "";
+
+
+                    if (
+                        status ===
+                        "PENDING"
+                    ) {
+
+                        actionHtml =
+
+                            `
+                            <div class="actions">
+
+                                <button
+                                    class="btn approve-btn"
+                                    onclick="processWithdrawal('${String(item.id)}', 'approve')"
+                                >
+                                    Approve Withdrawal
+                                </button>
+
+                                <button
+                                    class="btn reject-btn"
+                                    onclick="processWithdrawal('${String(item.id)}', 'reject')"
+                                >
+                                    Reject / Refund
+                                </button>
+
+                            </div>
+                            `;
+
+                    }
+
+
+                    card.innerHTML =
+
+                        `
+                        <h3>
+                            ${safeEsc(
+                                item.userName ||
+                                "Unknown User"
+                            )}
+                        </h3>
+
+                        <div class="withdrawal-info">
+
+                            <strong>Email:</strong>
+                            ${safeEsc(
+                                item.userEmail ||
+                                ""
+                            )}
+
+                            <br>
+
+                            <strong>User ID:</strong>
+                            ${safeEsc(
+                                item.userId ??
+                                ""
+                            )}
+
+                            <br>
+
+                            <strong>Amount:</strong>
+                            ${safeMoney(
+                                item.amount
+                            )}
+
+                            <br>
+
+                            <strong>Method:</strong>
+                            ${safeEsc(
+                                item.method ||
+                                ""
+                            )}
+
+                            <br>
+
+                            <strong>Account:</strong>
+                            ${safeEsc(
+                                item.account ||
+                                ""
+                            )}
+
+                            <br>
+
+                            <strong>Status:</strong>
+                            ${statusBadge(
+                                item.status
+                            )}
+
+                            <br>
+
+                            <strong>Created:</strong>
+                            ${
+                                item.createdAt
+                                    ? new Date(
+                                        item.createdAt
+                                      ).toLocaleString()
+                                    : "-"
+                            }
+
+                            ${
+                                item.processedAt
+                                    ? `
+                                        <br>
+                                        <strong>Processed:</strong>
+                                        ${new Date(
+                                            item.processedAt
+                                        ).toLocaleString()}
+                                      `
+                                    : ""
+                            }
+
+                            ${
+                                item.adminNote
+                                    ? `
+                                        <br>
+                                        <strong>Admin Note:</strong>
+                                        ${safeEsc(
+                                            item.adminNote
+                                        )}
+                                      `
+                                    : ""
+                            }
+
+                        </div>
+
+                        ${actionHtml}
+                        `;
+
+
+                    list.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Load withdrawals error:",
+                error
+            );
+
+
+            list.innerHTML =
+                `
+                <div class="error">
+                    ${safeEsc(
+                        error.message ||
+                        "Unable to load withdrawals."
+                    )}
+                </div>
+                `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PROCESS WITHDRAWAL
+    ===================================================== */
+
+    async function processWithdrawal(
+        id,
+        action
+    ) {
+
+        if (
+            !id
+        ) {
+
+            alert(
+                "Withdrawal ID is missing."
+            );
+
+            return;
+
+        }
+
+
+        const isApprove =
+            action ===
+            "approve";
+
+
+        const confirmation =
+            isApprove
+
+                ? confirm(
+                    "Approve this withdrawal?"
+                )
+
+                : confirm(
+                    "Reject this withdrawal and refund the amount to the user?"
+                );
+
+
+        if (!confirmation) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const note =
+                prompt(
+                    isApprove
+                        ? "Optional admin note:"
+                        : "Optional rejection note:"
+                );
+
+
+            const body = {
+
+                note:
+                    note ||
+                    ""
+
+            };
+
+
+            if (
+                typeof adminApi !==
+                "function"
+            ) {
+
+                throw new Error(
+                    "adminApi() is missing from script.js."
+                );
+
+            }
+
+
+            await adminApi(
+
+                "/admin/withdrawal/" +
+
+                encodeURIComponent(
+                    id
+                ) +
+
+                "/" +
+
+                (
+                    isApprove
+                        ? "approve"
+                        : "reject"
+                ),
+
+                "POST",
+
+                body
+
+            );
+
+
+            showPageMessage(
+
+                isApprove
+                    ? "Withdrawal approved successfully."
+                    : "Withdrawal rejected and amount refunded.",
+
+                "success"
+
+            );
+
+
+            await loadWithdrawals();
+
+
+        } catch (error) {
+
+            console.error(
+                "Process withdrawal error:",
+                error
+            );
+
+
+            showPageMessage(
+
+                error.message ||
+                "Unable to process withdrawal."
+
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            loadWithdrawals();
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo"><img src="logo.png" alt="KrakenCoin" class="logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+    <div>
+        <a href="login.html" class="btn primary" style="text-decoration:none;">Login</a>
+        <a href="signup.html" class="btn danger" style="text-decoration:none; margin-left:8px;">Create Account</a>
+    </div>
+</header>
+
+<main class="main" style="max-width:1100px; margin:0 auto;">
+
+    <section class="panel" style="margin-top:50px; text-align:center; padding:50px 25px;">
+        <h1 style="color:#ff1f1f; font-size:42px; margin-bottom:10px;">KrakenCoin</h1>
+        <p style="color:#aaa; font-size:18px; max-width:700px; margin:0 auto 30px;">
+            Trade cryptocurrency markets with live market prices, a secure wallet, trading tools and real-time market control.
+        </p>
+        <div class="row" style="justify-content:center; margin-top:20px;">
+            <a href="login.html" class="btn primary" style="text-decoration:none; min-width:150px; text-align:center;">Login</a>
+            <a href="signup.html" class="btn danger" style="text-decoration:none; min-width:150px; text-align:center;">Create Account</a>
+        </div>
+    </section>
+
+    <section class="grid" style="margin-top:25px;">
+
+        <div class="card">
+            <h3>Live Markets</h3>
+            <p>View live cryptocurrency market prices and market statistics.</p>
+            <a href="markets.html" class="btn primary" style="text-decoration:none; display:inline-block;">View Markets</a>
+        </div>
+
+        <div class="card">
+            <h3>Trading</h3>
+            <p>Trade BTC using the available trading durations and live market pricing.</p>
+            <a href="trade.html" class="btn success" style="text-decoration:none; display:inline-block;">Start Trading</a>
+        </div>
+
+        <div class="card">
+            <h3>Wallet</h3>
+            <p>Manage your balance, deposits, withdrawals and transactions.</p>
+            <a href="wallet.html" class="btn warning" style="text-decoration:none; display:inline-block;">Open Wallet</a>
+        </div>
+
+    </section>
+
+    <section class="panel" style="margin-top:25px;">
+        <h2>KrakenCoin Features</h2>
+        <div class="grid" style="margin-top:20px;">
+            <div class="list-item">
+                <strong>Live Market Data</strong>
+                <p>Real-time cryptocurrency market data is available through the market service.</p>
+            </div>
+            <div class="list-item">
+                <strong>Secure Authentication</strong>
+                <p>Accounts use password hashing and JWT authentication.</p>
+            </div>
+            <div class="list-item">
+                <strong>Wallet Management</strong>
+                <p>View balance, deposit information, withdrawals and transaction history.</p>
+            </div>
+            <div class="list-item">
+                <strong>Admin Market Control</strong>
+                <p>Authorized administrators can switch between real market mode and admin controlled market pricing.</p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer style="text-align:center; color:#666; padding:30px 15px; border-top:1px solid #292929; margin-top:30px;">
+    KrakenCoin
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("KrakenCoin home page loaded.");
+});
+</script>
+
+</body>
+</html>

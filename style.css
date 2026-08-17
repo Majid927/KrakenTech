@@ -1,0 +1,1275 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    background: #050505;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+}
+
+a {
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+    min-height: 70px;
+    background: #0b0b0b;
+    border-bottom: 1px solid #292929;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    color: #ff1f1f;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+}
+
+.logout {
+    background: #d60000;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 7px;
+
+    padding: 11px 20px;
+
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.logout:hover {
+    background: #b00000;
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.layout {
+    display: flex;
+    min-height: calc(100vh - 70px);
+}
+
+.sidebar {
+    width: 220px;
+    background: #0b0b0b;
+    padding: 20px;
+    flex-shrink: 0;
+
+    border-right: 1px solid #1e1e1e;
+}
+
+.sidebar a {
+    display: block;
+
+    padding: 13px 14px;
+    margin: 10px 0;
+
+    background: #181818;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    border-radius: 7px;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.sidebar a:hover {
+    background: #d60000;
+    transform: translateX(2px);
+}
+
+.sidebar a.active {
+    background: #d60000;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main {
+    flex: 1;
+    min-width: 0;
+    padding: 30px;
+}
+
+.main h1 {
+    margin-top: 0;
+}
+
+.main h2 {
+    margin-top: 0;
+}
+
+.main h3 {
+    margin-top: 0;
+}
+
+.main p {
+    color: #aaaaaa;
+}
+
+/* =====================================================
+   PANELS / CARDS
+===================================================== */
+
+.panel {
+    background: #111111;
+    border: 1px solid #292929;
+    border-radius: 12px;
+
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: #111111;
+    border: 1px solid #292929;
+
+    border-radius: 12px;
+
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card h2,
+.panel h2 {
+    color: #ff1f1f;
+}
+
+.card h3 {
+    color: #aaaaaa;
+}
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                220px,
+                1fr
+            )
+        );
+
+    gap: 20px;
+}
+
+.top-card {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: #111111;
+    border: 1px solid #292929;
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    min-width: 210px;
+    flex: 1;
+}
+
+.stat-card h3 {
+    margin-top: 0;
+    color: #aaaaaa;
+}
+
+.stat-card .value {
+    color: #00ff88;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+/* =====================================================
+   FORMS
+===================================================== */
+
+.form-group {
+    margin-bottom: 17px;
+}
+
+label {
+    display: block;
+
+    color: #aaaaaa;
+
+    font-size: 14px;
+
+    margin-bottom: 7px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    padding: 13px;
+
+    background: #191919;
+    color: #ffffff;
+
+    border: 1px solid #333333;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #ff1f1f;
+}
+
+select {
+    cursor: pointer;
+}
+
+select option {
+    background: #191919;
+    color: #ffffff;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.btn {
+    border: none;
+
+    border-radius: 7px;
+
+    padding: 11px 16px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: #1565c0;
+}
+
+.btn.primary:hover {
+    background: #0d47a1;
+}
+
+.btn.success {
+    background: #00c853;
+}
+
+.btn.success:hover {
+    background: #00a844;
+}
+
+.btn.danger {
+    background: #d60000;
+}
+
+.btn.danger:hover {
+    background: #b00000;
+}
+
+.btn.warning {
+    background: #ff9800;
+}
+
+.btn.warning:hover {
+    background: #e68900;
+}
+
+.btn.secondary {
+    background: #333333;
+}
+
+.btn.secondary:hover {
+    background: #444444;
+}
+
+.btn.purple {
+    background: #8e24aa;
+}
+
+.btn.purple:hover {
+    background: #6a1b7b;
+}
+
+.btn.full {
+    width: 100%;
+}
+
+/* =====================================================
+   BUTTON ROW
+===================================================== */
+
+.row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.row > * {
+    flex: 0 0 auto;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+    margin-top: 15px;
+
+    padding: 12px;
+
+    background: #191919;
+
+    border-radius: 7px;
+
+    color: #aaaaaa;
+
+    text-align: center;
+
+    line-height: 1.5;
+}
+
+.online {
+    color: #00ff88;
+}
+
+.offline {
+    color: #ff5555;
+}
+
+.loading {
+    color: #ffd54f;
+}
+
+/* =====================================================
+   CONNECTION
+===================================================== */
+
+.connection {
+    margin: 10px 0;
+
+    font-size: 13px;
+
+    color: #00ff88;
+}
+
+.connection.error {
+    color: #ff3333;
+}
+
+/* =====================================================
+   MARKET MODE
+===================================================== */
+
+.market-mode {
+    margin: 8px 0 15px;
+
+    font-size: 13px;
+
+    color: #00ff88;
+}
+
+.market-mode.admin {
+    color: #ff66ff;
+}
+
+/* =====================================================
+   PRICE
+===================================================== */
+
+.price {
+    color: #00ff88;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.balance-value {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.text-green {
+    color: #00ff88;
+}
+
+.text-red {
+    color: #ff5555;
+}
+
+.text-yellow {
+    color: #ffcc00;
+}
+
+.text-muted {
+    color: #888888;
+}
+
+/* =====================================================
+   MARKET CONTROL
+===================================================== */
+
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.controls button {
+    padding: 12px 18px;
+
+    border: none;
+    border-radius: 7px;
+
+    color: #ffffff;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.up {
+    background: #00c853;
+}
+
+.up:hover {
+    background: #00a844;
+}
+
+.down {
+    background: #d60000;
+}
+
+.down:hover {
+    background: #b00000;
+}
+
+.reset {
+    background: #555555;
+}
+
+.reset:hover {
+    background: #444444;
+}
+
+.mode-btn {
+    background: #333333;
+}
+
+.real-mode {
+    background: #1565c0;
+}
+
+.admin-mode {
+    background: #8e24aa;
+}
+
+.mode-active {
+    box-shadow:
+        0 0 0 2px #ffffff inset;
+}
+
+.market-mode-status {
+    margin: 12px 0;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    background: #191919;
+
+    line-height: 1.6;
+}
+
+.market-subtext {
+    color: #888888;
+
+    font-size: 13px;
+
+    margin-top: 8px;
+}
+
+/* =====================================================
+   CHART
+===================================================== */
+
+.chart-wrapper {
+    margin-top: 20px;
+
+    background: #111111;
+
+    border: 1px solid #292929;
+
+    border-radius: 10px;
+
+    padding: 10px;
+
+    width: 100%;
+}
+
+#chart {
+    width: 100%;
+    height: 500px;
+}
+
+/* =====================================================
+   OPEN TRADE
+===================================================== */
+
+#openTradeBox {
+    display: none;
+
+    margin-top: 20px;
+
+    padding: 18px;
+
+    background: #111111;
+
+    border: 1px solid #ff1f1f;
+
+    border-radius: 10px;
+}
+
+#openTradeBox h3 {
+    color: #ff1f1f;
+    margin-top: 0;
+}
+
+#openTradeBox p {
+    margin: 10px 0;
+    color: #aaaaaa;
+}
+
+#openTradeBox strong {
+    color: #ffffff;
+}
+
+.timer-display {
+    margin-top: 15px;
+
+    padding: 12px;
+
+    background: #191919;
+
+    border-radius: 7px;
+
+    border-left: 4px solid #ffcc00;
+}
+
+.timer-label {
+    color: #aaaaaa;
+
+    font-size: 13px;
+}
+
+#tradeCountdown {
+    color: #ffcc00;
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    margin-top: 4px;
+}
+
+/* =====================================================
+   TRADING PANEL
+===================================================== */
+
+.trading-panel {
+    width: 300px;
+
+    background: #0b0b0b;
+
+    padding: 25px;
+
+    border-left: 1px solid #292929;
+
+    flex-shrink: 0;
+}
+
+.trading-panel h2 {
+    color: #ff1f1f;
+}
+
+/* =====================================================
+   BUY / SELL
+===================================================== */
+
+.buy,
+.sell {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 8px;
+
+    color: #ffffff;
+}
+
+.buy {
+    background: #00c853;
+}
+
+.buy:hover {
+    background: #00a844;
+}
+
+.sell {
+    background: #d60000;
+}
+
+.sell:hover {
+    background: #b00000;
+}
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+#history {
+    padding-left: 0;
+
+    list-style: none;
+}
+
+#history li {
+    margin: 12px 0;
+
+    padding: 10px;
+
+    background: #191919;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+}
+
+.history-win {
+    border-left: 4px solid #00c853;
+}
+
+.history-loss {
+    border-left: 4px solid #d60000;
+}
+
+.history-open {
+    border-left: 4px solid #ffcc00;
+}
+
+.win-text {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.loss-text {
+    color: #ff3333;
+    font-weight: bold;
+}
+
+.open-text {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+/* =====================================================
+   BADGES
+===================================================== */
+
+.badge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.badge.pending,
+.status-badge.pending {
+    background: #4a3b00;
+    color: #ffcc00;
+}
+
+.badge.approved,
+.status-badge.approved {
+    background: #0b3d22;
+    color: #00ff88;
+}
+
+.badge.rejected,
+.status-badge.rejected {
+    background: #4a1010;
+    color: #ff5555;
+}
+
+.badge.completed {
+    background: #0b3d22;
+    color: #00ff88;
+}
+
+.badge.submitted {
+    background: #24384a;
+    color: #64b5f6;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+th,
+td {
+    padding: 12px;
+
+    border-bottom: 1px solid #292929;
+
+    text-align: left;
+
+    font-size: 14px;
+}
+
+th {
+    color: #ff1f1f;
+    background: #191919;
+}
+
+td {
+    color: #cccccc;
+}
+
+tr:hover td {
+    background: #171717;
+}
+
+/* =====================================================
+   LIST
+===================================================== */
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.list-item {
+    background: #191919;
+
+    border: 1px solid #292929;
+
+    border-radius: 8px;
+
+    padding: 14px;
+}
+
+/* =====================================================
+   MESSAGE BOX
+===================================================== */
+
+.message {
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+.message.success {
+    display: block;
+
+    background: #103d28;
+
+    color: #00ff88;
+
+    border: 1px solid #1b6946;
+}
+
+.message.error {
+    display: block;
+
+    background: #3d1212;
+
+    color: #ff6666;
+
+    border: 1px solid #702222;
+}
+
+.error-box {
+    display: none;
+
+    background: #351010;
+
+    border: 1px solid #8b2020;
+
+    color: #ff7777;
+
+    padding: 14px;
+
+    border-radius: 7px;
+
+    margin-bottom: 20px;
+
+    line-height: 1.6;
+}
+
+/* =====================================================
+   BACKEND BOX
+===================================================== */
+
+.backend-box {
+    background: #191919;
+
+    border: 1px solid #333333;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    margin-bottom: 20px;
+
+    font-size: 13px;
+
+    color: #aaaaaa;
+}
+
+.backend-box strong {
+    color: #00ff88;
+}
+
+/* =====================================================
+   EMPTY / LOADING
+===================================================== */
+
+.empty {
+    color: #888888;
+
+    padding: 20px;
+
+    text-align: center;
+}
+
+.loading-box {
+    color: #ffd54f;
+
+    padding: 20px;
+
+    text-align: center;
+}
+
+/* =====================================================
+   AUTH
+===================================================== */
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+
+    padding: 20px;
+
+    margin: 0 auto;
+}
+
+.auth-card {
+    background: #111111;
+
+    border: 1px solid #292929;
+
+    border-radius: 14px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 15px 40px
+        rgba(
+            0,
+            0,
+            0,
+            0.45
+        );
+}
+
+.auth-logo {
+    text-align: center;
+
+    color: #ff1f1f;
+
+    font-size: 32px;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    text-align: center;
+
+    color: #888888;
+
+    font-size: 14px;
+
+    margin-bottom: 30px;
+}
+
+.auth-footer {
+    text-align: center;
+
+    color: #888888;
+
+    margin-top: 22px;
+
+    font-size: 14px;
+}
+
+.auth-footer a {
+    color: #ff1f1f;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+.admin-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+}
+
+.admin-actions {
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+/* =====================================================
+   WITHDRAWAL / DEPOSIT CARD
+===================================================== */
+
+.withdrawal-card,
+.deposit-card {
+    background: #111111;
+
+    border: 1px solid #292929;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+}
+
+.withdrawal-card h3,
+.deposit-card h3 {
+    margin-top: 0;
+
+    color: #ffffff;
+}
+
+.withdrawal-info,
+.deposit-info {
+    color: #aaaaaa;
+
+    line-height: 1.8;
+}
+
+.withdrawal-info strong,
+.deposit-info strong {
+    color: #ffffff;
+}
+
+.actions {
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin-top: 15px;
+}
+
+/* =====================================================
+   PAYMENT DETAILS
+===================================================== */
+
+.payment-box {
+    background: #191919;
+
+    border: 1px solid #333333;
+
+    border-radius: 8px;
+
+    padding: 16px;
+
+    margin-top: 15px;
+}
+
+.payment-row {
+    margin: 8px 0;
+}
+
+.payment-label {
+    color: #888888;
+
+    font-size: 13px;
+}
+
+.payment-value {
+    color: #ffffff;
+
+    font-weight: bold;
+
+    word-break: break-word;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .layout {
+        flex-wrap: wrap;
+    }
+
+    .trading-panel {
+        width: 100%;
+
+        border-left: none;
+
+        border-top: 1px solid #292929;
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+
+        border-right: none;
+
+        border-bottom: 1px solid #292929;
+    }
+
+    .main {
+        padding: 20px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .header {
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .main {
+        padding: 15px;
+    }
+
+    .panel,
+    .card {
+        padding: 18px;
+    }
+
+    .auth-card {
+        padding: 25px 20px;
+    }
+
+    .top-card {
+        flex-direction: column;
+    }
+
+    .stat-card {
+        width: 100%;
+    }
+
+    .controls {
+        flex-direction: column;
+    }
+
+    .controls button {
+        width: 100%;
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    .row .btn {
+        width: 100%;
+    }
+
+}
+
+/* =====================================================
+   KRAKENCOIN BRANDING & LOGO
+===================================================== */
+
+.logo {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    color: #ff1f1f !important;
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+}
+
+.logo-img {
+    height: 38px;
+    width: auto;
+    max-width: 48px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.auth-logo {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    color: #ff1f1f !important;
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    margin-bottom: 12px !important;
+}
+
+.auth-logo-img {
+    height: 44px;
+    width: auto;
+    max-width: 52px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Red accents on active elements & highlights */
+.highlight-red, .text-danger, .red-accent {
+    color: #ff1f1f !important;
+}
+
+.btn-primary, .btn.primary {
+    background: #d60000 !important;
+    border-color: #d60000 !important;
+}
+
+.btn-primary:hover, .btn.primary:hover {
+    background: #b00000 !important;
+}

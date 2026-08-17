@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin Dashboard</title>
+
+    <!-- Lightweight Charts -->
+    <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #050505;
+            color: white;
+        }
+
+        .header {
+            height: 70px;
+            background: #0b0b0b;
+            border-bottom: 1px solid #292929;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 25px;
+        }
+
+        .logo {
+            color: #ff1f1f;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: #d60000;
+            color: white;
+            border: none;
+
+            padding: 11px 20px;
+            border-radius: 7px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: #b00000;
+        }
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 220px;
+            background: #0b0b0b;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar a {
+            display: block;
+
+            padding: 13px;
+            margin: 10px 0;
+
+            background: #181818;
+            color: white;
+
+            text-decoration: none;
+            border-radius: 7px;
+
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #d60000;
+        }
+
+        .sidebar a.active {
+            background: #d60000;
+        }
+
+        .main {
+            flex: 1;
+            padding: 25px;
+            min-width: 0;
+        }
+
+        .main h1 {
+            margin-top: 0;
+        }
+
+        .reference {
+            color: #aaa;
+        }
+
+        .reference strong {
+            color: #ff1f1f;
+        }
+
+        .connection {
+            margin: 10px 0;
+            font-size: 13px;
+            color: #00ff88;
+        }
+
+        .connection.error {
+            color: #ff3333;
+        }
+
+        .market-mode {
+            margin: 8px 0 15px;
+            font-size: 13px;
+            color: #00ff88;
+        }
+
+        .market-mode.admin {
+            color: #ffcc00;
+        }
+
+        .top-card {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: #111;
+
+            border: 1px solid #292929;
+
+            padding: 20px;
+            border-radius: 10px;
+
+            width: 220px;
+        }
+
+        .card h3 {
+            color: #aaa;
+            margin-top: 0;
+        }
+
+        .card h2 {
+            color: #00ff88;
+            margin-bottom: 0;
+        }
+
+        .chart-wrapper {
+            margin-top: 20px;
+
+            background: #111;
+            border: 1px solid #292929;
+
+            border-radius: 10px;
+            padding: 10px;
+
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #chart {
+            width: 100%;
+            height: 500px;
+        }
+
+        #openTradeBox {
+            display: none;
+
+            margin-top: 20px;
+            padding: 18px;
+
+            background: #111;
+            border: 1px solid #ff1f1f;
+
+            border-radius: 10px;
+        }
+
+        #openTradeBox h3 {
+            color: #ff1f1f;
+            margin-top: 0;
+        }
+
+        #openTradeBox p {
+            margin: 10px 0;
+            color: #aaa;
+        }
+
+        #openTradeBox strong {
+            color: white;
+        }
+
+        .timer-display {
+            margin-top: 15px;
+
+            padding: 12px;
+
+            background: #191919;
+            border-radius: 7px;
+
+            border-left: 4px solid #ffcc00;
+        }
+
+        .timer-label {
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        #tradeCountdown {
+            color: #ffcc00;
+
+            font-size: 24px;
+            font-weight: bold;
+
+            margin-top: 4px;
+        }
+
+        .open-status {
+            color: #ffcc00 !important;
+        }
+
+        .trading-panel {
+            width: 300px;
+
+            background: #0b0b0b;
+
+            padding: 25px;
+
+            border-left: 1px solid #292929;
+
+            flex-shrink: 0;
+        }
+
+        .trading-panel h2 {
+            color: #ff1f1f;
+        }
+
+        .trading-panel label {
+            display: block;
+
+            color: #aaa;
+
+            margin-top: 15px;
+            margin-bottom: 7px;
+        }
+
+        .trading-panel input,
+        .trading-panel select {
+            width: 100%;
+
+            padding: 13px;
+
+            background: #191919;
+            color: white;
+
+            border: 1px solid #333;
+
+            border-radius: 7px;
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        .trading-panel input:focus,
+        .trading-panel select:focus {
+            border-color: #ff1f1f;
+        }
+
+        .buy,
+        .sell {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 8px;
+
+            color: white;
+        }
+
+        .buy {
+            background: #00c853;
+        }
+
+        .buy:hover {
+            background: #00a844;
+        }
+
+        .sell {
+            background: #d60000;
+        }
+
+        .sell:hover {
+            background: #b00000;
+        }
+
+        .buy:disabled,
+        .sell:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #history {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        #history li {
+            margin: 12px 0;
+
+            padding: 10px;
+
+            background: #191919;
+            border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+        .history-win {
+            border-left: 4px solid #00c853;
+        }
+
+        .history-loss {
+            border-left: 4px solid #d60000;
+        }
+
+        .history-open {
+            border-left: 4px solid #ffcc00;
+        }
+
+        .win-text {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .loss-text {
+            color: #ff3333;
+            font-weight: bold;
+        }
+
+        .open-text {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        .empty-history {
+            color: #777;
+            text-align: center;
+            padding: 20px !important;
+        }
+
+        @media(max-width: 1100px) {
+
+            .layout {
+                flex-wrap: wrap;
+            }
+
+            .trading-panel {
+                width: 100%;
+
+                border-left: none;
+                border-top: 1px solid #292929;
+            }
+
+        }
+
+        @media(max-width: 900px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="logo">
+        KraKencoin.live
+    </div>
+
+    <button
+        class="logout"
+        id="logoutButton"
+        type="button"
+    >
+        Logout
+    </button>
+
+</header>
+
+
+<div class="layout">
+
+
+    <aside class="sidebar">
+
+        <a
+            class="active"
+            href="/dashboard.html"
+        >
+            Dashboard
+        </a>
+
+        <a href="/trade.html">
+            Trade
+        </a>
+
+        <a href="/markets.html">
+            Markets
+        </a>
+
+        <a href="/wallet.html">
+            Wallet
+        </a>
+
+        <a href="/profile.html">
+            Profile
+        </a>
+
+    </aside>
+
+
+    <main class="main">
+
+
+        <h1>
+
+            Welcome,
+
+            <span id="userName">
+                Trader
+            </span>
+
+        </h1>
+
+
+        <p class="reference">
+
+            Reference:
+
+            <strong id="userReference">
+                ---
+            </strong>
+
+        </p>
+
+
+        <div
+            class="connection"
+            id="connectionStatus"
+        >
+            Connecting to backend...
+        </div>
+
+
+        <!-- <div
+            class="market-mode"
+            id="marketMode"
+        >
+            Market mode: REAL MARKET
+        </div> -->
+
+
+        <h2>
+            Trading Dashboard
+        </h2>
+
+
+        <div class="top-card">
+
+
+            <div class="card">
+
+                <h3>
+                    Balance
+                </h3>
+
+                <h2 id="balance">
+                    $0.00
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    BTC / USDT
+                </h3>
+
+                <h2 id="btcPrice">
+                    $0.00
+                </h2>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="chart-wrapper">
+
+            <div id="chart"></div>
+
+        </div>
+
+
+        <div id="openTradeBox">
+
+
+            <h3>
+                🔴 OPEN TRADE
+            </h3>
+
+
+            <p>
+                Direction:
+
+                <strong id="openTradeType">
+                    ---
+                </strong>
+            </p>
+
+
+            <p>
+                Amount:
+
+                <strong id="openTradeAmount">
+                    $0.00
+                </strong>
+            </p>
+
+
+            <p>
+                Entry Price:
+
+                <strong id="openTradeEntry">
+                    $0.00
+                </strong>
+            </p>
+
+
+            <p>
+                Current Price:
+
+                <strong id="openTradeCurrent">
+                    $0.00
+                </strong>
+            </p>
+
+
+            <p>
+                Duration:
+
+                <strong id="openTradeDuration">
+                    30 Seconds
+                </strong>
+            </p>
+
+
+            <div class="timer-display">
+
+                <div class="timer-label">
+                    TIME REMAINING
+                </div>
+
+                <div id="tradeCountdown">
+                    00:00
+                </div>
+
+            </div>
+
+
+            <p>
+                Status:
+
+                <strong class="open-status">
+                    OPEN
+                </strong>
+            </p>
+
+
+        </div>
+
+
+        <!-- SINGLE HISTORY AREA -->
+        <div
+            class="card"
+            style="width:100%; margin-top:20px;"
+        >
+
+            <h3>
+                Trade History
+            </h3>
+
+            <ul id="history">
+
+                <li class="empty-history">
+                    No Trades Yet
+                </li>
+
+            </ul>
+
+        </div>
+
+
+    </main>
+
+
+    <aside class="trading-panel">
+
+
+        <h2>
+            Trade
+        </h2>
+
+
+        <label for="tradeAmount">
+            Amount
+        </label>
+
+
+        <input
+            type="number"
+            id="tradeAmount"
+            placeholder="Enter Amount"
+            min="1"
+            step="0.01"
+        >
+
+
+        <label for="tradeDuration">
+            Trade Duration
+        </label>
+
+
+        <select id="tradeDuration">
+
+            <option value="30">
+                30 Seconds
+            </option>
+
+        </select>
+
+
+        <button
+            class="buy"
+            id="buyButton"
+            type="button"
+        >
+            BUY BTC
+        </button>
+
+
+        <button
+            class="sell"
+            id="sellButton"
+            type="button"
+        >
+            SELL BTC
+        </button>
+
+
+        <p
+            style="
+                color:#777;
+                font-size:12px;
+                line-height:1.6;
+                margin-top:15px;
+            "
+        >
+            The server controls the official
+            trade price and automatically settles
+            the trade after the selected duration.
+        </p>
+
+
+    </aside>
+
+
+</div>
+
+
+<!-- =====================================================
+     LIVE ENGINE
+     ONLY ONE ENGINE FILE
+===================================================== -->
+
+<script src="/live-engine.js"></script>
+
+
+<script>
+
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : "http://localhost:3000";
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentUser = null;
+
+let userRefreshTimer = null;
+
+let tradeTimerInterval = null;
+
+let pageDestroyed = false;
+
+
+/* =====================================================
+   AUTH TOKEN
+===================================================== */
+
+function getAuthToken() {
+
+    return (
+
+        localStorage.getItem(
+            "tradeXToken"
+        ) ||
+
+        localStorage.getItem(
+            "token"
+        ) ||
+
+        localStorage.getItem(
+            "jwtToken"
+        ) ||
+
+        localStorage.getItem(
+            "authToken"
+        ) ||
+
+        ""
+
+    );
+
+}
+
+
+/* =====================================================
+   AUTH HEADERS
+===================================================== */
+
+function getAuthHeaders() {
+
+    const token =
+        getAuthToken();
+
+    return {
+
+        "Content-Type":
+            "application/json",
+
+        "Authorization":
+            "Bearer " + token
+
+    };
+
+}
+
+
+/* =====================================================
+   CONNECTION STATUS
+===================================================== */
+
+function setConnectionStatus(
+    message,
+    isError = false
+) {
+
+    const element =
+        document.getElementById(
+            "connectionStatus"
+        );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        message;
+
+    element.classList.toggle(
+        "error",
+        isError
+    );
+
+}
+
+
+/* =====================================================
+   LOAD USER
+===================================================== */
+
+async function loadUser() {
+
+    if (pageDestroyed) {
+        return false;
+    }
+
+    const savedUser =
+        localStorage.getItem(
+            "tradeXUser"
+        );
+
+    const token =
+        getAuthToken();
+
+
+    if (!savedUser || !token) {
+
+        setConnectionStatus(
+            "Please login first.",
+            true
+        );
+
+        return false;
+    }
+
+
+    try {
+
+        const saved =
+            JSON.parse(
+                savedUser
+            );
+
+
+        if (!saved.id) {
+
+            throw new Error(
+                "User ID missing."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/user/" +
+                encodeURIComponent(
+                    saved.id
+                ),
+
+                {
+
+                    method: "GET",
+
+                    headers:
+                        getAuthHeaders(),
+
+                    cache:
+                        "no-store"
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (response.status === 401) {
+
+            setConnectionStatus(
+                "Login session expired.",
+                true
+            );
+
+            return false;
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load user."
+            );
+
+        }
+
+
+        currentUser =
+            data.user;
+
+
+        localStorage.setItem(
+            "tradeXUser",
+            JSON.stringify(
+                currentUser
+            )
+        );
+
+
+        renderUser();
+
+
+        setConnectionStatus(
+            "● Backend Connected",
+            false
+        );
+
+
+        return true;
+
+
+    } catch (error) {
+
+        console.error(
+            "Load user error:",
+            error
+        );
+
+
+        setConnectionStatus(
+            "● Backend connection failed",
+            true
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER USER
+===================================================== */
+
+function renderUser() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const nameElement =
+        document.getElementById(
+            "userName"
+        );
+
+    const referenceElement =
+        document.getElementById(
+            "userReference"
+        );
+
+
+    if (nameElement) {
+
+        nameElement.textContent =
+            currentUser.name ||
+            "Trader";
+
+    }
+
+
+    if (referenceElement) {
+
+        referenceElement.textContent =
+            currentUser.id ||
+            "---";
+
+    }
+
+
+    updateBalance();
+
+    renderHistory();
+
+
+    const openTrade =
+        getOpenTrade();
+
+
+    if (openTrade) {
+
+        showOpenTrade(
+            openTrade
+        );
+
+        startTradeTimer(
+            openTrade
+        );
+
+    } else {
+
+        hideOpenTrade();
+
+    }
+
+}
+
+
+/* =====================================================
+   BALANCE
+===================================================== */
+
+function updateBalance() {
+
+    const element =
+        document.getElementById(
+            "balance"
+        );
+
+    if (!element) {
+        return;
+    }
+
+
+    const balance =
+        Number(
+            currentUser?.balance || 0
+        );
+
+
+    element.textContent =
+        "$" +
+        balance.toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+/* =====================================================
+   OPEN TRADE
+===================================================== */
+
+function getOpenTrade() {
+
+    const trades =
+        Array.isArray(
+            currentUser?.trades
+        )
+            ? currentUser.trades
+            : [];
+
+
+    return (
+        trades.find(
+            trade =>
+                String(
+                    trade.status || ""
+                ).toUpperCase() ===
+                "OPEN"
+        ) || null
+    );
+
+}
+
+
+/* =====================================================
+   SHOW OPEN TRADE
+===================================================== */
+
+function showOpenTrade(
+    trade
+) {
+
+    const box =
+        document.getElementById(
+            "openTradeBox"
+        );
+
+    if (!box) {
+        return;
+    }
+
+
+    box.style.display =
+        "block";
+
+
+    document.getElementById(
+        "openTradeType"
+    ).textContent =
+        trade.type || "---";
+
+
+    document.getElementById(
+        "openTradeAmount"
+    ).textContent =
+        "$" +
+        Number(
+            trade.amount || 0
+        ).toFixed(2);
+
+
+    document.getElementById(
+        "openTradeEntry"
+    ).textContent =
+        "$" +
+        Number(
+            trade.entryPrice || 0
+        ).toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+
+    const price =
+        typeof window.liveGetEffectivePrice ===
+        "function"
+            ? window.liveGetEffectivePrice()
+            : Number(
+                trade.entryPrice || 0
+            );
+
+
+    document.getElementById(
+        "openTradeCurrent"
+    ).textContent =
+        "$" +
+        Number(
+            price || 0
+        ).toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+
+    document.getElementById(
+        "openTradeDuration"
+    ).textContent =
+        formatDuration(
+            trade.duration || 30
+        );
+
+}
+
+
+/* =====================================================
+   HIDE OPEN TRADE
+===================================================== */
+
+function hideOpenTrade() {
+
+    const box =
+        document.getElementById(
+            "openTradeBox"
+        );
+
+    if (box) {
+
+        box.style.display =
+            "none";
+
+    }
+
+    stopTradeTimer();
+
+}
+
+
+/* =====================================================
+   DURATION FORMAT
+===================================================== */
+
+function formatDuration(
+    seconds
+) {
+
+    seconds =
+        Number(seconds || 0);
+
+
+    if (seconds < 60) {
+
+        return (
+            seconds +
+            " Seconds"
+        );
+
+    }
+
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    return (
+        minutes +
+        " Minute" +
+        (
+            minutes === 1
+                ? ""
+                : "s"
+        )
+    );
+
+}
+
+
+/* =====================================================
+   TRADE TIMER
+===================================================== */
+
+function startTradeTimer(
+    trade
+) {
+
+    stopTradeTimer();
+
+
+    if (!trade.expiresAt) {
+        return;
+    }
+
+
+    function updateTimer() {
+
+        if (pageDestroyed) {
+            return;
+        }
+
+
+        const expiry =
+            new Date(
+                trade.expiresAt
+            ).getTime();
+
+
+        if (!Number.isFinite(expiry)) {
+
+            document.getElementById(
+                "tradeCountdown"
+            ).textContent =
+                "00:00";
+
+            return;
+        }
+
+
+        const remaining =
+            Math.max(
+                0,
+                Math.ceil(
+                    (
+                        expiry -
+                        Date.now()
+                    ) / 1000
+                )
+            );
+
+
+        const minutes =
+            Math.floor(
+                remaining / 60
+            );
+
+
+        const seconds =
+            remaining % 60;
+
+
+        const countdown =
+            document.getElementById(
+                "tradeCountdown"
+            );
+
+
+        if (countdown) {
+
+            countdown.textContent =
+                String(
+                    minutes
+                ).padStart(
+                    2,
+                    "0"
+                ) +
+                ":" +
+                String(
+                    seconds
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+        }
+
+
+        const current =
+            typeof window.liveGetEffectivePrice ===
+            "function"
+                ? window.liveGetEffectivePrice()
+                : 0;
+
+
+        const currentElement =
+            document.getElementById(
+                "openTradeCurrent"
+            );
+
+
+        if (
+            currentElement &&
+            current > 0
+        ) {
+
+            currentElement.textContent =
+                "$" +
+                Number(
+                    current
+                ).toLocaleString(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+        if (remaining <= 0) {
+
+            stopTradeTimer();
+
+
+            /*
+             * Only refresh USER DATA.
+             * Never reload browser.
+             */
+
+            setTimeout(
+                refreshUser,
+                1000
+            );
+
+        }
+
+    }
+
+
+    updateTimer();
+
+
+    tradeTimerInterval =
+        setInterval(
+            updateTimer,
+            500
+        );
+
+}
+
+
+/* =====================================================
+   STOP TRADE TIMER
+===================================================== */
+
+function stopTradeTimer() {
+
+    if (tradeTimerInterval) {
+
+        clearInterval(
+            tradeTimerInterval
+        );
+
+        tradeTimerInterval =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function renderHistory() {
+
+    const history =
+        document.getElementById(
+            "history"
+        );
+
+    if (!history) {
+        return;
+    }
+
+
+    history.innerHTML =
+        "";
+
+
+    const trades =
+        Array.isArray(
+            currentUser?.trades
+        )
+            ? currentUser.trades
+            : [];
+
+
+    if (!trades.length) {
+
+        history.innerHTML =
+            '<li class="empty-history">No Trades Yet</li>';
+
+        return;
+
+    }
+
+
+    trades.forEach(
+        function(trade) {
+
+            const li =
+                document.createElement(
+                    "li"
+                );
+
+
+            const status =
+                String(
+                    trade.status ||
+                    "OPEN"
+                ).toUpperCase();
+
+
+            let rowClass =
+                "history-open";
+
+
+            let textClass =
+                "open-text";
+
+
+            if (status === "WIN") {
+
+                rowClass =
+                    "history-win";
+
+                textClass =
+                    "win-text";
+
+            }
+
+
+            if (
+                status === "LOSE" ||
+                status === "LOSS"
+            ) {
+
+                rowClass =
+                    "history-loss";
+
+                textClass =
+                    "loss-text";
+
+            }
+
+
+            li.className =
+                rowClass;
+
+
+            let html =
+
+                "<strong>" +
+
+                escapeHtml(
+                    trade.type ||
+                    "TRADE"
+                ) +
+
+                "</strong>" +
+
+                "<br>" +
+
+                "Amount: $" +
+
+                Number(
+                    trade.amount || 0
+                ).toFixed(2) +
+
+                "<br>" +
+
+                "Entry: $" +
+
+                Number(
+                    trade.entryPrice || 0
+                ).toFixed(2);
+
+
+            if (
+                trade.closePrice !==
+                    null &&
+                trade.closePrice !==
+                    undefined
+            ) {
+
+                html +=
+
+                    "<br>" +
+
+                    "Close: $" +
+
+                    Number(
+                        trade.closePrice
+                    ).toFixed(2);
+
+            }
+
+
+            html +=
+
+                "<br>Status: " +
+
+                "<span class='" +
+                textClass +
+                "'>" +
+
+                escapeHtml(
+                    status
+                ) +
+
+                "</span>";
+
+
+            if (status === "WIN") {
+
+                html +=
+
+                    "<br>Profit: " +
+
+                    "<span class='win-text'>+$" +
+
+                    Number(
+                        trade.profit || 0
+                    ).toFixed(2) +
+
+                    "</span>";
+
+            }
+
+
+            if (
+                status === "LOSE" ||
+                status === "LOSS"
+            ) {
+
+                html +=
+
+                    "<br>Loss: " +
+
+                    "<span class='loss-text'>-$" +
+
+                    Math.abs(
+                        Number(
+                            trade.profit || 0
+                        )
+                    ).toFixed(2) +
+
+                    "</span>";
+
+            }
+
+
+            li.innerHTML =
+                html;
+
+
+            history.appendChild(
+                li
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   BUY
+===================================================== */
+
+async function buy() {
+
+    await submitTrade(
+        "BUY"
+    );
+
+}
+
+
+/* =====================================================
+   SELL
+===================================================== */
+
+async function sell() {
+
+    await submitTrade(
+        "SELL"
+    );
+
+}
+
+
+/* =====================================================
+   SUBMIT TRADE
+===================================================== */
+
+async function submitTrade(
+    type
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+
+    }
+
+
+    const openTrade =
+        getOpenTrade();
+
+
+    if (openTrade) {
+
+        alert(
+            "You already have an open trade. Please wait until it settles."
+        );
+
+        return;
+
+    }
+
+
+    const amountInput =
+        document.getElementById(
+            "tradeAmount"
+        );
+
+
+    const durationInput =
+        document.getElementById(
+            "tradeDuration"
+        );
+
+
+    const amount =
+        Number(
+            amountInput?.value
+        );
+
+
+    const duration =
+        Number(
+            durationInput?.value || 30
+        );
+
+
+    if (
+        !Number.isFinite(amount) ||
+        amount <= 0
+    ) {
+
+        alert(
+            "Enter a valid amount."
+        );
+
+        return;
+
+    }
+
+
+    const balance =
+        Number(
+            currentUser.balance || 0
+        );
+
+
+    if (amount > balance) {
+
+        alert(
+            "Insufficient balance."
+        );
+
+        return;
+
+    }
+
+
+    const buyButton =
+        document.getElementById(
+            "buyButton"
+        );
+
+
+    const sellButton =
+        document.getElementById(
+            "sellButton"
+        );
+
+
+    buyButton.disabled =
+        true;
+
+    sellButton.disabled =
+        true;
+
+
+    try {
+
+        /*
+         * Server decides the official
+         * trade entry price.
+         */
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/trade",
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers:
+                        getAuthHeaders(),
+
+                    body:
+                        JSON.stringify({
+
+                            symbol:
+                                "BTC",
+
+                            type:
+                                type,
+
+                            amount:
+                                amount,
+
+                            duration:
+                                duration
+
+                        })
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (response.status === 401) {
+
+            logout();
+
+            return;
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+
+                data.message ||
+                "Trade failed."
+
+            );
+
+        }
+
+
+        /*
+         * Update local user immediately.
+         */
+
+        currentUser.balance =
+            Number(
+                data.balance ??
+                currentUser.balance ??
+                0
+            );
+
+
+        if (
+            !Array.isArray(
+                currentUser.trades
+            )
+        ) {
+
+            currentUser.trades =
+                [];
+
+        }
+
+
+        if (data.trade) {
+
+            /*
+             * Avoid duplicate trade
+             * if backend already returned
+             * same trade.
+             */
+
+            const exists =
+                currentUser.trades.some(
+                    trade =>
+                        String(
+                            trade.id
+                        ) ===
+                        String(
+                            data.trade.id
+                        )
+                );
+
+
+            if (!exists) {
+
+                currentUser.trades.unshift(
+                    data.trade
+                );
+
+            }
+
+        }
+
+
+        localStorage.setItem(
+            "tradeXUser",
+            JSON.stringify(
+                currentUser
+            )
+        );
+
+
+        renderUser();
+
+
+        if (amountInput) {
+
+            amountInput.value =
+                "";
+
+        }
+
+
+        alert(
+            type +
+            " trade opened successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Trade error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Unable to open trade."
+        );
+
+
+    } finally {
+
+        buyButton.disabled =
+            false;
+
+        sellButton.disabled =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   REFRESH USER
+===================================================== */
+
+async function refreshUser() {
+
+    if (
+        pageDestroyed ||
+        !currentUser ||
+        !currentUser.id
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/user/" +
+                encodeURIComponent(
+                    currentUser.id
+                ),
+
+                {
+
+                    method:
+                        "GET",
+
+                    headers:
+                        getAuthHeaders(),
+
+                    cache:
+                        "no-store"
+
+                }
+
+            );
+
+
+        if (response.status === 401) {
+
+            logout();
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            return;
+
+        }
+
+
+        currentUser =
+            data.user;
+
+
+        localStorage.setItem(
+            "tradeXUser",
+            JSON.stringify(
+                currentUser
+            )
+        );
+
+
+        renderUser();
+
+
+    } catch (error) {
+
+        console.error(
+            "Refresh user error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   START USER REFRESH
+===================================================== */
+
+function startUserRefresh() {
+
+    /*
+     * IMPORTANT:
+     * Only one interval allowed.
+     */
+
+    if (userRefreshTimer) {
+
+        clearInterval(
+            userRefreshTimer
+        );
+
+        userRefreshTimer =
+            null;
+
+    }
+
+
+    userRefreshTimer =
+        setInterval(
+            function() {
+
+                if (
+                    document.hidden ||
+                    pageDestroyed
+                ) {
+
+                    return;
+
+                }
+
+
+                refreshUser();
+
+            },
+            5000
+        );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout() {
+
+    pageDestroyed =
+        true;
+
+
+    stopTradeTimer();
+
+
+    if (userRefreshTimer) {
+
+        clearInterval(
+            userRefreshTimer
+        );
+
+        userRefreshTimer =
+            null;
+
+    }
+
+
+    /*
+     * Stop live engine.
+     * This does NOT reload the page.
+     */
+
+    if (
+        typeof window.stopLiveEngine ===
+        "function"
+    ) {
+
+        window.stopLiveEngine();
+
+    }
+
+
+    localStorage.removeItem(
+        "tradeXToken"
+    );
+
+    localStorage.removeItem(
+        "token"
+    );
+
+    localStorage.removeItem(
+        "jwtToken"
+    );
+
+    localStorage.removeItem(
+        "authToken"
+    );
+
+    localStorage.removeItem(
+        "tradeXUser"
+    );
+
+    localStorage.removeItem(
+        "currentUserId"
+    );
+
+    localStorage.removeItem(
+        "login"
+    );
+
+
+    window.location.href =
+        "/login.html";
+
+}
+
+
+/* =====================================================
+   BUTTON EVENTS
+===================================================== */
+
+document
+    .getElementById(
+        "buyButton"
+    )
+    .addEventListener(
+        "click",
+        buy
+    );
+
+
+document
+    .getElementById(
+        "sellButton"
+    )
+    .addEventListener(
+        "click",
+        sell
+    );
+
+
+document
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        logout
+    );
+
+
+/* =====================================================
+   PAGE START
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function() {
+
+        if (pageDestroyed) {
+            return;
+        }
+
+
+        const token =
+            getAuthToken();
+
+
+        if (!token) {
+
+            setConnectionStatus(
+                "Please login first.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Load user.
+         */
+
+        await loadUser();
+
+
+        /*
+         * Start ONLY user polling.
+         * Market polling belongs to
+         * live-engine.js.
+         */
+
+        startUserRefresh();
+
+    }
+);
+
+
+/* =====================================================
+   CLEANUP
+===================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+        pageDestroyed =
+            true;
+
+
+        stopTradeTimer();
+
+
+        if (userRefreshTimer) {
+
+            clearInterval(
+                userRefreshTimer
+            );
+
+            userRefreshTimer =
+                null;
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

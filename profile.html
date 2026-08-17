@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin - Profile</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #050505;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #0b0b0b;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .logo {
+            color: #00ff88;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 9px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-dark {
+            background: #1b1b1b;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .btn-green {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .btn-red {
+            background: #ff4545;
+            color: #fff;
+        }
+
+        .container {
+            width: min(1100px, 94%);
+            margin: 30px auto 60px;
+        }
+
+        .heading {
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            margin: 0 0 7px;
+            font-size: 30px;
+        }
+
+        .heading p {
+            margin: 0;
+            color: #888;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .card {
+            background: #0d0d0d;
+            border: 1px solid #242424;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+
+        .stat {
+            background: #0d0d0d;
+            border: 1px solid #242424;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .card h2 {
+            margin: 0 0 20px;
+            font-size: 20px;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #151515;
+            border: 2px solid #00ff88;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00ff88;
+            font-size: 34px;
+            font-weight: bold;
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .info-box {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .info-label {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            color: #fff;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th,
+        td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #222;
+            text-align: left;
+        }
+
+        th {
+            color: #777;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 13px;
+        }
+
+        .green {
+            color: #00ff88;
+        }
+
+        .red {
+            color: #ff5050;
+        }
+
+        .yellow {
+            color: #ffb000;
+        }
+
+        .muted {
+            color: #888;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #181818;
+        }
+
+        .empty {
+            padding: 25px;
+            text-align: center;
+            color: #777;
+        }
+
+        .message {
+            padding: 13px;
+            border-radius: 9px;
+            background: #111;
+            border: 1px solid #242424;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            color: #555;
+            font-size: 12px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 800px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar {
+                margin: auto;
+            }
+
+            .topbar {
+                padding: 0 14px;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
+
+    <div class="topbar">
+
+        <div class="logo"><img src="logo.png" alt="KrakenCoin" class="logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+
+        <div class="top-actions">
+
+            <button
+                class="btn-dark"
+                onclick="goDashboard()"
+            >
+                Dashboard
+            </button>
+
+            <button
+                class="btn-red"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="container">
+
+        <div class="heading">
+
+            <h1>
+                My Profile
+            </h1>
+
+            <p>
+                Manage your KrakenCoin account and view your wallet activity.
+            </p>
+
+        </div>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <!-- =================================================
+             STATS
+        ================================================== -->
+
+        <div class="grid">
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Available Balance
+                </div>
+
+                <div
+                    id="balance"
+                    class="stat-value"
+                >
+                    $0.00
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Total Trades
+                </div>
+
+                <div
+                    id="totalTrades"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Account Status
+                </div>
+
+                <div
+                    id="accountStatus"
+                    class="stat-value"
+                >
+                    Active
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PROFILE INFORMATION
+        ================================================== -->
+
+        <div class="card">
+
+            <h2>
+                Account Information
+            </h2>
+
+            <div class="profile-layout">
+
+                <div
+                    id="avatar"
+                    class="avatar"
+                >
+                    U
+                </div>
+
+
+                <div class="profile-info">
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Full Name
+                        </div>
+
+                        <div
+                            id="userName"
+                            class="info-value"
+                        >
+                            Loading...
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Email
+                        </div>
+
+                        <div
+                            id="userEmail"
+                            class="info-value"
+                        >
+                            Loading...
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Phone
+                        </div>
+
+                        <div
+                            id="userPhone"
+                            class="info-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Account ID
+                        </div>
+
+                        <div
+                            id="userId"
+                            class="info-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Joined
+                        </div>
+
+                        <div
+                            id="createdAt"
+                            class="info-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Account Status
+                        </div>
+
+                        <div
+                            class="info-value green"
+                        >
+                            Active
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DEPOSIT HISTORY
+        ================================================== -->
+
+        <div class="card">
+
+            <h2>
+                Deposit History
+            </h2>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Method
+                            </th>
+
+                            <th>
+                                Reference
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="depositTable"
+                    >
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             WITHDRAWAL HISTORY
+        ================================================== -->
+
+        <div class="card">
+
+            <h2>
+                Withdrawal History
+            </h2>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Method
+                            </th>
+
+                            <th>
+                                Account
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="withdrawalTable"
+                    >
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TRANSACTIONS
+        ================================================== -->
+
+        <div class="card">
+
+            <h2>
+                Transactions
+            </h2>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Direction
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="transactionTable"
+                    >
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TRADE HISTORY
+        ================================================== -->
+
+        <div class="card">
+
+            <h2>
+                Trade History
+            </h2>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Market
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Entry
+                            </th>
+
+                            <th>
+                                Close
+                            </th>
+
+                            <th>
+                                Result
+                            </th>
+
+                            <th>
+                                Profit
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="tradeTable"
+                    >
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer">
+            KrakenCoin Profile
+        </div>
+
+    </div>
+
+
+<script>
+
+    // =====================================================
+    // CONFIG
+    // =====================================================
+
+    const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : "http://localhost:3000";
+
+
+    // =====================================================
+    // TOKEN
+    // =====================================================
+
+    function getToken() {
+
+        return (
+
+            localStorage.getItem(
+                "tradeXToken"
+            ) ||
+
+            localStorage.getItem(
+                "token"
+            ) ||
+
+            ""
+
+        );
+
+    }
+
+
+    // =====================================================
+    // HEADERS
+    // =====================================================
+
+    function getHeaders() {
+
+        return {
+
+            "Content-Type":
+                "application/json",
+
+            "Authorization":
+                `Bearer ${getToken()}`
+
+        };
+
+    }
+
+
+    // =====================================================
+    // CHECK LOGIN
+    // =====================================================
+
+    function checkLogin() {
+
+        const token =
+            getToken();
+
+        if (!token) {
+
+            window.location.href =
+                "login.html";
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+
+    // =====================================================
+    // FORMAT MONEY
+    // =====================================================
+
+    function money(
+        value
+    ) {
+
+        const number =
+            Number(value || 0);
+
+        return "$" +
+            number.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    // =====================================================
+    // FORMAT DATE
+    // =====================================================
+
+    function formatDate(
+        value
+    ) {
+
+        if (!value) {
+            return "-";
+        }
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "-";
+
+        }
+
+        return date.toLocaleString();
+
+    }
+
+
+    // =====================================================
+    // MESSAGE
+    // =====================================================
+
+    function showMessage(
+        text,
+        type = "info"
+    ) {
+
+        const box =
+            document.getElementById(
+                "message"
+            );
+
+        box.style.display =
+            "block";
+
+        box.textContent =
+            text;
+
+        if (type === "error") {
+
+            box.style.color =
+                "#ff5555";
+
+        } else if (type === "success") {
+
+            box.style.color =
+                "#00ff88";
+
+        } else {
+
+            box.style.color =
+                "#ffb000";
+
+        }
+
+    }
+
+
+    // =====================================================
+    // LOAD PROFILE
+    // =====================================================
+
+    async function loadProfile() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/me`,
+                    {
+                        method: "GET",
+                        headers: getHeaders()
+                    }
+                );
+
+
+            if (
+                response.status === 401
+            ) {
+
+                logout();
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load profile."
+                );
+
+            }
+
+
+            const user =
+                data.user;
+
+
+            renderProfile(
+                user
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =====================================================
+    // RENDER PROFILE
+    // =====================================================
+
+    function renderProfile(
+        user
+    ) {
+
+        document.getElementById(
+            "userName"
+        ).textContent =
+            user.name || "-";
+
+
+        document.getElementById(
+            "userEmail"
+        ).textContent =
+            user.email || "-";
+
+
+        document.getElementById(
+            "userPhone"
+        ).textContent =
+            user.phone || "-";
+
+
+        document.getElementById(
+            "userId"
+        ).textContent =
+            user.id || "-";
+
+
+        document.getElementById(
+            "createdAt"
+        ).textContent =
+            formatDate(
+                user.createdAt
+            );
+
+
+        document.getElementById(
+            "balance"
+        ).textContent =
+            money(
+                user.balance
+            );
+
+
+        const trades =
+            Array.isArray(
+                user.trades
+            )
+                ? user.trades
+                : [];
+
+
+        document.getElementById(
+            "totalTrades"
+        ).textContent =
+            trades.length;
+
+
+        const name =
+            String(
+                user.name || "U"
+            ).trim();
+
+
+        document.getElementById(
+            "avatar"
+        ).textContent =
+            name
+                ? name
+                    .charAt(0)
+                    .toUpperCase()
+                : "U";
+
+
+        renderDeposits(
+            user.deposits || []
+        );
+
+
+        renderWithdrawals(
+            user.withdrawals || []
+        );
+
+
+        renderTransactions(
+            user.transactions || []
+        );
+
+
+        renderTrades(
+            trades
+        );
+
+    }
+
+
+    // =====================================================
+    // DEPOSITS
+    // =====================================================
+
+    function renderDeposits(
+        deposits
+    ) {
+
+        const table =
+            document.getElementById(
+                "depositTable"
+            );
+
+        table.innerHTML = "";
+
+
+        if (
+            !deposits.length
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty"
+                    >
+                        No deposit history found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        deposits.forEach(
+            deposit => {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${deposit.id || "-"}
+                    </td>
+
+                    <td class="green">
+                        ${money(deposit.amount)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(deposit.method)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(deposit.reference)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(
+                            deposit.status
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatDate(
+                            deposit.createdAt
+                        )}
+                    </td>
+
+                `;
+
+
+                table.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // WITHDRAWALS
+    // =====================================================
+
+    function renderWithdrawals(
+        withdrawals
+    ) {
+
+        const table =
+            document.getElementById(
+                "withdrawalTable"
+            );
+
+        table.innerHTML = "";
+
+
+        if (
+            !withdrawals.length
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty"
+                    >
+                        No withdrawal history found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        withdrawals.forEach(
+            withdrawal => {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${withdrawal.id || "-"}
+                    </td>
+
+                    <td class="red">
+                        ${money(
+                            withdrawal.amount
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            withdrawal.method
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            withdrawal.account
+                        )}
+                    </td>
+
+                    <td>
+                        ${statusBadge(
+                            withdrawal.status
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatDate(
+                            withdrawal.createdAt
+                        )}
+                    </td>
+
+                `;
+
+
+                table.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // TRANSACTIONS
+    // =====================================================
+
+    function renderTransactions(
+        transactions
+    ) {
+
+        const table =
+            document.getElementById(
+                "transactionTable"
+            );
+
+        table.innerHTML = "";
+
+
+        if (
+            !transactions.length
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty"
+                    >
+                        No transactions found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        transactions.forEach(
+            transaction => {
+
+                const direction =
+                    String(
+                        transaction.direction || ""
+                    ).toUpperCase();
+
+
+                const amountClass =
+                    direction === "CREDIT"
+                        ? "green"
+                        : direction === "DEBIT"
+                            ? "red"
+                            : "yellow";
+
+
+                const sign =
+                    direction === "CREDIT"
+                        ? "+"
+                        : direction === "DEBIT"
+                            ? "-"
+                            : "";
+
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${escapeHtml(
+                            transaction.type
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            transaction.description
+                        )}
+                    </td>
+
+                    <td class="${amountClass}">
+                        ${sign}${money(
+                            transaction.amount
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            transaction.direction
+                        )}
+                    </td>
+
+                    <td>
+                        ${statusBadge(
+                            transaction.status
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatDate(
+                            transaction.createdAt
+                        )}
+                    </td>
+
+                `;
+
+
+                table.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // TRADES
+    // =====================================================
+
+    function renderTrades(
+        trades
+    ) {
+
+        const table =
+            document.getElementById(
+                "tradeTable"
+            );
+
+        table.innerHTML = "";
+
+
+        if (
+            !trades.length
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty"
+                    >
+                        No trades found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        trades.forEach(
+            trade => {
+
+                let resultClass =
+                    "muted";
+
+
+                if (
+                    trade.result === "WIN"
+                ) {
+
+                    resultClass =
+                        "green";
+
+                } else if (
+                    trade.result === "LOSE"
+                ) {
+
+                    resultClass =
+                        "red";
+
+                }
+
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(
+                                trade.symbol
+                            )}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${
+                            trade.type === "BUY"
+
+                                ? '<span class="green">BUY</span>'
+
+                                : '<span class="red">SELL</span>'
+                        }
+                    </td>
+
+                    <td>
+                        ${money(
+                            trade.amount
+                        )}
+                    </td>
+
+                    <td>
+                        $${Number(
+                            trade.entryPrice || 0
+                        ).toLocaleString(
+                            "en-US",
+                            {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 8
+                            }
+                        )}
+                    </td>
+
+                    <td>
+                        ${
+                            trade.closePrice
+                                ? "$" +
+                                  Number(
+                                      trade.closePrice
+                                  ).toLocaleString(
+                                      "en-US",
+                                      {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 8
+                                      }
+                                  )
+                                : "-"
+                        }
+                    </td>
+
+                    <td class="${resultClass}">
+                        ${escapeHtml(
+                            trade.result
+                        )}
+                    </td>
+
+                    <td class="${resultClass}">
+                        ${money(
+                            trade.profit
+                        )}
+                    </td>
+
+                `;
+
+
+                table.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    }
+
+
+    // =====================================================
+    // STATUS BADGE
+    // =====================================================
+
+    function statusBadge(
+        status
+    ) {
+
+        const clean =
+            String(
+                status || "-"
+            ).toUpperCase();
+
+
+        let className =
+            "yellow";
+
+
+        if (
+            clean === "APPROVED" ||
+            clean === "COMPLETED" ||
+            clean === "WIN"
+        ) {
+
+            className =
+                "green";
+
+        }
+
+
+        if (
+            clean === "REJECTED" ||
+            clean === "LOSE"
+        ) {
+
+            className =
+                "red";
+
+        }
+
+
+        return `
+
+            <span class="status ${className}">
+                ${escapeHtml(clean)}
+            </span>
+
+        `;
+
+    }
+
+
+    // =====================================================
+    // ESCAPE HTML
+    // =====================================================
+
+    function escapeHtml(
+        value
+    ) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+
+        }
+
+
+        return String(
+            value
+        )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    // =====================================================
+    // DASHBOARD
+    // =====================================================
+
+    function goDashboard() {
+
+        window.location.href =
+            "dashboard.html";
+
+    }
+
+
+    // =====================================================
+    // LOGOUT
+    // =====================================================
+
+    function logout() {
+
+        localStorage.removeItem(
+            "tradeXToken"
+        );
+
+        localStorage.removeItem(
+            "token"
+        );
+
+        localStorage.removeItem(
+            "tradeXUser"
+        );
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    // =====================================================
+    // PAGE START
+    // =====================================================
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            if (
+                !checkLogin()
+            ) {
+
+                return;
+
+            }
+
+            loadProfile();
+
+        }
+    );
+
+
+    // =====================================================
+    // AUTO REFRESH
+    // =====================================================
+
+    setInterval(
+        () => {
+
+            if (
+                getToken()
+            ) {
+
+                loadProfile();
+
+            }
+
+        },
+        15000
+    );
+
+</script>
+
+</body>
+</html>

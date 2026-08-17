@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin - Trade</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #050505;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            height: 70px;
+            background: #0b0b0b;
+            border-bottom: 1px solid #292929;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 25px;
+        }
+
+        .logo {
+            color: #ff1f1f;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: #d60000;
+            color: white;
+            border: none;
+
+            padding: 11px 20px;
+            border-radius: 7px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: #b00000;
+        }
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 220px;
+            background: #0b0b0b;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar a {
+            display: block;
+
+            padding: 13px;
+            margin: 10px 0;
+
+            background: #181818;
+            color: white;
+
+            text-decoration: none;
+            border-radius: 7px;
+
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #d60000;
+        }
+
+        .sidebar a.active {
+            background: #d60000;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        .top-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(
+                        220px,
+                        1fr
+                    )
+                );
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid #292929;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .card h3 {
+            color: #aaa;
+            margin-top: 0;
+        }
+
+        .value {
+            color: #00ff88;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .panel {
+            background: #111;
+            border: 1px solid #292929;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .panel h2 {
+            color: #ff1f1f;
+            margin-top: 0;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 7px;
+            background: #191919;
+            text-align: center;
+        }
+
+        .success {
+            color: #00ff88;
+        }
+
+        .error {
+            color: #ff5555;
+        }
+
+        .loading {
+            color: #ffcc00;
+        }
+
+        .trade-box {
+            max-width: 520px;
+        }
+
+        label {
+            display: block;
+            color: #aaa;
+            margin-top: 15px;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+
+            background: #191919;
+            color: white;
+
+            border: 1px solid #333;
+            border-radius: 7px;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #ff1f1f;
+        }
+
+        .trade-button {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 7px;
+
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 10px;
+        }
+
+        .buy {
+            background: #00c853;
+        }
+
+        .buy:hover {
+            background: #00a844;
+        }
+
+        .sell {
+            background: #d60000;
+        }
+
+        .sell:hover {
+            background: #b00000;
+        }
+
+        .trade-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .market-info {
+            color: #aaa;
+            line-height: 1.8;
+        }
+
+        .market-info strong {
+            color: white;
+        }
+
+        .open-trade {
+            display: none;
+
+            background: #111;
+
+            border: 1px solid #ff1f1f;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            margin-bottom: 20px;
+        }
+
+        .open-trade h2 {
+            color: #ff1f1f;
+            margin-top: 0;
+        }
+
+        .timer-box {
+            margin-top: 15px;
+
+            padding: 15px;
+
+            background: #191919;
+
+            border-left: 4px solid #ffcc00;
+
+            border-radius: 7px;
+        }
+
+        .timer-label {
+            color: #888;
+            font-size: 12px;
+        }
+
+        #countdown {
+            color: #ffcc00;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            margin-top: 5px;
+        }
+
+        #history {
+            padding: 0;
+            list-style: none;
+        }
+
+        #history li {
+            background: #191919;
+
+            border-radius: 7px;
+
+            padding: 12px;
+
+            margin-bottom: 10px;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+        }
+
+        .win {
+            border-left: 4px solid #00c853;
+        }
+
+        .loss {
+            border-left: 4px solid #d60000;
+        }
+
+        .open {
+            border-left: 4px solid #ffcc00;
+        }
+
+        .win-text {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .loss-text {
+            color: #ff5555;
+            font-weight: bold;
+        }
+
+        .open-text {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="logo"><img src="logo.png" alt="KrakenCoin" class="logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+
+    <button
+        class="logout"
+        onclick="logout()"
+    >
+        Logout
+    </button>
+
+</header>
+
+
+<div class="layout">
+
+
+    <aside class="sidebar">
+
+        <a href="/dashboard.html">
+            Dashboard
+        </a>
+
+        <a
+            class="active"
+            href="/trade.html"
+        >
+            Trade
+        </a>
+
+        <a href="/markets.html">
+            Markets
+        </a>
+
+        <a href="/wallet.html">
+            Wallet
+        </a>
+
+        <a href="/profile.html">
+            Profile
+        </a>
+
+    </aside>
+
+
+    <main class="main">
+
+
+        <h1>
+            Trade BTC
+        </h1>
+
+
+        <p
+            style="
+                color:#888;
+                margin-top:5px;
+            "
+        >
+            Trade using the current server market price.
+        </p>
+
+
+        <!-- =================================================
+             TOP INFORMATION
+        ================================================== -->
+
+        <div class="top-grid">
+
+
+            <div class="card">
+
+                <h3>
+                    Available Balance
+                </h3>
+
+                <div
+                    class="value"
+                    id="balance"
+                >
+                    $0.00
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    BTC / USDT
+                </h3>
+
+                <div
+                    class="value"
+                    id="btcPrice"
+                >
+                    $0.00
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             CONNECTION
+        ================================================== -->
+
+        <div
+            id="connection"
+            class="status loading"
+        >
+            Connecting to backend...
+        </div>
+
+
+        <!-- =================================================
+             OPEN TRADE
+        ================================================== -->
+
+        <div
+            id="openTrade"
+            class="open-trade"
+        >
+
+            <h2>
+                🔴 Open Trade
+            </h2>
+
+            <div class="market-info">
+
+                <strong>Direction:</strong>
+
+                <span id="openType">
+                    ---
+                </span>
+
+                <br>
+
+                <strong>Amount:</strong>
+
+                <span id="openAmount">
+                    $0.00
+                </span>
+
+                <br>
+
+                <strong>Entry Price:</strong>
+
+                <span id="openEntry">
+                    $0.00
+                </span>
+
+                <br>
+
+                <strong>Current Price:</strong>
+
+                <span id="openCurrent">
+                    $0.00
+                </span>
+
+                <br>
+
+                <strong>Duration:</strong>
+
+                <span>
+                    30 Seconds
+                </span>
+
+            </div>
+
+
+            <div class="timer-box">
+
+                <div class="timer-label">
+                    TIME REMAINING
+                </div>
+
+                <div id="countdown">
+                    00:00
+                </div>
+
+            </div>
+
+
+            <div
+                style="
+                    margin-top:15px;
+                    color:#aaa;
+                "
+            >
+
+                Status:
+
+                <strong
+                    class="open-text"
+                >
+                    OPEN
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TRADE PANEL
+        ================================================== -->
+
+        <div class="panel trade-box">
+
+            <h2>
+                Place Trade
+            </h2>
+
+
+            <div class="market-info">
+
+                <strong>Market:</strong>
+                BTC / USDT
+
+                <br>
+
+                <strong>Trade Duration:</strong>
+                30 Seconds
+
+                <br>
+
+                <strong>Current Price:</strong>
+
+                <span id="panelPrice">
+                    $0.00
+                </span>
+
+            </div>
+
+
+            <label for="amount">
+                Trade Amount
+            </label>
+
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Enter Amount"
+                min="1"
+                step="0.01"
+                autocomplete="off"
+            >
+
+
+            <button
+                id="buyButton"
+                class="trade-button buy"
+                onclick="openTrade('BUY')"
+            >
+                BUY BTC
+            </button>
+
+
+            <button
+                id="sellButton"
+                class="trade-button sell"
+                onclick="openTrade('SELL')"
+            >
+                SELL BTC
+            </button>
+
+
+            <div
+                id="tradeStatus"
+                class="status"
+            >
+                Ready to trade.
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             HISTORY
+        ================================================== -->
+
+        <div class="panel">
+
+            <h2>
+                Trade History
+            </h2>
+
+
+            <ul id="history">
+
+                <li>
+                    No Trades Yet
+                </li>
+
+            </ul>
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : "http://localhost:3000";
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentUser =
+    null;
+
+let currentPrice =
+    0;
+
+let countdownInterval =
+    null;
+
+let userRefreshInterval =
+    null;
+
+let marketRefreshInterval =
+    null;
+
+
+/* =====================================================
+   TOKEN
+===================================================== */
+
+function getToken() {
+
+    return (
+
+        localStorage.getItem(
+            "tradeXToken"
+        ) ||
+
+        localStorage.getItem(
+            "token"
+        ) ||
+
+        localStorage.getItem(
+            "jwtToken"
+        ) ||
+
+        localStorage.getItem(
+            "authToken"
+        ) ||
+
+        ""
+
+    );
+
+}
+
+
+/* =====================================================
+   HEADERS
+===================================================== */
+
+function headers() {
+
+    return {
+
+        "Content-Type":
+            "application/json",
+
+        "Authorization":
+            "Bearer " +
+            getToken()
+
+    };
+
+}
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const balanceElement =
+    document.getElementById(
+        "balance"
+    );
+
+const priceElement =
+    document.getElementById(
+        "btcPrice"
+    );
+
+const panelPriceElement =
+    document.getElementById(
+        "panelPrice"
+    );
+
+const connectionElement =
+    document.getElementById(
+        "connection"
+    );
+
+const tradeStatusElement =
+    document.getElementById(
+        "tradeStatus"
+    );
+
+const openTradeElement =
+    document.getElementById(
+        "openTrade"
+    );
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+function money(
+    value
+) {
+
+    return (
+
+        "$" +
+
+        Number(
+            value || 0
+        ).toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        )
+
+    );
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function setConnection(
+    text,
+    type
+) {
+
+    connectionElement.textContent =
+        text;
+
+    connectionElement.className =
+        "status " +
+        (
+            type ||
+            "loading"
+        );
+
+}
+
+
+function setTradeStatus(
+    text,
+    type
+) {
+
+    tradeStatusElement.textContent =
+        text;
+
+    tradeStatusElement.className =
+        "status " +
+        (
+            type ||
+            ""
+        );
+
+}
+
+
+/* =====================================================
+   LOAD USER
+===================================================== */
+
+async function loadUser() {
+
+    const savedUser =
+        localStorage.getItem(
+            "tradeXUser"
+        );
+
+    const token =
+        getToken();
+
+
+    if (
+        !savedUser ||
+        !token
+    ) {
+
+        setConnection(
+            "Please login first.",
+            "error"
+        );
+
+        return false;
+
+    }
+
+
+    try {
+
+        const user =
+            JSON.parse(
+                savedUser
+            );
+
+
+        if (
+            !user.id
+        ) {
+
+            throw new Error(
+                "User ID missing."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/user/" +
+                encodeURIComponent(
+                    user.id
+                ),
+
+                {
+
+                    method:
+                        "GET",
+
+                    headers:
+                        headers(),
+
+                    cache:
+                        "no-store"
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            setConnection(
+                "Login session expired.",
+                "error"
+            );
+
+            return false;
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+
+                data.message ||
+                "Unable to load user."
+
+            );
+
+        }
+
+
+        currentUser =
+            data.user;
+
+
+        localStorage.setItem(
+
+            "tradeXUser",
+
+            JSON.stringify(
+                currentUser
+            )
+
+        );
+
+
+        renderUser();
+
+
+        setConnection(
+            "● Backend Connected",
+            "success"
+        );
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Load user error:",
+            error
+        );
+
+        setConnection(
+            "● Backend connection failed",
+            "error"
+        );
+
+        return false;
+    }
+
+}
+
+
+/* =====================================================
+   RENDER USER
+===================================================== */
+
+function renderUser() {
+
+    if (
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    balanceElement.textContent =
+        money(
+            currentUser.balance
+        );
+
+
+    renderHistory();
+
+
+    const openTrade =
+        getOpenTrade();
+
+
+    if (
+        openTrade
+    ) {
+
+        showOpenTrade(
+            openTrade
+        );
+
+    } else {
+
+        hideOpenTrade();
+
+    }
+
+}
+
+
+/* =====================================================
+   GET OPEN TRADE
+===================================================== */
+
+function getOpenTrade() {
+
+    const trades =
+        Array.isArray(
+            currentUser?.trades
+        )
+            ? currentUser.trades
+            : [];
+
+
+    return (
+
+        trades.find(
+            function(trade) {
+
+                return (
+                    trade.status ===
+                    "OPEN"
+                );
+
+            }
+        ) ||
+
+        null
+
+    );
+
+}
+
+
+/* =====================================================
+   SHOW OPEN TRADE
+===================================================== */
+
+function showOpenTrade(
+    trade
+) {
+
+    openTradeElement.style.display =
+        "block";
+
+
+    document.getElementById(
+        "openType"
+    ).textContent =
+        trade.type ||
+        "---";
+
+
+    document.getElementById(
+        "openAmount"
+    ).textContent =
+        money(
+            trade.amount
+        );
+
+
+    document.getElementById(
+        "openEntry"
+    ).textContent =
+        money(
+            trade.entryPrice
+        );
+
+
+    document.getElementById(
+        "openCurrent"
+    ).textContent =
+        money(
+            currentPrice
+        );
+
+
+    startCountdown(
+        trade
+    );
+
+}
+
+
+/* =====================================================
+   HIDE OPEN TRADE
+===================================================== */
+
+function hideOpenTrade() {
+
+    openTradeElement.style.display =
+        "none";
+
+    stopCountdown();
+
+}
+
+
+/* =====================================================
+   COUNTDOWN
+===================================================== */
+
+function startCountdown(
+    trade
+) {
+
+    stopCountdown();
+
+
+    if (
+        !trade.expiresAt
+    ) {
+
+        return;
+
+    }
+
+
+    function update() {
+
+        const expiry =
+            new Date(
+                trade.expiresAt
+            ).getTime();
+
+
+        const remaining =
+            Math.max(
+                0,
+                Math.ceil(
+                    (
+                        expiry -
+                        Date.now()
+                    ) /
+                    1000
+                )
+            );
+
+
+        const minutes =
+            Math.floor(
+                remaining /
+                60
+            );
+
+
+        const seconds =
+            remaining %
+            60;
+
+
+        document.getElementById(
+            "countdown"
+        ).textContent =
+
+            String(
+                minutes
+            ).padStart(
+                2,
+                "0"
+            ) +
+
+            ":" +
+
+            String(
+                seconds
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        document.getElementById(
+            "openCurrent"
+        ).textContent =
+            money(
+                currentPrice
+            );
+
+
+        if (
+            remaining <=
+            0
+        ) {
+
+            stopCountdown();
+
+
+            setTimeout(
+                async function() {
+
+                    await loadUser();
+
+                },
+                1200
+            );
+
+        }
+
+    }
+
+
+    update();
+
+
+    countdownInterval =
+        setInterval(
+            update,
+            500
+        );
+
+}
+
+
+/* =====================================================
+   STOP COUNTDOWN
+===================================================== */
+
+function stopCountdown() {
+
+    if (
+        countdownInterval
+    ) {
+
+        clearInterval(
+            countdownInterval
+        );
+
+        countdownInterval =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD MARKET
+===================================================== */
+
+async function loadMarket() {
+
+    try {
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/market",
+
+                {
+                    method:
+                        "GET",
+
+                    cache:
+                        "no-store"
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                "Market request failed."
+            );
+
+        }
+
+
+        const btc =
+            data.data &&
+            data.data.BTC;
+
+
+        if (
+            btc &&
+            Number(
+                btc.price
+            ) > 0
+        ) {
+
+            currentPrice =
+                Number(
+                    btc.price
+                );
+
+        }
+
+
+        priceElement.textContent =
+            money(
+                currentPrice
+            );
+
+
+        panelPriceElement.textContent =
+            money(
+                currentPrice
+            );
+
+
+        const openTrade =
+            getOpenTrade();
+
+
+        if (
+            openTrade
+        ) {
+
+            document.getElementById(
+                "openCurrent"
+            ).textContent =
+                money(
+                    currentPrice
+                );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Market error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   OPEN TRADE
+===================================================== */
+
+async function openTrade(
+    type
+) {
+
+    if (
+        !currentUser
+    ) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+
+    }
+
+
+    const existingTrade =
+        getOpenTrade();
+
+
+    if (
+        existingTrade
+    ) {
+
+        alert(
+            "You already have an open trade. Please wait 30 seconds until it settles."
+        );
+
+        return;
+
+    }
+
+
+    const amount =
+        Number(
+
+            document.getElementById(
+                "amount"
+            ).value
+
+        );
+
+
+    if (
+        !Number.isFinite(
+            amount
+        ) ||
+        amount <= 0
+    ) {
+
+        setTradeStatus(
+            "Please enter a valid amount.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const balance =
+        Number(
+            currentUser.balance ||
+            0
+        );
+
+
+    if (
+        amount >
+        balance
+    ) {
+
+        setTradeStatus(
+            "Insufficient balance.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const buyButton =
+        document.getElementById(
+            "buyButton"
+        );
+
+
+    const sellButton =
+        document.getElementById(
+            "sellButton"
+        );
+
+
+    buyButton.disabled =
+        true;
+
+    sellButton.disabled =
+        true;
+
+
+    setTradeStatus(
+        "Opening " +
+        type +
+        " trade...",
+        "loading"
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/trade",
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers:
+                        headers(),
+
+                    body:
+                        JSON.stringify({
+
+                            symbol:
+                                "BTC",
+
+                            type:
+                                type,
+
+                            amount:
+                                amount,
+
+                            duration:
+                                30
+
+                        })
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            logout();
+
+            return;
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+
+                data.message ||
+                "Trade failed."
+
+            );
+
+        }
+
+
+        currentUser.balance =
+            Number(
+                data.balance ||
+                0
+            );
+
+
+        if (
+            !Array.isArray(
+                currentUser.trades
+            )
+        ) {
+
+            currentUser.trades =
+                [];
+
+        }
+
+
+        currentUser.trades =
+            currentUser.trades.filter(
+                function(trade) {
+
+                    return (
+
+                        String(
+                            trade.id
+                        ) !==
+
+                        String(
+                            data.trade.id
+                        )
+
+                    );
+
+                }
+            );
+
+
+        currentUser.trades.unshift(
+            data.trade
+        );
+
+
+        localStorage.setItem(
+            "tradeXUser",
+            JSON.stringify(
+                currentUser
+            )
+        );
+
+
+        renderUser();
+
+
+        document.getElementById(
+            "amount"
+        ).value =
+            "";
+
+
+        setTradeStatus(
+            type +
+            " trade opened successfully.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Trade error:",
+            error
+        );
+
+
+        setTradeStatus(
+
+            error.message ||
+            "Unable to open trade.",
+
+            "error"
+
+        );
+
+    } finally {
+
+        buyButton.disabled =
+            false;
+
+        sellButton.disabled =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function renderHistory() {
+
+    const history =
+        document.getElementById(
+            "history"
+        );
+
+
+    history.innerHTML =
+        "";
+
+
+    const trades =
+        Array.isArray(
+            currentUser?.trades
+        )
+            ? currentUser.trades
+            : [];
+
+
+    if (
+        trades.length === 0
+    ) {
+
+        history.innerHTML =
+            "<li>No Trades Yet</li>";
+
+        return;
+
+    }
+
+
+    trades.forEach(
+        function(trade) {
+
+            const li =
+                document.createElement(
+                    "li"
+                );
+
+
+            const status =
+                String(
+                    trade.status ||
+                    "OPEN"
+                ).toUpperCase();
+
+
+            let cssClass =
+                "open";
+
+            let textClass =
+                "open-text";
+
+
+            if (
+                status ===
+                "WIN"
+            ) {
+
+                cssClass =
+                    "win";
+
+                textClass =
+                    "win-text";
+
+            }
+
+
+            if (
+                status ===
+                    "LOSE" ||
+                status ===
+                    "LOSS"
+            ) {
+
+                cssClass =
+                    "loss";
+
+                textClass =
+                    "loss-text";
+
+            }
+
+
+            li.className =
+                cssClass;
+
+
+            let html =
+
+                "<strong>" +
+
+                escapeHtml(
+                    trade.type ||
+                    "TRADE"
+                ) +
+
+                "</strong>" +
+
+                "<br>Amount: " +
+
+                money(
+                    trade.amount
+                ) +
+
+                "<br>Entry: " +
+
+                money(
+                    trade.entryPrice
+                );
+
+
+            if (
+                trade.closePrice !==
+                    null &&
+                trade.closePrice !==
+                    undefined
+            ) {
+
+                html +=
+
+                    "<br>Close: " +
+
+                    money(
+                        trade.closePrice
+                    );
+
+            }
+
+
+            html +=
+
+                "<br>Status: " +
+
+                "<span class='" +
+                textClass +
+                "'>" +
+
+                escapeHtml(
+                    status
+                ) +
+
+                "</span>";
+
+
+            if (
+                status ===
+                "WIN"
+            ) {
+
+                html +=
+
+                    "<br>Profit: " +
+
+                    "<span class='win-text'>+$" +
+
+                    Number(
+                        trade.profit ||
+                        0
+                    ).toFixed(2) +
+
+                    "</span>";
+
+            }
+
+
+            if (
+                status ===
+                    "LOSE" ||
+                status ===
+                    "LOSS"
+            ) {
+
+                html +=
+
+                    "<br>Loss: " +
+
+                    "<span class='loss-text'>-$" +
+
+                    Math.abs(
+                        Number(
+                            trade.profit ||
+                            0
+                        )
+                    ).toFixed(2) +
+
+                    "</span>";
+
+            }
+
+
+            li.innerHTML =
+                html;
+
+
+            history.appendChild(
+                li
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout() {
+
+    localStorage.removeItem(
+        "tradeXToken"
+    );
+
+    localStorage.removeItem(
+        "token"
+    );
+
+    localStorage.removeItem(
+        "jwtToken"
+    );
+
+    localStorage.removeItem(
+        "authToken"
+    );
+
+    localStorage.removeItem(
+        "tradeXUser"
+    );
+
+    localStorage.removeItem(
+        "currentUserId"
+    );
+
+    localStorage.removeItem(
+        "login"
+    );
+
+
+    stopCountdown();
+
+
+    window.location.href =
+        "/login.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function() {
+
+        if (
+            !getToken()
+        ) {
+
+            setConnection(
+                "Please login first.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        await loadMarket();
+
+        await loadUser();
+
+
+        /*
+         * Refresh API data only.
+         * Browser reload nahi hota.
+         */
+
+        marketRefreshInterval =
+            setInterval(
+                function() {
+
+                    if (
+                        !document.hidden
+                    ) {
+
+                        loadMarket();
+
+                    }
+
+                },
+                5000
+            );
+
+
+        userRefreshInterval =
+            setInterval(
+                function() {
+
+                    if (
+                        !document.hidden
+                    ) {
+
+                        loadUser();
+
+                    }
+
+                },
+                5000
+            );
+
+    }
+);
+
+
+/* =====================================================
+   CLEANUP
+===================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+        stopCountdown();
+
+
+        if (
+            marketRefreshInterval
+        ) {
+
+            clearInterval(
+                marketRefreshInterval
+            );
+
+        }
+
+
+        if (
+            userRefreshInterval
+        ) {
+
+            clearInterval(
+                userRefreshInterval
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

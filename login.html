@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin - Login</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #050505;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 430px;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: #111;
+            border: 1px solid #292929;
+            border-radius: 14px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-align: center;
+            color: #ff1f1f;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .auth-logo-img {
+            height: 42px;
+            width: auto;
+            max-width: 50px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+
+            background: #191919;
+            color: white;
+
+            border: 1px solid #333;
+            border-radius: 7px;
+
+            outline: none;
+            font-size: 15px;
+        }
+
+        .form-group input:focus {
+            border-color: #ff1f1f;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+
+            background: #d60000;
+            color: white;
+
+            border: none;
+            border-radius: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-button:hover {
+            background: #b80000;
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+
+            margin-top: 15px;
+            padding: 12px;
+
+            border-radius: 7px;
+
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            display: block;
+            background: #103d28;
+            color: #00ff88;
+            border: 1px solid #1b6946;
+        }
+
+        .message.error {
+            display: block;
+            background: #3d1212;
+            color: #ff6666;
+            border: 1px solid #702222;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: #888;
+            margin-top: 22px;
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+            color: #ff1f1f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <div class="auth-logo"><img src="logo.png" alt="KrakenCoin" class="auth-logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+
+
+        <div class="auth-subtitle">
+            Sign in to your trading account
+        </div>
+
+
+        <form
+            id="loginForm"
+            autocomplete="on"
+        >
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-button"
+                id="loginButton"
+            >
+                Login
+            </button>
+
+
+        </form>
+
+
+        <div
+            id="loginMessage"
+            class="message"
+        ></div>
+
+
+        <div class="auth-footer">
+
+            Don't have an account?
+
+            <a href="/signup.html">
+                Create Account
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : "http://localhost:3000";
+
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+
+const loginMessage =
+    document.getElementById(
+        "loginMessage"
+    );
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showLoginMessage(
+    text,
+    type
+) {
+
+    loginMessage.textContent =
+        text;
+
+    loginMessage.className =
+        "message " +
+        type;
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document.getElementById(
+                "email"
+            ).value
+            .trim()
+            .toLowerCase();
+
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+
+        if (
+            !email ||
+            !password
+        ) {
+
+            showLoginMessage(
+                "Please enter your email and password.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        loginButton.disabled =
+            true;
+
+        loginButton.textContent =
+            "Logging in...";
+
+
+        loginMessage.className =
+            "message";
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    API_URL +
+                    "/login",
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                email:
+                                    email,
+
+                                password:
+                                    password
+
+                            })
+
+                    }
+
+                );
+
+
+            let data = {};
+
+
+            try {
+
+                data =
+                    await response.json();
+
+            } catch (error) {
+
+                throw new Error(
+                    "Invalid response from server."
+                );
+
+            }
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+
+                    data.message ||
+                    "Login failed."
+
+                );
+
+            }
+
+
+            if (
+                !data.token ||
+                !data.user ||
+                !data.user.id
+            ) {
+
+                throw new Error(
+                    "Server login response is incomplete."
+                );
+
+            }
+
+
+            /*
+             * Save authentication token.
+             */
+
+            localStorage.setItem(
+                "tradeXToken",
+                data.token
+            );
+
+
+            /*
+             * Save current user ID.
+             */
+
+            localStorage.setItem(
+                "currentUserId",
+                String(
+                    data.user.id
+                )
+            );
+
+
+            /*
+             * Save user object.
+             */
+
+            localStorage.setItem(
+                "tradeXUser",
+                JSON.stringify(
+                    data.user
+                )
+            );
+
+
+            /*
+             * Login state.
+             */
+
+            localStorage.setItem(
+                "login",
+                "true"
+            );
+
+
+            showLoginMessage(
+                "Login successful. Opening dashboard...",
+                "success"
+            );
+
+
+            /*
+             * IMPORTANT:
+             * Dashboard stays on localhost:3000.
+             */
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "dashboard.html";
+
+                },
+                500
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+
+            showLoginMessage(
+
+                error.message ||
+                "Unable to connect to backend.",
+
+                "error"
+
+            );
+
+        } finally {
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "Login";
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

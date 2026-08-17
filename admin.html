@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" type="image/png" href="logo.png">
+    <title>KraKencoin.live Admin</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #050505;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    min-height: 100vh;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.header {
+    height: 70px;
+    background: #0b0b0b;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    color: #00ff88;
+}
+
+.logo span {
+    color: #ffffff;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.server-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ff4d5a;
+}
+
+.status-dot.online {
+    background: #00ff88;
+}
+
+.logout-btn {
+    border: 1px solid #333;
+    background: #151515;
+    color: white;
+    padding: 9px 15px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background: #222;
+}
+
+/* ======================================================
+   LAYOUT
+====================================================== */
+
+.layout {
+    display: flex;
+    min-height: calc(100vh - 70px);
+}
+
+/* ======================================================
+   SIDEBAR
+====================================================== */
+
+.sidebar {
+    width: 235px;
+    background: #090909;
+    border-right: 1px solid #222;
+    padding: 20px 12px;
+    flex-shrink: 0;
+}
+
+.nav-title {
+    color: #666;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 12px;
+}
+
+.nav-btn {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    color: #aaa;
+    text-align: left;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: #151515;
+    color: #00ff88;
+}
+
+.main {
+    flex: 1;
+    padding: 25px;
+    min-width: 0;
+}
+
+/* ======================================================
+   SECTIONS
+====================================================== */
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.page-title {
+    margin: 0 0 5px;
+    font-size: 28px;
+}
+
+.page-subtitle {
+    color: #777;
+    margin-bottom: 25px;
+}
+
+/* ======================================================
+   CARDS & STATS
+====================================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.stat-label {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.green { color: #00ff88; }
+.red { color: #ff4d5a; }
+.yellow { color: #ffc107; }
+.blue { color: #4da3ff; }
+.purple { color: #a777ff; }
+
+/* ======================================================
+   TOOLBAR & CONTROLS
+====================================================== */
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.search {
+    flex: 1;
+    min-width: 200px;
+    background: #0c0c0c;
+    border: 1px solid #2a2a2a;
+    color: white;
+    padding: 11px 13px;
+    border-radius: 8px;
+    outline: none;
+}
+
+.search:focus,
+.input:focus,
+.textarea:focus,
+.select:focus {
+    border-color: #00ff88;
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+
+.btn {
+    border: 0;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: opacity 0.2s;
+}
+
+.btn-sm {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.btn-green {
+    background: #00ff88;
+    color: #000;
+}
+
+.btn-green:hover {
+    background: #00d974;
+}
+
+.btn-red {
+    background: #ff4655;
+    color: white;
+}
+
+.btn-blue {
+    background: #287be8;
+    color: white;
+}
+
+.btn-dark {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: white;
+}
+
+.btn:hover {
+    opacity: .88;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid #333;
+    color: #ccc;
+}
+
+.btn-outline:hover {
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+/* ======================================================
+   TABLE
+====================================================== */
+
+.table-card {
+    background: #0b0b0b;
+    border: 1px solid #222;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+th {
+    background: #111;
+    color: #777;
+    font-size: 12px;
+    text-align: left;
+    padding: 14px;
+    white-space: nowrap;
+}
+
+td {
+    border-top: 1px solid #1d1d1d;
+    padding: 14px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+tr:hover td {
+    background: #101010;
+}
+
+/* ======================================================
+   BADGES
+====================================================== */
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.badge-green {
+    background: rgba(0,255,136,.12);
+    color: #00ff88;
+}
+
+.badge-red {
+    background: rgba(255,70,85,.12);
+    color: #ff4655;
+}
+
+.badge-yellow {
+    background: rgba(255,193,7,.12);
+    color: #ffc107;
+}
+
+.badge-blue {
+    background: rgba(40,123,232,.12);
+    color: #4da3ff;
+}
+
+.badge-gray {
+    background: #1d1d1d;
+    color: #999;
+}
+
+/* ======================================================
+   FORMS
+====================================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.label {
+    display: block;
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.input,
+.select,
+.textarea {
+    width: 100%;
+    background: #090909;
+    color: white;
+    border: 1px solid #292929;
+    border-radius: 8px;
+    padding: 11px 12px;
+    outline: none;
+}
+
+.textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+/* ======================================================
+   USER ACTIONS & QUICK ADJUSTMENTS
+====================================================== */
+
+.action-row {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.quick-adj {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+}
+
+.quick-adj button {
+    flex: 1;
+    padding: 4px;
+    font-size: 11px;
+    background: #181818;
+    border: 1px solid #333;
+    color: #ccc;
+    border-radius: 4px;
+}
+
+.quick-adj button:hover {
+    background: #252525;
+    color: #00ff88;
+}
+
+/* ======================================================
+   MARKET GRID
+====================================================== */
+
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.coin-card {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.coin-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.coin-name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.coin-symbol {
+    color: #777;
+    font-size: 12px;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.market-actions {
+    display: flex;
+    gap: 7px;
+}
+
+/* ======================================================
+   MODE BOX
+====================================================== */
+
+.mode-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.mode-info h3 {
+    margin: 0 0 5px;
+}
+
+.mode-info p {
+    margin: 0;
+    color: #777;
+    font-size: 13px;
+}
+
+.mode-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* ======================================================
+   MODAL
+====================================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 500px;
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    border-radius: 13px;
+    padding: 22px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close {
+    background: transparent;
+    border: 0;
+    color: #777;
+    font-size: 24px;
+}
+
+/* ======================================================
+   TOAST
+====================================================== */
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #151515;
+    border: 1px solid #333;
+    color: white;
+    padding: 13px 17px;
+    border-radius: 9px;
+    display: none;
+    z-index: 1000;
+    max-width: 350px;
+}
+
+.toast.show {
+    display: block;
+}
+
+.toast.success {
+    border-color: #00ff88;
+}
+
+.toast.error {
+    border-color: #ff4655;
+}
+
+.empty {
+    text-align: center;
+    padding: 45px;
+    color: #666;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .market-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .sidebar {
+        width: 65px;
+        padding: 12px 7px;
+    }
+    .nav-title {
+        display: none;
+    }
+    .nav-btn {
+        font-size: 0;
+        text-align: center;
+    }
+    .nav-btn::first-letter {
+        font-size: 18px;
+    }
+    .main {
+        padding: 15px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .market-grid {
+        grid-template-columns: 1fr;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 550px) {
+    .header {
+        padding: 0 12px;
+    }
+    .server-status {
+        display: none;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .page-title {
+        font-size: 22px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+    <div class="logo">
+        KraKencoin.live Admin
+    </div>
+
+    <div class="header-right">
+        <div class="server-status">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="serverStatus">Checking server...</span>
+        </div>
+        <button class="logout-btn" onclick="logoutAdmin()">
+            Logout
+        </button>
+    </div>
+</header>
+
+
+<div class="layout">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+    <div class="nav-title">Administration</div>
+
+    <button class="nav-btn active" data-section="dashboard" onclick="showSection('dashboard', this)">
+        📊 Dashboard
+    </button>
+
+    <button class="nav-btn" data-section="users" onclick="showSection('users', this)">
+        👥 Users
+    </button>
+
+    <button class="nav-btn" data-section="deposits" onclick="showSection('deposits', this)">
+        💰 Deposits
+    </button>
+
+    <button class="nav-btn" data-section="market" onclick="showSection('market', this)">
+        📈 Market Control
+    </button>
+
+    <button class="nav-btn" data-section="payments" onclick="showSection('payments', this)">
+        🏦 Payment Settings
+    </button>
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<section id="section-dashboard" class="section active">
+    <h1 class="page-title">Admin Dashboard</h1>
+    <div class="page-subtitle">KrakenCoin system overview and real-time activity</div>
+
+    <div class="stats-grid">
+        <div class="card">
+            <div class="stat-label">Total Users</div>
+            <div id="statUsers" class="stat-value">0</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-label">Logged In Users</div>
+            <div id="statLoggedIn" class="stat-value purple">0</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-label">Total User Balance</div>
+            <div id="statBalance" class="stat-value green">$0.00</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-label">Pending Deposits</div>
+            <div id="statDeposits" class="stat-value yellow">0</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-label">Live Market Mode</div>
+            <div id="statMarketMode" class="stat-value blue">REAL</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Quick Controls</h3>
+        <div class="toolbar">
+            <button class="btn btn-green" onclick="showSectionByName('users')">
+                Manage Users
+            </button>
+            <button class="btn btn-blue" onclick="showSectionByName('deposits')">
+                View Deposit Requests
+            </button>
+            <button class="btn btn-dark" onclick="showSectionByName('market')">
+                Control Live Graph
+            </button>
+            <button class="btn btn-outline" onclick="loadDashboard()">
+                🔄 Refresh Stats
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     USERS
+===================================================== -->
+
+<section id="section-users" class="section">
+    <h1 class="page-title">Users Directory</h1>
+    <div class="page-subtitle">Manage KrakenCoin registered users, balances and login activity.</div>
+
+    <div class="toolbar">
+        <input id="userSearch" class="search" type="text" placeholder="Search name, email, phone or ID..." oninput="renderUsers()">
+        <button class="btn btn-dark" onclick="loadUsers()">Refresh List</button>
+    </div>
+
+    <div class="table-card">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Balance</th>
+                        <th>Trades</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable">
+                    <tr><td colspan="8" class="empty">Loading users...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     DEPOSITS
+===================================================== -->
+
+<section id="section-deposits" class="section">
+    <h1 class="page-title">Deposit Requests</h1>
+    <div class="page-subtitle">Review, approve or reject user deposit submissions.</div>
+
+    <div class="toolbar">
+        <input id="depositSearch" class="search" type="text" placeholder="Search user, email, method, reference..." oninput="renderDeposits()">
+        <button class="btn btn-dark" onclick="loadDeposits()">Refresh Deposits</button>
+    </div>
+
+    <div class="table-card">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Reference</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="depositsTable">
+                    <tr><td colspan="9" class="empty">Loading deposits...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     MARKET CONTROL
+===================================================== -->
+
+<section id="section-market" class="section">
+    <h1 class="page-title">Live Graph & Market Control</h1>
+    <div class="page-subtitle">Manually adjust live candlestick prices and switch market modes in real time.</div>
+
+    <div class="mode-box">
+        <div class="mode-info">
+            <h3>Current Market Mode: <span id="currentMode" class="green">REAL</span></h3>
+            <p><strong>REAL</strong> mode fetches live Binance prices. <strong>ADMIN</strong> mode forces the live trading graph to follow your custom prices set below.</p>
+        </div>
+        <div class="mode-buttons">
+            <button id="realModeBtn" class="btn btn-blue" onclick="setMarketMode('REAL')">
+                🌐 REAL BINANCE
+            </button>
+            <button id="adminModeBtn" class="btn btn-green" onclick="setMarketMode('ADMIN')">
+                ⚙️ MANUAL ADMIN
+            </button>
+        </div>
+    </div>
+
+    <div id="marketGrid" class="market-grid">
+        Loading market coins...
+    </div>
+</section>
+
+
+<!-- =====================================================
+     PAYMENT SETTINGS
+===================================================== -->
+
+<section id="section-payments" class="section">
+    <h1 class="page-title">Payment Settings</h1>
+    <div class="page-subtitle">Configure deposit accounts displayed to users in their wallet.</div>
+
+    <div class="card">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="label">Deposits Status</label>
+                <select id="paymentEnabled" class="select">
+                    <option value="true">Enabled</option>
+                    <option value="false">Disabled</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Payment Method Name</label>
+                <input id="paymentMethod" class="input" placeholder="Bank Transfer / Crypto USDT">
+            </div>
+
+            <div class="form-group">
+                <label class="label">Account Title</label>
+                <input id="accountTitle" class="input" placeholder="Account holder title">
+            </div>
+
+            <div class="form-group">
+                <label class="label">Account / IBAN Number</label>
+                <input id="accountNumber" class="input" placeholder="Bank account / wallet number">
+            </div>
+
+            <div class="form-group">
+                <label class="label">Crypto Wallet Address (if crypto)</label>
+                <input id="walletAddress" class="input" placeholder="USDT / BTC address">
+            </div>
+
+            <div class="form-group">
+                <label class="label">Network</label>
+                <input id="network" class="input" placeholder="TRC20 / ERC20 / BEP20">
+            </div>
+
+            <div class="form-group">
+                <label class="label">Minimum Deposit Limit ($)</label>
+                <input id="minDeposit" class="input" type="number" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label class="label">Maximum Deposit Limit ($)</label>
+                <input id="maxDeposit" class="input" type="number" min="0" step="0.01">
+            </div>
+
+            <div class="form-group full">
+                <label class="label">Payment Instructions for Users</label>
+                <textarea id="paymentInstructions" class="textarea" placeholder="Enter instructions displayed on deposit page..."></textarea>
+            </div>
+        </div>
+
+        <button class="btn btn-green" onclick="savePaymentSettings()">
+            Save Payment Settings
+        </button>
+    </div>
+</section>
+
+</main>
+</div>
+</div>
+
+
+<!-- =====================================================
+     BALANCE MODAL
+===================================================== -->
+
+<div id="balanceModal" class="modal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="balanceModalTitle">Manage Balance</h3>
+            <button class="close" onclick="closeBalanceModal()">×</button>
+        </div>
+
+        <input id="balanceUserId" type="hidden">
+
+        <div class="form-group">
+            <label class="label">Amount ($)</label>
+            <input id="balanceAmount" class="input" type="number" min="0.01" step="0.01" placeholder="Enter amount (e.g. 100)">
+        </div>
+
+        <div class="toolbar">
+            <button id="addBalanceButton" class="btn btn-green" onclick="submitBalanceChange('add')">
+                ➕ Add Balance
+            </button>
+            <button id="removeBalanceButton" class="btn btn-red" onclick="submitBalanceChange('remove')">
+                ➖ Remove Balance
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- =====================================================
+     USER DETAILS MODAL
+===================================================== -->
+
+<div id="userModal" class="modal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>User Profile Details</h3>
+            <button class="close" onclick="closeUserModal()">×</button>
+        </div>
+        <div id="userDetails">Loading details...</div>
+    </div>
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/* ======================================================
+   CONFIG & AUTH
+====================================================== */
+
+const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : "http://localhost:3000";
+
+let ADMIN_SECRET = localStorage.getItem("tradeXAdminSecret") || "";
+
+/* DATA STATE */
+let users = [];
+let deposits = [];
+let market = {};
+let marketMode = "REAL";
+
+/* ======================================================
+   API FETCH HELPER
+====================================================== */
+
+async function apiFetch(endpoint, options = {}) {
+    const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+    };
+
+    const token = localStorage.getItem("tradeXToken") || localStorage.getItem("token");
+    if (token) {
+        headers.Authorization = "Bearer " + token;
+    }
+
+    if (ADMIN_SECRET) {
+        headers["x-admin-secret"] = ADMIN_SECRET;
+    }
+
+    const response = await fetch(API_URL + endpoint, {
+        ...options,
+        headers
+    });
+
+    let data;
+    try {
+        data = await response.json();
+    } catch (error) {
+        throw new Error("Server returned an invalid JSON response.");
+    }
+
+    if (!response.ok) {
+        throw new Error(data.message || `Request failed with status ${response.status}`);
+    }
+
+    return data;
+}
+
+/* ======================================================
+   TOAST NOTIFICATION
+====================================================== */
+
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = "toast show " + type;
+
+    setTimeout(() => {
+        toast.className = "toast";
+    }, 3500);
+}
+
+/* ======================================================
+   ADMIN SECRET & AUTH CHECK
+====================================================== */
+
+function requestAdminSecret() {
+    if (ADMIN_SECRET) {
+        return true;
+    }
+
+    const secret = prompt("Enter Krakencoin.live Admin Secret Key:");
+    if (!secret) {
+        showToast("Admin secret is required.", "error");
+        return false;
+    }
+
+    ADMIN_SECRET = secret.trim();
+    localStorage.setItem("tradeXAdminSecret", ADMIN_SECRET);
+    return true;
+}
+
+function checkAuth() {
+    return requestAdminSecret();
+}
+
+function logoutAdmin() {
+    localStorage.removeItem("tradeXAdminSecret");
+    ADMIN_SECRET = "";
+    showToast("Admin logged out.", "success");
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
+}
+
+/* ======================================================
+   SERVER MONITORING
+====================================================== */
+
+async function checkServer() {
+    try {
+        const response = await fetch(API_URL + "/api/health");
+        const data = await response.json();
+
+        if (data.success || response.ok) {
+            document.getElementById("statusDot").classList.add("online");
+            document.getElementById("serverStatus").textContent = "Server Online";
+        }
+    } catch (error) {
+        document.getElementById("statusDot").classList.remove("online");
+        document.getElementById("serverStatus").textContent = "Server Offline";
+    }
+}
+
+/* ======================================================
+   NAVIGATION
+====================================================== */
+
+function showSection(section, button) {
+    document.querySelectorAll(".section").forEach(item => item.classList.remove("active"));
+    document.getElementById("section-" + section).classList.add("active");
+
+    document.querySelectorAll(".nav-btn").forEach(item => item.classList.remove("active"));
+    if (button) {
+        button.classList.add("active");
+    }
+
+    if (section === "dashboard") loadDashboard();
+    if (section === "users") loadUsers();
+    if (section === "deposits") loadDeposits();
+    if (section === "market") loadMarketControl();
+    if (section === "payments") loadPaymentSettings();
+}
+
+function showSectionByName(section) {
+    const button = document.querySelector(`.nav-btn[data-section="${section}"]`);
+    showSection(section, button);
+}
+
+/* ======================================================
+   LOAD DASHBOARD
+====================================================== */
+
+async function loadDashboard() {
+    try {
+        await Promise.all([
+            loadUsers(),
+            loadDeposits(),
+            loadMarketControl()
+        ]);
+    } catch (error) {
+        console.error("Dashboard load error:", error);
+    }
+}
+
+/* ======================================================
+   USERS LOGIC
+====================================================== */
+
+async function loadUsers() {
+    if (!checkAuth()) return;
+
+    const tbody = document.getElementById("usersTable");
+    tbody.innerHTML = `<tr><td colspan="8" class="empty">Loading users...</td></tr>`;
+
+    try {
+        const data = await apiFetch("/users");
+        users = Array.isArray(data.users) ? data.users : [];
+        renderUsers();
+        updateStats();
+    } catch (error) {
+        tbody.innerHTML = `<tr><td colspan="8" class="empty">${escapeHtml(error.message)}</td></tr>`;
+        showToast(error.message, "error");
+    }
+}
+
+function getUserActivityTimestamp(user) {
+    let dates = [];
+    if (user.lastLogin) dates.push(new Date(user.lastLogin).getTime());
+    if (user.lastActive) dates.push(new Date(user.lastActive).getTime());
+    if (user.createdAt) dates.push(new Date(user.createdAt).getTime());
+
+    if (Array.isArray(user.trades)) {
+        user.trades.forEach(t => { if (t && t.createdAt) dates.push(new Date(t.createdAt).getTime()); });
+    }
+
+    const valid = dates.filter(d => Number.isFinite(d) && d > 0);
+    return valid.length > 0 ? Math.max(...valid) : 0;
+}
+
+function renderUsers() {
+    const tbody = document.getElementById("usersTable");
+    const search = (document.getElementById("userSearch")?.value || "").trim().toLowerCase();
+
+    const filtered = users.filter(user => {
+        const text = [user.name, user.email, user.phone, user.id].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="empty">No users found matching search.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(user => `
+        <tr>
+            <td><code>${escapeHtml(String(user.id))}</code></td>
+            <td><strong>${escapeHtml(user.name || "-")}</strong></td>
+            <td>${escapeHtml(user.email || "-")}</td>
+            <td>${escapeHtml(user.phone || "-")}</td>
+            <td class="green"><strong>$${money(user.balance)}</strong></td>
+            <td>${Array.isArray(user.trades) ? user.trades.length : 0}</td>
+            <td>${formatLastLogin(user)}</td>
+            <td>
+                <div class="action-row">
+                    <button class="btn btn-dark btn-sm" onclick="viewUser('${escapeAttr(user.id)}')">View</button>
+                    <button class="btn btn-green btn-sm" onclick="openBalanceModal('${escapeAttr(user.id)}')">Balance</button>
+                </div>
+            </td>
+        </tr>
+    `).join("");
+}
+
+/* ======================================================
+   UPDATE STATS
+====================================================== */
+
+function updateStats() {
+    const totalUsers = users.length;
+    // Count all registered users who have logged in or performed activity
+    const loggedInUsers = users.filter(u => getUserActivityTimestamp(u) > 0).length;
+
+    const totalBalance = users.reduce((total, user) => total + Number(user.balance || 0), 0);
+    const pendingDeposits = deposits.filter(d => d.status === "SUBMITTED" || d.status === "PENDING").length;
+
+    document.getElementById("statUsers").textContent = totalUsers;
+    document.getElementById("statLoggedIn").textContent = loggedInUsers;
+    document.getElementById("statBalance").textContent = "$" + money(totalBalance);
+    document.getElementById("statDeposits").textContent = pendingDeposits;
+
+    const modeElem = document.getElementById("statMarketMode");
+    if (modeElem) {
+        modeElem.textContent = marketMode;
+        modeElem.className = "stat-value " + (marketMode === "ADMIN" ? "green" : "blue");
+    }
+}
+
+/* ======================================================
+   USER DETAILS MODAL
+====================================================== */
+
+async function viewUser(userId) {
+    if (!checkAuth()) return;
+    const modal = document.getElementById("userModal");
+    const details = document.getElementById("userDetails");
+
+    modal.classList.add("show");
+    details.innerHTML = "Loading user info...";
+
+    try {
+        const data = await apiFetch("/admin/user/" + encodeURIComponent(userId));
+        const user = data.user;
+
+        details.innerHTML = `
+            <div class="form-group">
+                <div class="label">User Name</div>
+                <div><strong>${escapeHtml(user.name)}</strong></div>
+            </div>
+            <div class="form-group">
+                <div class="label">Email Address</div>
+                <div>${escapeHtml(user.email)}</div>
+            </div>
+            <div class="form-group">
+                <div class="label">Phone</div>
+                <div>${escapeHtml(user.phone || "Not set")}</div>
+            </div>
+            <div class="form-group">
+                <div class="label">Current Balance</div>
+                <div class="green"><strong>$${money(user.balance)}</strong></div>
+            </div>
+            <div class="form-group">
+                <div class="label">Total Trades</div>
+                <div>${Array.isArray(user.trades) ? user.trades.length : 0}</div>
+            </div>
+            <div class="form-group">
+                <div class="label">Last Activity Timestamp</div>
+                <div>${formatDate(user.lastLogin || user.lastActive || user.createdAt)}</div>
+            </div>
+            <button class="btn btn-green" onclick="closeUserModal()">Close</button>
+        `;
+    } catch (error) {
+        details.innerHTML = escapeHtml(error.message);
+    }
+}
+
+function closeUserModal() {
+    document.getElementById("userModal").classList.remove("show");
+}
+
+/* ======================================================
+   BALANCE MODAL
+====================================================== */
+
+function openBalanceModal(userId) {
+    document.getElementById("balanceUserId").value = userId;
+    document.getElementById("balanceAmount").value = "";
+    document.getElementById("balanceModal").classList.add("show");
+}
+
+function closeBalanceModal() {
+    document.getElementById("balanceModal").classList.remove("show");
+}
+
+async function submitBalanceChange(action) {
+    if (!checkAuth()) return;
+
+    const userId = document.getElementById("balanceUserId").value;
+    const amount = Number(document.getElementById("balanceAmount").value);
+
+    if (!userId || !Number.isFinite(amount) || amount <= 0) {
+        showToast("Please enter a valid amount greater than 0.", "error");
+        return;
+    }
+
+    const endpoint = action === "add" ? "/admin/add-balance" : "/admin/remove-balance";
+
+    try {
+        const data = await apiFetch(endpoint, {
+            method: "POST",
+            body: JSON.stringify({ userId, amount })
+        });
+
+        showToast(data.message || "Balance updated.");
+        closeBalanceModal();
+        await loadUsers();
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
+/* ======================================================
+   DEPOSITS LOGIC & APPROVAL
+====================================================== */
+
+async function loadDeposits() {
+    if (!checkAuth()) return;
+
+    const tbody = document.getElementById("depositsTable");
+    tbody.innerHTML = `<tr><td colspan="9" class="empty">Loading deposit requests...</td></tr>`;
+
+    try {
+        const data = await apiFetch("/admin/deposits");
+        deposits = Array.isArray(data.deposits) ? data.deposits : [];
+        renderDeposits();
+        updateStats();
+    } catch (error) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">${escapeHtml(error.message)}</td></tr>`;
+        showToast(error.message, "error");
+    }
+}
+
+function renderDeposits() {
+    const tbody = document.getElementById("depositsTable");
+    const search = (document.getElementById("depositSearch")?.value || "").trim().toLowerCase();
+
+    const filtered = deposits.filter(deposit => {
+        const text = [deposit.id, deposit.userName, deposit.userEmail, deposit.method, deposit.reference, deposit.status].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">No deposit requests found.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(deposit => `
+        <tr>
+            <td><code>${escapeHtml(String(deposit.id))}</code></td>
+            <td><strong>${escapeHtml(deposit.userName || "-")}</strong></td>
+            <td>${escapeHtml(deposit.userEmail || "-")}</td>
+            <td class="green"><strong>$${money(deposit.amount)}</strong></td>
+            <td>${escapeHtml(deposit.method || "-")}</td>
+            <td><code>${escapeHtml(deposit.reference || "-")}</code></td>
+            <td>${depositStatus(deposit.status)}</td>
+            <td>${formatDate(deposit.createdAt)}</td>
+            <td>
+                ${(deposit.status === "SUBMITTED" || deposit.status === "PENDING") ? `
+                    <div class="action-row">
+                        <button class="btn btn-green btn-sm" onclick="approveDeposit('${escapeAttr(deposit.id)}')">Approve</button>
+                        <button class="btn btn-red btn-sm" onclick="rejectDeposit('${escapeAttr(deposit.id)}')">Reject</button>
+                    </div>
+                ` : `<span class="badge badge-gray">Done</span>`}
+            </td>
+        </tr>
+    `).join("");
+}
+
+async function approveDeposit(depositId) {
+    if (!checkAuth()) return;
+    if (!confirm("Approve this deposit request and credit user balance?")) return;
+
+    try {
+        const deposit = deposits.find(d => String(d.id) === String(depositId));
+        if (deposit) {
+            await apiFetch("/admin/add-balance", {
+                method: "POST",
+                body: JSON.stringify({ userId: deposit.userId, amount: deposit.amount })
+            });
+            deposit.status = "APPROVED";
+            showToast("Deposit approved and user balance credited!");
+            renderDeposits();
+            loadUsers();
+        }
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
+async function rejectDeposit(depositId) {
+    if (!checkAuth()) return;
+    if (!confirm("Reject this deposit request?")) return;
+
+    const deposit = deposits.find(d => String(d.id) === String(depositId));
+    if (deposit) {
+        deposit.status = "REJECTED";
+        showToast("Deposit marked as rejected.", "error");
+        renderDeposits();
+    }
+}
+
+/* ======================================================
+   MARKET CONTROL LOGIC (LIVE GRAPH MANIPULATION)
+====================================================== */
+
+async function loadMarketControl() {
+    if (!checkAuth()) return;
+
+    try {
+        const data = await apiFetch("/admin/market-control");
+        marketMode = data.mode || "REAL";
+        market = data;
+
+        const modeDisplay = document.getElementById("currentMode");
+        if (modeDisplay) {
+            modeDisplay.textContent = marketMode;
+            modeDisplay.className = marketMode === "ADMIN" ? "green" : "blue";
+        }
+
+        renderMarket();
+        updateStats();
+    } catch (error) {
+        document.getElementById("marketGrid").innerHTML = `<div class="card">${escapeHtml(error.message)}</div>`;
+        showToast(error.message, "error");
+    }
+}
+
+function renderMarket() {
+    const container = document.getElementById("marketGrid");
+    const adminPrices = market.adminPrices || { BTC: 118450, ETH: 4300, BNB: 820, SOL: 190, XRP: 3.2, ADA: 0.9 };
+    const realPrices = market.realPrices || {};
+    const effectivePrices = market.effectivePrices || {};
+
+    const symbols = Object.keys(adminPrices);
+
+    if (symbols.length === 0) {
+        container.innerHTML = `<div class="card">No coin data loaded.</div>`;
+        return;
+    }
+
+    container.innerHTML = symbols.map(symbol => `
+        <div class="coin-card">
+            <div class="coin-header">
+                <div>
+                    <div class="coin-name">${escapeHtml(symbol)} / USDT</div>
+                    <div class="coin-symbol">${marketMode === "ADMIN" ? "MANUAL GRAPH OVERRIDE" : "LIVE BINANCE API"}</div>
+                </div>
+                <span class="badge ${marketMode === "ADMIN" ? "badge-green" : "badge-blue"}">
+                    ${escapeHtml(marketMode)}
+                </span>
+            </div>
+
+            <div class="price green">
+                $${money(effectivePrices[symbol] || adminPrices[symbol])}
+            </div>
+
+            <div style="color:#777; font-size:12px; margin-bottom:10px;">
+                Binance Real: <strong>$${money(realPrices[symbol])}</strong>
+            </div>
+
+            <div class="form-group">
+                <label class="label">Admin Custom Price</label>
+                <input id="price-${escapeAttr(symbol)}" class="input" type="number" min="0.000001" step="any" value="${escapeAttr(adminPrices[symbol])}">
+                
+                <div class="quick-adj">
+                    <button onclick="adjustPriceInput('${escapeAttr(symbol)}', 1.01)">+1%</button>
+                    <button onclick="adjustPriceInput('${escapeAttr(symbol)}', 1.05)">+5%</button>
+                    <button onclick="adjustPriceInput('${escapeAttr(symbol)}', 0.99)">-1%</button>
+                    <button onclick="adjustPriceInput('${escapeAttr(symbol)}', 0.95)">-5%</button>
+                </div>
+            </div>
+
+            <div class="market-actions">
+                <button class="btn btn-green" style="width:100%" onclick="setCoinPrice('${escapeAttr(symbol)}')">
+                    Set Live Graph Price
+                </button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function adjustPriceInput(symbol, multiplier) {
+    const input = document.getElementById("price-" + symbol);
+    if (input && input.value) {
+        const val = Number(input.value) * multiplier;
+        input.value = val.toFixed(val > 10 ? 2 : 4);
+    }
+}
+
+async function setMarketMode(mode) {
+    if (!checkAuth()) return;
+
+    try {
+        const data = await apiFetch("/admin/market-control/mode", {
+            method: "POST",
+            body: JSON.stringify({ mode: mode })
+        });
+
+        marketMode = data.mode;
+        showToast(data.message || `Switched live market mode to ${mode}`);
+        await loadMarketControl();
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
+async function setCoinPrice(symbol) {
+    if (!checkAuth()) return;
+
+    const input = document.getElementById("price-" + symbol);
+    const price = Number(input.value);
+
+    if (!Number.isFinite(price) || price <= 0) {
+        showToast("Enter a valid price greater than 0.", "error");
+        return;
+    }
+
+    try {
+        const data = await apiFetch("/admin/market-control/price", {
+            method: "POST",
+            body: JSON.stringify({ symbol: symbol, price: price })
+        });
+
+        showToast(data.message || `${symbol} graph price updated!`);
+        await loadMarketControl();
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
+/* ======================================================
+   PAYMENT SETTINGS LOGIC
+====================================================== */
+
+async function loadPaymentSettings() {
+    if (!checkAuth()) return;
+
+    try {
+        const data = await apiFetch("/admin/payment-settings");
+        const settings = data.settings || {};
+
+        document.getElementById("paymentEnabled").value = settings.enabled ? "true" : "false";
+        document.getElementById("paymentMethod").value = settings.method || "";
+        document.getElementById("accountTitle").value = settings.accountTitle || "";
+        document.getElementById("accountNumber").value = settings.accountNumber || "";
+        document.getElementById("walletAddress").value = settings.walletAddress || "";
+        document.getElementById("network").value = settings.network || "";
+        document.getElementById("minDeposit").value = settings.minDeposit ?? "";
+        document.getElementById("maxDeposit").value = settings.maxDeposit ?? "";
+        document.getElementById("paymentInstructions").value = settings.instructions || "";
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
+async function savePaymentSettings() {
+    if (!checkAuth()) return;
+
+    const settings = {
+        enabled: document.getElementById("paymentEnabled").value === "true",
+        method: document.getElementById("paymentMethod").value.trim(),
+        accountTitle: document.getElementById("accountTitle").value.trim(),
+        accountNumber: document.getElementById("accountNumber").value.trim(),
+        walletAddress: document.getElementById("walletAddress").value.trim(),
+        network: document.getElementById("network").value.trim(),
+        minDeposit: Number(document.getElementById("minDeposit").value),
+        maxDeposit: Number(document.getElementById("maxDeposit").value),
+        instructions: document.getElementById("paymentInstructions").value.trim()
+    };
+
+    if (!Number.isFinite(settings.minDeposit) || !Number.isFinite(settings.maxDeposit)) {
+        showToast("Enter valid minimum and maximum deposit limits.", "error");
+        return;
+    }
+
+    try {
+        const data = await apiFetch("/admin/payment-settings", {
+            method: "POST",
+            body: JSON.stringify(settings)
+        });
+        showToast(data.message || "Payment settings updated successfully!");
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
+/* ======================================================
+   FORMATTING UTILITIES
+====================================================== */
+
+function money(value) {
+    const number = Number(value || 0);
+    if (!Number.isFinite(number)) return "0.00";
+    return number.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function formatDate(value) {
+    if (!value) return "-";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "-";
+    return date.toLocaleString();
+}
+
+function formatLastLogin(user) {
+    const ts = getUserActivityTimestamp(user);
+    if (!ts) return `<span class="badge badge-gray">Registered</span>`;
+
+    const date = new Date(ts);
+    const diffMs = Date.now() - ts;
+
+    if (diffMs < 5 * 60 * 1000) {
+        return `<span class="badge badge-green">Online Now</span>`;
+    } else if (diffMs < 60 * 60 * 1000) {
+        const mins = Math.floor(diffMs / 60000);
+        return `<span class="badge badge-yellow">${mins}m ago</span>`;
+    } else if (diffMs < 24 * 60 * 60 * 1000) {
+        const hrs = Math.floor(diffMs / 3600000);
+        return `<span class="badge badge-blue">${hrs}h ago</span>`;
+    }
+    return date.toLocaleDateString();
+}
+
+function depositStatus(status) {
+    const value = String(status || "").toUpperCase();
+    if (value === "APPROVED") return `<span class="badge badge-green">APPROVED</span>`;
+    if (value === "REJECTED") return `<span class="badge badge-red">REJECTED</span>`;
+    if (value === "SUBMITTED" || value === "PENDING") return `<span class="badge badge-yellow">PENDING</span>`;
+    return `<span class="badge badge-gray">${escapeHtml(value || "UNKNOWN")}</span>`;
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function escapeAttr(value) {
+    return escapeHtml(value);
+}
+
+/* ======================================================
+   INITIALIZATION & REFRESH TIMER
+====================================================== */
+
+document.addEventListener("DOMContentLoaded", async () => {
+    checkServer();
+    if (checkAuth()) {
+        await loadDashboard();
+    }
+});
+
+setInterval(async () => {
+    try {
+        checkServer();
+        if (ADMIN_SECRET) {
+            await loadDeposits();
+            await loadUsers();
+            await loadMarketControl();
+        }
+    } catch (error) {
+        console.error("Auto refresh error:", error);
+    }
+}, 10000);
+
+</script>
+
+</body>
+</html>

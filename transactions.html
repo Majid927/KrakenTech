@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenCoin - Transactions</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #050505;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            height: 70px;
+            background: #0b0b0b;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .back-btn {
+            background: #151515;
+            border: 1px solid #333;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: #222;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .page-title {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           BALANCE CARD
+        ========================= */
+
+        .balance-card {
+            background: linear-gradient(
+                135deg,
+                #0d1f17,
+                #0a0a0a
+            );
+
+            border: 1px solid #164c34;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .balance-label {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .balance {
+            color: #00ff88;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           FILTERS
+        ========================= */
+
+        .filters {
+            background: #0c0c0c;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #151515;
+            color: #aaa;
+            border: 1px solid #333;
+            padding: 9px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover {
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+            font-weight: bold;
+        }
+
+        /* =========================
+           TRANSACTION LIST
+        ========================= */
+
+        .transactions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .transaction {
+            background: #0d0d0d;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 18px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .transaction:hover {
+            border-color: #333;
+        }
+
+        .transaction-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .transaction-type {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .amount {
+            font-size: 17px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .credit {
+            color: #00ff88;
+        }
+
+        .debit {
+            color: #ff4d4d;
+        }
+
+        .pending {
+            color: #ffc107;
+        }
+
+        .status {
+            min-width: 90px;
+            text-align: center;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #191919;
+        }
+
+        .status.completed {
+            color: #00ff88;
+        }
+
+        .status.pending {
+            color: #ffc107;
+        }
+
+        .status.rejected {
+            color: #ff4d4d;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+            background: #0c0c0c;
+            border: 1px dashed #333;
+            border-radius: 12px;
+            padding: 50px 20px;
+            text-align: center;
+            color: #777;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error {
+            background: #250d0d;
+            border: 1px solid #662020;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .container {
+                width: 92%;
+                margin: 20px auto;
+            }
+
+            .page-title {
+                font-size: 25px;
+            }
+
+            .transaction {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .amount {
+                text-align: left;
+            }
+
+            .status {
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="header">
+
+        <div class="logo"><img src="logo.png" alt="KrakenCoin" class="logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+
+        <button
+            class="back-btn"
+            onclick="goBack()"
+        >
+            ← Dashboard
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="container">
+
+        <h1 class="page-title">
+            Transactions
+        </h1>
+
+        <p class="subtitle">
+            View your complete account transaction history.
+        </p>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="errorBox"
+            class="error"
+        ></div>
+
+
+        <!-- BALANCE -->
+
+        <section class="balance-card">
+
+            <div class="balance-label">
+                Available Balance
+            </div>
+
+            <div
+                id="balance"
+                class="balance"
+            >
+                $0.00
+            </div>
+
+        </section>
+
+
+        <!-- FILTERS -->
+
+        <div class="filters">
+
+            <button
+                class="filter-btn active"
+                onclick="setFilter('ALL', this)"
+            >
+                All
+            </button>
+
+            <button
+                class="filter-btn"
+                onclick="setFilter('CREDIT', this)"
+            >
+                Credits
+            </button>
+
+            <button
+                class="filter-btn"
+                onclick="setFilter('DEBIT', this)"
+            >
+                Debits
+            </button>
+
+            <button
+                class="filter-btn"
+                onclick="setFilter('PENDING', this)"
+            >
+                Pending
+            </button>
+
+        </div>
+
+
+        <!-- TRANSACTIONS -->
+
+        <section id="transactions">
+
+            <div class="loading">
+                Loading transactions...
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        // =====================================================
+        // API
+        // =====================================================
+
+        const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+    ? window.location.origin
+    : "http://localhost:3000";
+
+
+        // =====================================================
+        // STATE
+        // =====================================================
+
+        let allTransactions = [];
+
+        let currentFilter = "ALL";
+
+
+        // =====================================================
+        // GET TOKEN
+        // =====================================================
+
+        function getToken() {
+
+            return (
+
+                localStorage.getItem("tradeXToken") ||
+
+                localStorage.getItem("token") ||
+
+                ""
+
+            );
+
+        }
+
+
+        // =====================================================
+        // CHECK LOGIN
+        // =====================================================
+
+        function checkLogin() {
+
+            const token =
+                getToken();
+
+            if (!token) {
+
+                window.location.href =
+                    "/login.html";
+
+                return false;
+
+            }
+
+            return true;
+
+        }
+
+
+        // =====================================================
+        // FORMAT MONEY
+        // =====================================================
+
+        function formatMoney(
+            value
+        ) {
+
+            const number =
+                Number(value || 0);
+
+            return "$" +
+                number.toLocaleString(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+        // =====================================================
+        // FORMAT DATE
+        // =====================================================
+
+        function formatDate(
+            date
+        ) {
+
+            if (!date) {
+
+                return "Unknown date";
+
+            }
+
+            const d =
+                new Date(date);
+
+            if (
+                isNaN(
+                    d.getTime()
+                )
+            ) {
+
+                return "Unknown date";
+
+            }
+
+            return d.toLocaleString(
+                "en-US",
+                {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // ESCAPE HTML
+        // =====================================================
+
+        function escapeHtml(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        // =====================================================
+        // LOAD TRANSACTIONS
+        // =====================================================
+
+        async function loadTransactions() {
+
+            if (!checkLogin()) {
+
+                return;
+
+            }
+
+
+            const container =
+                document.getElementById(
+                    "transactions"
+                );
+
+
+            container.innerHTML = `
+                <div class="loading">
+                    Loading transactions...
+                </div>
+            `;
+
+
+            try {
+
+                const token =
+                    getToken();
+
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/wallet/transactions",
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    "Bearer " +
+                                    token
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    if (
+                        response.status === 401
+                    ) {
+
+                        localStorage.removeItem(
+                            "tradeXToken"
+                        );
+
+                        localStorage.removeItem(
+                            "token"
+                        );
+
+                        window.location.href =
+                            "/login.html";
+
+                        return;
+
+                    }
+
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load transactions."
+                    );
+
+                }
+
+
+                if (
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load transactions."
+                    );
+
+                }
+
+
+                document.getElementById(
+                    "balance"
+                ).textContent =
+                    formatMoney(
+                        data.balance
+                    );
+
+
+                allTransactions =
+                    Array.isArray(
+                        data.transactions
+                    )
+                        ? data.transactions
+                        : [];
+
+
+                renderTransactions();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Transaction error:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Unable to connect to server."
+                );
+
+
+                container.innerHTML = `
+                    <div class="empty">
+                        Unable to load transactions.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        // =====================================================
+        // RENDER
+        // =====================================================
+
+        function renderTransactions() {
+
+            const container =
+                document.getElementById(
+                    "transactions"
+                );
+
+
+            let transactions =
+                [...allTransactions];
+
+
+            if (
+                currentFilter ===
+                "CREDIT"
+            ) {
+
+                transactions =
+                    transactions.filter(
+
+                        transaction =>
+                            String(
+                                transaction.direction ||
+                                ""
+                            ).toUpperCase() ===
+                            "CREDIT"
+
+                    );
+
+            }
+
+
+            if (
+                currentFilter ===
+                "DEBIT"
+            ) {
+
+                transactions =
+                    transactions.filter(
+
+                        transaction =>
+                            String(
+                                transaction.direction ||
+                                ""
+                            ).toUpperCase() ===
+                            "DEBIT"
+
+                    );
+
+            }
+
+
+            if (
+                currentFilter ===
+                "PENDING"
+            ) {
+
+                transactions =
+                    transactions.filter(
+
+                        transaction =>
+                            String(
+                                transaction.status ||
+                                ""
+                            ).toUpperCase() ===
+                            "PENDING"
+
+                    );
+
+            }
+
+
+            if (
+                transactions.length === 0
+            ) {
+
+                container.innerHTML = `
+                    <div class="empty">
+                        No transactions found.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                transactions.map(
+
+                    transaction =>
+                        createTransactionHTML(
+                            transaction
+                        )
+
+                ).join("");
+
+        }
+
+
+        // =====================================================
+        // TRANSACTION HTML
+        // =====================================================
+
+        function createTransactionHTML(
+            transaction
+        ) {
+
+            const direction =
+                String(
+                    transaction.direction ||
+                    ""
+                ).toUpperCase();
+
+
+            const status =
+                String(
+                    transaction.status ||
+                    "UNKNOWN"
+                ).toUpperCase();
+
+
+            const amount =
+                Number(
+                    transaction.amount ||
+                    0
+                );
+
+
+            let amountClass =
+                "pending";
+
+
+            let amountPrefix =
+                "";
+
+
+            if (
+                direction ===
+                "CREDIT"
+            ) {
+
+                amountClass =
+                    "credit";
+
+                amountPrefix =
+                    "+";
+
+            }
+
+
+            if (
+                direction ===
+                "DEBIT"
+            ) {
+
+                amountClass =
+                    "debit";
+
+                amountPrefix =
+                    "-";
+
+            }
+
+
+            if (
+                direction ===
+                "PENDING"
+            ) {
+
+                amountClass =
+                    "pending";
+
+                amountPrefix =
+                    "";
+
+            }
+
+
+            let statusClass =
+                "pending";
+
+
+            if (
+                status ===
+                "COMPLETED"
+            ) {
+
+                statusClass =
+                    "completed";
+
+            }
+
+
+            if (
+                status ===
+                "REJECTED"
+            ) {
+
+                statusClass =
+                    "rejected";
+
+            }
+
+
+            const title =
+                transaction.description ||
+                transaction.type ||
+                "Transaction";
+
+
+            return `
+
+                <div class="transaction">
+
+                    <div>
+
+                        <div class="transaction-title">
+
+                            ${escapeHtml(title)}
+
+                        </div>
+
+                        <div class="transaction-date">
+
+                            ${formatDate(
+                                transaction.createdAt
+                            )}
+
+                        </div>
+
+                        <div class="transaction-type">
+
+                            Type:
+                            ${escapeHtml(
+                                transaction.type ||
+                                "N/A"
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="amount ${amountClass}"
+                    >
+
+                        ${amountPrefix}
+                        ${formatMoney(amount)}
+
+                    </div>
+
+
+                    <div
+                        class="status ${statusClass}"
+                    >
+
+                        ${escapeHtml(status)}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+        // =====================================================
+        // FILTER
+        // =====================================================
+
+        function setFilter(
+            filter,
+            button
+        ) {
+
+            currentFilter =
+                filter;
+
+
+            document
+                .querySelectorAll(
+                    ".filter-btn"
+                )
+                .forEach(
+                    btn =>
+                        btn.classList.remove(
+                            "active"
+                        )
+                );
+
+
+            if (button) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            renderTransactions();
+
+        }
+
+
+        // =====================================================
+        // ERROR
+        // =====================================================
+
+        function showError(
+            message
+        ) {
+
+            const box =
+                document.getElementById(
+                    "errorBox"
+                );
+
+
+            box.textContent =
+                message;
+
+
+            box.style.display =
+                "block";
+
+        }
+
+
+        // =====================================================
+        // BACK
+        // =====================================================
+
+        function goBack() {
+
+            window.location.href =
+                "/dashboard.html";
+
+        }
+
+
+        // =====================================================
+        // START
+        // =====================================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+
+                loadTransactions();
+
+            }
+        );
+
+
+        // =====================================================
+        // AUTO REFRESH
+        // =====================================================
+
+        setInterval(
+            loadTransactions,
+            10000
+        );
+
+    </script>
+
+</body>
+</html>

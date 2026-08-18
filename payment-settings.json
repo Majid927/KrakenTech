@@ -5,6 +5,7 @@
   "accountNumber": "",
   "walletAddress": "",
   "network": "",
+  "paymentUrl": "",
   "instructions": "Make your payment using the details above and keep your payment reference.",
   "minDeposit": 1,
   "maxDeposit": 1000000,

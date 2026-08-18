@@ -891,6 +891,49 @@ tr:hover td {
     <h1 class="page-title">Payment Settings</h1>
     <div class="page-subtitle">Configure deposit accounts displayed to users in their wallet.</div>
 
+    <!-- ─── PAYMENT REDIRECT LINK ─────────────────────────────── -->
+    <div class="card" style="border:2px solid #d60000; margin-bottom:25px;">
+        <h2 style="color:#ff1f1f; margin-top:0;">💳 Payment Redirect Link</h2>
+        <p style="color:#aaa; margin-bottom:18px;">
+            This URL is used by the client's <strong>Wallet → Payment</strong> button.
+            When a client clicks Pay, they will be redirected to this link.
+            Change it any time without redeploying the site.
+        </p>
+
+        <div id="currentPaymentLinkBox" style="
+            background:#1a1a1a; border:1px solid #333; border-radius:8px;
+            padding:14px 18px; margin-bottom:16px; display:none;
+        ">
+            <div style="color:#888; font-size:12px; margin-bottom:4px;">Currently Active URL:</div>
+            <div id="currentPaymentLinkDisplay" style="color:#00ff88; word-break:break-all; font-size:14px;"></div>
+        </div>
+        <div id="noPaymentLinkBox" style="
+            background:#1a1a1a; border:1px solid #555; border-radius:8px;
+            padding:14px 18px; margin-bottom:16px; color:#888; font-size:13px;
+        ">
+            ⚠ No payment link set yet. Clients will see an unavailable message.
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+            <label class="label">Payment / Redirect URL</label>
+            <input
+                id="paymentUrlInput"
+                class="input"
+                type="url"
+                placeholder="https://payment-example.com/pay/123"
+                style="font-size:14px;"
+            >
+            <div style="color:#666; font-size:11px; margin-top:5px;">
+                Must start with https:// — clients are redirected here when they click Payment.
+            </div>
+        </div>
+
+        <button class="btn btn-green" onclick="savePaymentUrl()" style="min-width:180px;">
+            Save / Update Link
+        </button>
+    </div>
+
+    <!-- ─── DEPOSIT ACCOUNT DETAILS ───────────────────────────── -->
     <div class="card">
         <div class="form-grid">
             <div class="form-group">
@@ -1592,6 +1635,48 @@ async function loadPaymentSettings() {
         document.getElementById("minDeposit").value = settings.minDeposit ?? "";
         document.getElementById("maxDeposit").value = settings.maxDeposit ?? "";
         document.getElementById("paymentInstructions").value = settings.instructions || "";
+
+        // Payment redirect link display
+        const url = settings.paymentUrl || "";
+        document.getElementById("paymentUrlInput").value = url;
+        if (url) {
+            document.getElementById("currentPaymentLinkDisplay").textContent = url;
+            document.getElementById("currentPaymentLinkBox").style.display = "block";
+            document.getElementById("noPaymentLinkBox").style.display = "none";
+        } else {
+            document.getElementById("currentPaymentLinkBox").style.display = "none";
+            document.getElementById("noPaymentLinkBox").style.display = "block";
+        }
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
+async function savePaymentUrl() {
+    if (!checkAuth()) return;
+
+    const url = (document.getElementById("paymentUrlInput").value || "").trim();
+
+    if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
+        showToast("Payment URL must start with http:// or https://", "error");
+        return;
+    }
+
+    try {
+        const data = await apiFetch("/admin/payment-settings", {
+            method: "POST",
+            body: JSON.stringify({ paymentUrl: url })
+        });
+        showToast(data.message || "Payment link updated successfully!");
+
+        if (url) {
+            document.getElementById("currentPaymentLinkDisplay").textContent = url;
+            document.getElementById("currentPaymentLinkBox").style.display = "block";
+            document.getElementById("noPaymentLinkBox").style.display = "none";
+        } else {
+            document.getElementById("currentPaymentLinkBox").style.display = "none";
+            document.getElementById("noPaymentLinkBox").style.display = "block";
+        }
     } catch (error) {
         showToast(error.message, "error");
     }

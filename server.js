@@ -60,6 +60,16 @@ const paymentSettingsFile =
 // ======================================================
 // FRONTEND PATH
 // ======================================================
+//
+// Actual structure:
+//
+// D:\website trading
+// ├── backend
+// └── Microsoft VS Code
+//     └── tradex
+//
+// server.js is inside backend.
+//
 
 const candidateFolders = [
     process.env.FRONTEND_DIR,
@@ -1586,6 +1596,38 @@ app.get(
 
             }
 
+        });
+
+    }
+);
+
+
+// ======================================================
+// PUBLIC PAYMENT REDIRECT LINK
+// ======================================================
+
+app.get(
+    "/api/payment-link",
+    (req, res) => {
+
+        const settings = getPaymentSettings();
+        const rawUrl = (settings.paymentUrl || "").trim();
+
+        if (!rawUrl) {
+
+            return res.json({
+                success:   false,
+                available: false,
+                paymentUrl: "",
+                message:   "Payment link is currently unavailable. Please try again later."
+            });
+
+        }
+
+        return res.json({
+            success:    true,
+            available:  true,
+            paymentUrl: rawUrl
         });
 
     }

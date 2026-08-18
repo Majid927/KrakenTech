@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="icon" type="image/png" href="logo.png">
-    <title>KrakenCoin - Market Control</title>
+    <title>KrakenTech - Crypto Markets</title>
 
     <style>
         * {
@@ -16,1753 +15,623 @@
             margin: 0;
             background: #050505;
             color: #ffffff;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        .topbar {
-            min-height: 70px;
-            background: #0b0b0b;
-            border-bottom: 1px solid #222;
+        /* =========================================
+           HEADER
+        ========================================= */
+        .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 25px;
+            padding: 16px 28px;
+            background: #0d0d0d;
+            border-bottom: 1px solid #1f1f1f;
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 100;
         }
 
         .logo {
-            font-size: 22px;
-            font-weight: 800;
-            color: #00ff88;
-        }
-
-        .top-right {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            color: #ff1f1f;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-decoration: none;
         }
 
-        .mode-badge {
-            padding: 8px 14px;
-            border-radius: 20px;
+        .logo-img {
+            height: 32px !important;
+            width: 32px !important;
+            max-height: 32px !important;
+            max-width: 32px !important;
+            object-fit: contain;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .logout {
+            background: transparent;
+            color: #ff1f1f;
+            border: 1px solid #ff1f1f;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
             font-size: 13px;
-            font-weight: bold;
-            background: #222;
+            transition: all 0.2s ease;
         }
 
-        .mode-real {
-            color: #00ff88;
-            border: 1px solid #00ff88;
+        .logout:hover {
+            background: #ff1f1f;
+            color: #ffffff;
         }
 
-        .mode-admin {
-            color: #ffb000;
-            border: 1px solid #ffb000;
+        /* =========================================
+           LAYOUT & SIDEBAR
+        ========================================= */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 65px);
         }
 
-        .container {
-            width: min(1200px, 94%);
-            margin: 30px auto 60px;
+        .sidebar {
+            width: 220px;
+            background: #0a0a0a;
+            border-right: 1px solid #1a1a1a;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
         }
 
-        .page-title {
-            margin-bottom: 25px;
+        .sidebar a {
+            color: #888;
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar a:hover {
+            color: #fff;
+            background: #141414;
+        }
+
+        .sidebar a.active {
+            color: #fff;
+            background: #1c1c1c;
+            border-left: 3px solid #ff1f1f;
+            font-weight: 600;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+            max-width: 1300px;
+            width: 100%;
+        }
+
+        /* =========================================
+           PAGE HEADER & SEARCH
+        ========================================= */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .page-title h1 {
-            margin: 0 0 8px;
-            font-size: 30px;
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            color: #ffffff;
         }
 
         .page-title p {
             margin: 0;
-            color: #999;
-        }
-
-        .card {
-            background: #0d0d0d;
-            border: 1px solid #242424;
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 22px;
-        }
-
-        .card h2 {
-            margin: 0 0 18px;
-            font-size: 20px;
-        }
-
-        .mode-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            border: none;
-            cursor: pointer;
-            border-radius: 9px;
-            padding: 12px 18px;
+            color: #888;
             font-size: 14px;
-            font-weight: bold;
-            transition: 0.2s;
         }
 
-        button:hover {
-            transform: translateY(-1px);
-            opacity: 0.92;
+        .search-box {
+            position: relative;
+            min-width: 260px;
         }
 
-        .btn-real {
-            background: #00c875;
-            color: #000;
-        }
-
-        .btn-admin {
-            background: #ffb000;
-            color: #000;
-        }
-
-        .btn-save {
-            background: #00ff88;
-            color: #000;
-        }
-
-        .btn-refresh {
-            background: #222;
-            color: #fff;
-            border: 1px solid #444;
-        }
-
-        .btn-danger {
-            background: #ff4545;
-            color: #fff;
-        }
-
-        .status-box {
-            margin-top: 18px;
-            padding: 14px;
-            border-radius: 9px;
+        .search-box input {
+            width: 100%;
             background: #111;
-            border: 1px solid #222;
-            color: #bbb;
+            border: 1px solid #282828;
+            border-radius: 8px;
+            padding: 10px 14px 10px 36px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
-        .success {
+        .search-box input:focus {
+            border-color: #ff1f1f;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* =========================================
+           TOP STATS CARDS
+        ========================================= */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #0f0f0f;
+            border: 1px solid #1f1f1f;
+            border-radius: 12px;
+            padding: 18px 20px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-sub {
+            font-size: 12px;
             color: #00ff88;
+            margin-top: 4px;
         }
 
-        .error {
-            color: #ff5555;
-        }
-
-        .info {
-            color: #ffb000;
+        /* =========================================
+           MARKETS TABLE
+        ========================================= */
+        .card {
+            background: #0f0f0f;
+            border: 1px solid #1f1f1f;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .table-wrap {
-            width: 100%;
             overflow-x: auto;
+            width: 100%;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 750px;
-        }
-
-        th,
-        td {
-            padding: 14px 12px;
-            border-bottom: 1px solid #222;
             text-align: left;
-        }
-
-        th {
-            color: #999;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-
-        td {
             font-size: 14px;
         }
 
-        .coin-name {
-            font-weight: bold;
-        }
-
-        .symbol {
-            color: #00ff88;
-            font-weight: bold;
-        }
-
-        .price {
-            font-weight: bold;
-        }
-
-        .real-price {
-            color: #aaa;
-        }
-
-        .effective-price {
-            color: #00ff88;
-            font-weight: bold;
-        }
-
-        input {
-            width: 150px;
-            background: #080808;
-            color: white;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 10px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #00ff88;
-        }
-
-        .price-input {
-            width: 170px;
-        }
-
-        .action-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .small-btn {
-            padding: 9px 12px;
-            font-size: 12px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .stat {
-            background: #111;
-            border: 1px solid #242424;
-            border-radius: 12px;
-            padding: 18px;
-        }
-
-        .stat-title {
+        th {
+            background: #141414;
             color: #888;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .admin-login {
-            max-width: 500px;
-            margin: 0 auto 25px;
-        }
-
-        .field {
-            margin-bottom: 14px;
-        }
-
-        .field label {
-            display: block;
-            color: #aaa;
-            margin-bottom: 7px;
-            font-size: 13px;
-        }
-
-        .field input {
-            width: 100%;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .footer-note {
-            color: #666;
             font-size: 12px;
-            text-align: center;
-            margin-top: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 18px;
+            border-bottom: 1px solid #222;
         }
 
-        @media (max-width: 800px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
+        td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #181818;
+            vertical-align: middle;
+        }
 
-            .topbar {
-                padding: 14px;
-            }
+        tr:hover td {
+            background: #141414;
+        }
 
-            .container {
-                width: 95%;
-            }
+        .coin-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-            .page-title h1 {
-                font-size: 24px;
+        .coin-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #ff1f1f;
+            border: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+        .coin-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .coin-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .coin-sym {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .price-text {
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        .price-up {
+            color: #00ff88 !important;
+        }
+
+        .price-down {
+            color: #ff4545 !important;
+        }
+
+        .change-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .change-up {
+            background: rgba(0, 255, 136, 0.12);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.25);
+        }
+
+        .change-down {
+            background: rgba(255, 69, 69, 0.12);
+            color: #ff4545;
+            border: 1px solid rgba(255, 69, 69, 0.25);
+        }
+
+        .btn-trade {
+            background: #ff1f1f;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-trade:hover {
+            background: #d60000;
+            box-shadow: 0 2px 10px rgba(255, 31, 31, 0.4);
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 8px #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                border-right: none;
+                border-bottom: 1px solid #1a1a1a;
+                padding: 10px;
+            }
+            .sidebar a {
+                padding: 8px 12px;
+                white-space: nowrap;
+            }
+            .main {
+                padding: 16px;
             }
         }
     </style>
 </head>
-
 <body>
 
-    <!-- =====================================================
-         TOP BAR
-    ====================================================== -->
+    <!-- =========================================
+         TOP HEADER
+    ========================================= -->
+    <header class="header">
+        <a href="/dashboard.html" class="logo">
+            <img src="logo.png" alt="KrakenTech" class="logo-img" onerror="this.style.display='none'">
+            <span>KrakenTech</span>
+        </a>
 
-    <div class="topbar">
+        <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:13px; color:#888; display:flex; align-items:center;">
+                <span class="live-dot"></span> Live Markets
+            </div>
+            <button class="logout" onclick="logout()">Logout</button>
+        </div>
+    </header>
 
-        <div class="logo"><img src="logo.png" alt="KrakenCoin" class="logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+    <!-- =========================================
+         MAIN LAYOUT
+    ========================================= -->
+    <div class="layout">
 
-        <div class="top-right">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <a href="/dashboard.html">📊 Dashboard</a>
+            <a href="/trade.html">📈 Trade</a>
+            <a href="/markets.html" class="active">🌐 Markets</a>
+            <a href="/wallet.html">💳 Wallet</a>
+            <a href="/profile.html">👤 Profile</a>
+        </aside>
 
-            <div id="modeBadge" class="mode-badge">
-                Loading...
+        <!-- MAIN CONTENT -->
+        <main class="main">
+
+            <div class="page-header">
+                <div class="page-title">
+                    <h1>Cryptocurrency Markets</h1>
+                    <p>Real-time market prices, trends, and trading pairs.</p>
+                </div>
+
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="marketSearch" placeholder="Search coin or symbol..." oninput="filterMarkets()">
+                </div>
             </div>
 
-            <button
-                class="btn-refresh"
-                onclick="loadMarketControl()"
-            >
-                Refresh
-            </button>
+            <!-- STATS ROW -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Market Status</div>
+                    <div class="stat-value" style="color:#00ff88;">Active & Live</div>
+                    <div class="stat-sub" id="lastUpdatedText">Connecting...</div>
+                </div>
 
-        </div>
+                <div class="stat-card">
+                    <div class="stat-label">Tracked Pairs</div>
+                    <div class="stat-value" id="trackedCoinsCount">--</div>
+                    <div class="stat-sub">USD & USDT Markets</div>
+                </div>
 
+                <div class="stat-card">
+                    <div class="stat-label">Top Performer</div>
+                    <div class="stat-value" id="topGainerText">--</div>
+                    <div class="stat-sub" id="topGainerChange">--</div>
+                </div>
+            </div>
+
+            <!-- TABLE CARD -->
+            <div class="card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Live Price</th>
+                                <th>24h Change</th>
+                                <th>24h High</th>
+                                <th>24h Low</th>
+                                <th style="text-align:right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marketsTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:40px; color:#777;">
+                                    Loading live market data...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
     </div>
 
-
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
-
-    <div class="container">
-
-        <div class="page-title">
-
-            <h1>
-                Market Control
-            </h1>
-
-            <p>
-                Control real market mode and admin market prices.
-            </p>
-
-        </div>
-
-
-        <!-- =================================================
-             ADMIN AUTH
-        ================================================== -->
-
-        <div
-            id="loginCard"
-            class="card admin-login"
-        >
-
-            <h2>
-                Admin Authorization
-            </h2>
-
-            <div class="field">
-
-                <label>
-                    Admin Secret
-                </label>
-
-                <input
-                    type="password"
-                    id="adminSecret"
-                    placeholder="Enter admin secret"
-                >
-
-            </div>
-
-            <button
-                class="btn-admin"
-                onclick="saveAdminSecret()"
-            >
-                Connect Admin
-            </button>
-
-            <div
-                id="loginStatus"
-                class="status-box"
-            >
-                Enter your admin secret to continue.
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             CONTROL PANEL
-        ================================================== -->
-
-        <div
-            id="controlPanel"
-            class="hidden"
-        >
-
-            <!-- MODE -->
-
-            <div class="card">
-
-                <h2>
-                    Market Mode
-                </h2>
-
-                <div class="mode-buttons">
-
-                    <button
-                        class="btn-real"
-                        onclick="setMarketMode('REAL')"
-                    >
-                        REAL MARKET
-                    </button>
-
-                    <button
-                        class="btn-admin"
-                        onclick="setMarketMode('ADMIN')"
-                    >
-                        ADMIN CONTROL
-                    </button>
-
-                </div>
-
-                <div
-                    id="modeStatus"
-                    class="status-box"
-                >
-                    Loading market mode...
-                </div>
-
-            </div>
-
-
-            <!-- STATS -->
-
-            <div class="grid">
-
-                <div class="stat">
-
-                    <div class="stat-title">
-                        Current Mode
-                    </div>
-
-                    <div
-                        id="statMode"
-                        class="stat-value"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-title">
-                        Market Updated
-                    </div>
-
-                    <div
-                        id="statUpdated"
-                        class="stat-value"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-title">
-                        Admin Updated
-                    </div>
-
-                    <div
-                        id="statAdminUpdated"
-                        class="stat-value"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 INDIVIDUAL COIN CONTROL
-            ================================================== -->
-
-            <div class="card">
-
-                <h2>
-                    Coin Prices
-                </h2>
-
-                <div class="table-wrap">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Coin
-                                </th>
-
-                                <th>
-                                    Real Price
-                                </th>
-
-                                <th>
-                                    Admin Price
-                                </th>
-
-                                <th>
-                                    Effective Price
-                                </th>
-
-                                <th>
-                                    Update
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="coinTable">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 ALL PRICE CONTROL
-            ================================================== -->
-
-            <div class="card">
-
-                <h2>
-                    Update All Admin Prices
-                </h2>
-
-                <div class="table-wrap">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Coin
-                                </th>
-
-                                <th>
-                                    Admin Price
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="allPriceTable">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-                <br>
-
-                <button
-                    class="btn-save"
-                    onclick="saveAllPrices()"
-                >
-                    Save All Prices
-                </button>
-
-                <div
-                    id="allPriceStatus"
-                    class="status-box"
-                >
-                    Change prices and click Save All Prices.
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 CURRENT MARKET
-            ================================================== -->
-
-            <div class="card">
-
-                <h2>
-                    Current Public Market
-                </h2>
-
-                <div class="table-wrap">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Symbol
-                                </th>
-
-                                <th>
-                                    Name
-                                </th>
-
-                                <th>
-                                    Price
-                                </th>
-
-                                <th>
-                                    Real Price
-                                </th>
-
-                                <th>
-                                    Source
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="publicMarketTable">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="footer-note">
-            KrakenCoin Market Control
-        </div>
-
-    </div>
-
-
-<script>
-
-    // =====================================================
-    // CONFIG
-    // =====================================================
-
-    const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
-    ? window.location.origin
-    : "http://localhost:3000";
-
-    const ADMIN_SECRET_STORAGE =
-        "tradeXAdminSecret";
-
-
-    // =====================================================
-    // ELEMENTS
-    // =====================================================
-
-    const loginCard =
-        document.getElementById(
-            "loginCard"
-        );
-
-    const controlPanel =
-        document.getElementById(
-            "controlPanel"
-        );
-
-    const adminSecretInput =
-        document.getElementById(
-            "adminSecret"
-        );
-
-    const loginStatus =
-        document.getElementById(
-            "loginStatus"
-        );
-
-    const modeBadge =
-        document.getElementById(
-            "modeBadge"
-        );
-
-
-    // =====================================================
-    // GET TOKEN
-    // =====================================================
-
-    function getToken() {
-
-        return (
-
-            localStorage.getItem(
-                "tradeXToken"
-            ) ||
-
-            localStorage.getItem(
-                "token"
-            ) ||
-
-            ""
-
-        );
-
-    }
-
-
-    // =====================================================
-    // GET ADMIN SECRET
-    // =====================================================
-
-    function getAdminSecret() {
-
-        return localStorage.getItem(
-            ADMIN_SECRET_STORAGE
-        ) || "";
-
-    }
-
-
-    // =====================================================
-    // HEADERS
-    // =====================================================
-
-    function getHeaders() {
-
-        const token =
-            getToken();
-
-        const secret =
-            getAdminSecret();
-
-        return {
-
-            "Content-Type":
-                "application/json",
-
-            "Authorization":
-                token
-                    ? `Bearer ${token}`
-                    : "",
-
-            "x-admin-secret":
-                secret
-
-        };
-
-    }
-
-
-    // =====================================================
-    // SAVE ADMIN SECRET
-    // =====================================================
-
-    function saveAdminSecret() {
-
-        const secret =
-            adminSecretInput.value.trim();
-
-        if (!secret) {
-
-            loginStatus.innerHTML =
-                '<span class="error">Please enter admin secret.</span>';
-
-            return;
-
+    <!-- =========================================
+         SCRIPTS
+    ========================================= -->
+    <script>
+        const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+            ? window.location.origin
+            : "http://localhost:3000";
+
+        let currentMarketData = {};
+        let previousPrices = {};
+
+        function logout() {
+            localStorage.removeItem("tradeXToken");
+            localStorage.removeItem("token");
+            localStorage.removeItem("tradeXUser");
+            localStorage.removeItem("user");
+            window.location.href = "/login.html";
         }
 
-        localStorage.setItem(
-            ADMIN_SECRET_STORAGE,
-            secret
-        );
+        function formatMoney(amount) {
+            const num = Number(amount);
+            if (!Number.isFinite(num)) return "$0.00";
+            if (num < 0.01) return "$" + num.toFixed(6);
+            if (num < 1) return "$" + num.toFixed(4);
+            return "$" + num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
-        loginStatus.innerHTML =
-            '<span class="success">Admin secret saved. Connecting...</span>';
+        async function fetchMarkets() {
+            try {
+                const response = await fetch(API_URL + "/market");
+                if (!response.ok) return;
 
-        testAdminConnection();
+                const data = await response.json();
+                if (!data.success || !data.market) return;
 
-    }
+                currentMarketData = data.market;
+                renderMarkets();
+                updateStats();
 
-
-    // =====================================================
-    // TEST ADMIN CONNECTION
-    // =====================================================
-
-    async function testAdminConnection() {
-
-        try {
-
-            const token =
-                getToken();
-
-            if (!token) {
-
-                loginStatus.innerHTML =
-                    '<span class="error">User login token not found. Login first.</span>';
-
-                return;
-
+                document.getElementById("lastUpdatedText").textContent =
+                    "Updated " + new Date().toLocaleTimeString();
+            } catch (err) {
+                console.error("Market fetch error:", err);
             }
-
-            const response =
-                await fetch(
-                    `${API_URL}/admin/market-control`,
-                    {
-                        method: "GET",
-                        headers: getHeaders()
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            if (!response.ok || !data.success) {
-
-                loginStatus.innerHTML =
-                    `<span class="error">${data.message || "Admin authorization failed."}</span>`;
-
-                return;
-
-            }
-
-            loginCard.classList.add(
-                "hidden"
-            );
-
-            controlPanel.classList.remove(
-                "hidden"
-            );
-
-            loadMarketControl();
-
-        } catch (error) {
-
-            console.error(error);
-
-            loginStatus.innerHTML =
-                '<span class="error">Unable to connect to backend.</span>';
-
         }
 
-    }
-
-
-    // =====================================================
-    // FORMAT PRICE
-    // =====================================================
-
-    function formatPrice(
-        value
-    ) {
-
-        const number =
-            Number(value || 0);
-
-        if (!Number.isFinite(number)) {
-            return "0";
-        }
-
-        if (number < 1) {
-
-            return number.toFixed(6);
-
-        }
-
-        return number.toLocaleString(
-            "en-US",
-            {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }
-        );
-
-    }
-
-
-    // =====================================================
-    // FORMAT DATE
-    // =====================================================
-
-    function formatDate(
-        value
-    ) {
-
-        if (!value) {
-            return "-";
-        }
-
-        const date =
-            new Date(value);
-
-        if (
-            Number.isNaN(
-                date.getTime()
-            )
-        ) {
-
-            return "-";
-
-        }
-
-        return date.toLocaleString();
-
-    }
-
-
-    // =====================================================
-    // LOAD MARKET CONTROL
-    // =====================================================
-
-    async function loadMarketControl() {
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/admin/market-control`,
-                    {
-                        method: "GET",
-                        headers: getHeaders()
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            if (
-                response.status === 401
-            ) {
-
-                controlPanel.classList.add(
-                    "hidden"
-                );
-
-                loginCard.classList.remove(
-                    "hidden"
-                );
-
-                loginStatus.innerHTML =
-                    '<span class="error">Login token expired. Please login again.</span>';
-
-                return;
-
-            }
-
-            if (
-                response.status === 403
-            ) {
-
-                controlPanel.classList.add(
-                    "hidden"
-                );
-
-                loginCard.classList.remove(
-                    "hidden"
-                );
-
-                loginStatus.innerHTML =
-                    '<span class="error">Wrong admin secret.</span>';
-
-                return;
-
-            }
-
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to load market control."
-                );
-
-            }
-
-
-            controlPanel.classList.remove(
-                "hidden"
-            );
-
-            loginCard.classList.add(
-                "hidden"
-            );
-
-
-            updateModeUI(
-                data.mode
-            );
-
-
-            document.getElementById(
-                "statMode"
-            ).textContent =
-                data.mode;
-
-
-            document.getElementById(
-                "statUpdated"
-            ).textContent =
-                formatDate(
-                    data.realMarketUpdatedAt
-                );
-
-
-            document.getElementById(
-                "statAdminUpdated"
-            ).textContent =
-                formatDate(
-                    data.updatedAt
-                );
-
-
-            renderCoinTable(
-                data
-            );
-
-
-            renderAllPriceTable(
-                data
-            );
-
-
-            loadPublicMarket();
-
-        } catch (error) {
-
-            console.error(error);
-
-            if (
-                controlPanel.classList.contains(
-                    "hidden"
-                )
-            ) {
-
-                loginStatus.innerHTML =
-                    `<span class="error">${error.message}</span>`;
-
-            }
-
-        }
-
-    }
-
-
-    // =====================================================
-    // MODE UI
-    // =====================================================
-
-    function updateModeUI(
-        mode
-    ) {
-
-        modeBadge.textContent =
-            mode === "ADMIN"
-                ? "ADMIN MODE"
-                : "REAL MODE";
-
-        modeBadge.className =
-            "mode-badge " +
-            (
-                mode === "ADMIN"
-                    ? "mode-admin"
-                    : "mode-real"
-            );
-
-        document.getElementById(
-            "modeStatus"
-        ).innerHTML =
-            mode === "ADMIN"
-
-                ? '<span class="info">ADMIN mode is active. Public market uses admin prices.</span>'
-
-                : '<span class="success">REAL mode is active. Public market uses real market prices.</span>';
-
-    }
-
-
-    // =====================================================
-    // SET MARKET MODE
-    // =====================================================
-
-    async function setMarketMode(
-        mode
-    ) {
-
-        const message =
-            mode === "ADMIN"
-
-                ? "Activate ADMIN market control?"
-
-                : "Activate REAL market?"
-
-        const confirmed =
-            confirm(message);
-
-        if (!confirmed) {
-            return;
-        }
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/admin/market-control/mode`,
-                    {
-                        method: "POST",
-                        headers: getHeaders(),
-                        body: JSON.stringify({
-                            mode: mode
-                        })
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to change market mode."
-                );
-
-            }
-
-            updateModeUI(
-                data.mode
-            );
-
-            document.getElementById(
-                "statMode"
-            ).textContent =
-                data.mode;
-
-            document.getElementById(
-                "statAdminUpdated"
-            ).textContent =
-                formatDate(
-                    data.updatedAt
-                );
-
-            await loadMarketControl();
-
-            alert(
-                data.message
-            );
-
-        } catch (error) {
-
-            alert(
-                error.message
-            );
-
-        }
-
-    }
-
-
-    // =====================================================
-    // RENDER COIN TABLE
-    // =====================================================
-
-    function renderCoinTable(
-        data
-    ) {
-
-        const table =
-            document.getElementById(
-                "coinTable"
-            );
-
-        table.innerHTML = "";
-
-        const symbols =
-            Object.keys(
-                data.adminPrices || {}
-            );
-
-        symbols.forEach(
-            symbol => {
-
-                const adminPrice =
-                    Number(
-                        data.adminPrices[
-                            symbol
-                        ] || 0
-                    );
-
-                const realPrice =
-                    Number(
-                        data.realPrices[
-                            symbol
-                        ] || 0
-                    );
-
-                const effectivePrice =
-                    Number(
-                        data.effectivePrices[
-                            symbol
-                        ] || 0
-                    );
-
-
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                row.innerHTML = `
-
-                    <td>
-
-                        <span class="symbol">
-                            ${symbol}
-                        </span>
-
-                    </td>
-
-                    <td class="real-price">
-
-                        $${formatPrice(
-                            realPrice
-                        )}
-
-                    </td>
-
-                    <td>
-
-                        <input
-                            class="price-input"
-                            type="number"
-                            step="any"
-                            id="price-${symbol}"
-                            value="${adminPrice}"
-                        >
-
-                    </td>
-
-                    <td class="effective-price">
-
-                        $${formatPrice(
-                            effectivePrice
-                        )}
-
-                    </td>
-
-                    <td>
-
-                        <button
-                            class="btn-save small-btn"
-                            onclick="saveCoinPrice('${symbol}')"
-                        >
-                            Update
-                        </button>
-
-                    </td>
-
-                `;
-
-
-                table.appendChild(
-                    row
-                );
-
-            }
-        );
-
-    }
-
-
-    // =====================================================
-    // SAVE SINGLE COIN PRICE
-    // =====================================================
-
-    async function saveCoinPrice(
-        symbol
-    ) {
-
-        const input =
-            document.getElementById(
-                `price-${symbol}`
-            );
-
-        if (!input) {
-            return;
-        }
-
-        const price =
-            Number(
-                input.value
-            );
-
-        if (
-            !Number.isFinite(price) ||
-            price <= 0
-        ) {
-
-            alert(
-                "Enter a valid price."
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/admin/market-control/price`,
-                    {
-                        method: "POST",
-                        headers: getHeaders(),
-                        body: JSON.stringify({
-
-                            symbol:
-                                symbol,
-
-                            price:
-                                price
-
-                        })
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to update price."
-                );
-
-            }
-
-            alert(
-                data.message
-            );
-
-            await loadMarketControl();
-
-        } catch (error) {
-
-            alert(
-                error.message
-            );
-
-        }
-
-    }
-
-
-    // =====================================================
-    // RENDER ALL PRICE TABLE
-    // =====================================================
-
-    function renderAllPriceTable(
-        data
-    ) {
-
-        const table =
-            document.getElementById(
-                "allPriceTable"
-            );
-
-        table.innerHTML = "";
-
-        const symbols =
-            Object.keys(
-                data.adminPrices || {}
-            );
-
-        symbols.forEach(
-            symbol => {
-
-                const price =
-                    Number(
-                        data.adminPrices[
-                            symbol
-                        ] || 0
-                    );
-
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
-
-                row.innerHTML = `
-
-                    <td>
-
-                        <span class="symbol">
-                            ${symbol}
-                        </span>
-
-                    </td>
-
-                    <td>
-
-                        <input
-                            type="number"
-                            step="any"
-                            class="price-input all-price-input"
-                            data-symbol="${symbol}"
-                            value="${price}"
-                        >
-
-                    </td>
-
-                `;
-
-                table.appendChild(
-                    row
-                );
-
-            }
-        );
-
-    }
-
-
-    // =====================================================
-    // SAVE ALL PRICES
-    // =====================================================
-
-    async function saveAllPrices() {
-
-        const inputs =
-            document.querySelectorAll(
-                ".all-price-input"
-            );
-
-        const prices = {};
-
-        let valid =
-            true;
-
-
-        inputs.forEach(
-            input => {
-
-                const symbol =
-                    input.dataset.symbol;
-
-                const price =
-                    Number(
-                        input.value
-                    );
-
-                if (
-                    !Number.isFinite(price) ||
-                    price <= 0
-                ) {
-
-                    valid =
-                        false;
-
+        function updateStats() {
+            const keys = Object.keys(currentMarketData);
+            document.getElementById("trackedCoinsCount").textContent = keys.length + " Pairs";
+
+            let bestCoin = null;
+            let bestChange = -Infinity;
+
+            keys.forEach(sym => {
+                const coin = currentMarketData[sym];
+                const change = Number(coin.change24h || 0);
+                if (change > bestChange) {
+                    bestChange = change;
+                    bestCoin = coin;
                 }
+            });
 
-                prices[
-                    symbol
-                ] =
-                    price;
-
+            if (bestCoin) {
+                document.getElementById("topGainerText").textContent = bestCoin.name || bestCoin.symbol;
+                const sign = bestChange >= 0 ? "+" : "";
+                document.getElementById("topGainerChange").textContent = `${sign}${bestChange.toFixed(2)}% (24h)`;
+                document.getElementById("topGainerChange").style.color = bestChange >= 0 ? "#00ff88" : "#ff4545";
             }
-        );
-
-
-        if (!valid) {
-
-            document.getElementById(
-                "allPriceStatus"
-            ).innerHTML =
-                '<span class="error">One or more prices are invalid.</span>';
-
-            return;
-
         }
 
+        function renderMarkets() {
+            const tbody = document.getElementById("marketsTableBody");
+            const filter = (document.getElementById("marketSearch")?.value || "").trim().toLowerCase();
 
-        try {
-
-            document.getElementById(
-                "allPriceStatus"
-            ).innerHTML =
-                '<span class="info">Saving prices...</span>';
-
-
-            const response =
-                await fetch(
-                    `${API_URL}/admin/market-control/prices`,
-                    {
-                        method: "POST",
-                        headers: getHeaders(),
-                        body: JSON.stringify(
-                            prices
-                        )
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to save prices."
-                );
-
-            }
-
-
-            document.getElementById(
-                "allPriceStatus"
-            ).innerHTML =
-                `<span class="success">${data.message}</span>`;
-
-
-            await loadMarketControl();
-
-        } catch (error) {
-
-            document.getElementById(
-                "allPriceStatus"
-            ).innerHTML =
-                `<span class="error">${error.message}</span>`;
-
-        }
-
-    }
-
-
-    // =====================================================
-    // PUBLIC MARKET
-    // =====================================================
-
-    async function loadPublicMarket() {
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/market`
-                );
-
-            const data =
-                await response.json();
-
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-
+            const keys = Object.keys(currentMarketData);
+            if (keys.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#777;">No market data available.</td></tr>`;
                 return;
-
             }
 
-            renderPublicMarket(
-                data
-            );
+            const filteredKeys = keys.filter(sym => {
+                const coin = currentMarketData[sym];
+                const name = (coin.name || "").toLowerCase();
+                const symbol = (coin.symbol || sym).toLowerCase();
+                return symbol.includes(filter) || name.includes(filter);
+            });
 
-        } catch (error) {
+            if (filteredKeys.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#777;">No coins match "${filter}".</td></tr>`;
+                return;
+            }
 
-            console.error(
-                "Public market error:",
-                error
-            );
+            let html = "";
+            filteredKeys.forEach(sym => {
+                const coin = currentMarketData[sym];
+                const symbol = coin.symbol || sym;
+                const name = coin.name || symbol.replace("USDT", "");
+                const price = Number(coin.price || 0);
+                const prevPrice = previousPrices[sym] || price;
+                const change = Number(coin.change24h || 0);
+                const isPositive = change >= 0;
+                const high = Number(coin.high24h || (price * 1.03));
+                const low = Number(coin.low24h || (price * 0.97));
 
-        }
+                const priceClass = price > prevPrice ? "price-up" : (price < prevPrice ? "price-down" : "");
+                const changeClass = isPositive ? "change-up" : "change-down";
+                const changeSign = isPositive ? "+" : "";
 
-    }
+                const cleanSymbol = symbol.replace("USDT", "");
+                const badgeLetters = cleanSymbol.substring(0, 3).toUpperCase();
 
-
-    // =====================================================
-    // RENDER PUBLIC MARKET
-    // =====================================================
-
-    function renderPublicMarket(
-        data
-    ) {
-
-        const table =
-            document.getElementById(
-                "publicMarketTable"
-            );
-
-        table.innerHTML = "";
-
-
-        const market =
-            data.data || {};
-
-
-        Object.keys(
-            market
-        ).forEach(
-            symbol => {
-
-                const coin =
-                    market[
-                        symbol
-                    ];
-
-
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                row.innerHTML = `
-
-                    <td>
-
-                        <span class="symbol">
-                            ${coin.symbol}
-                        </span>
-
-                    </td>
-
-                    <td class="coin-name">
-                        ${coin.name}
-                    </td>
-
-                    <td class="effective-price">
-                        $${formatPrice(
-                            coin.price
-                        )}
-                    </td>
-
-                    <td class="real-price">
-                        $${formatPrice(
-                            coin.realPrice
-                        )}
-                    </td>
-
-                    <td>
-
-                        ${
-                            coin.source === "ADMIN"
-
-                                ? '<span class="info">ADMIN</span>'
-
-                                : '<span class="success">REAL</span>'
-                        }
-
-                    </td>
-
+                html += `
+                    <tr>
+                        <td>
+                            <div class="coin-cell">
+                                <div class="coin-badge">${badgeLetters}</div>
+                                <div class="coin-info">
+                                    <span class="coin-name">${name}</span>
+                                    <span class="coin-sym">${symbol}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="price-text ${priceClass}">${formatMoney(price)}</span>
+                        </td>
+                        <td>
+                            <span class="change-pill ${changeClass}">${changeSign}${change.toFixed(2)}%</span>
+                        </td>
+                        <td style="color:#aaa;">${formatMoney(high)}</td>
+                        <td style="color:#aaa;">${formatMoney(low)}</td>
+                        <td style="text-align:right;">
+                            <a href="/trade.html?symbol=${encodeURIComponent(symbol)}" class="btn-trade">Trade</a>
+                        </td>
+                    </tr>
                 `;
 
+                previousPrices[sym] = price;
+            });
 
-                table.appendChild(
-                    row
-                );
-
-            }
-        );
-
-    }
-
-
-    // =====================================================
-    // AUTO REFRESH
-    // =====================================================
-
-    setInterval(
-        () => {
-
-            if (
-                !controlPanel.classList.contains(
-                    "hidden"
-                )
-            ) {
-
-                loadMarketControl();
-
-            }
-
-        },
-        10000
-    );
-
-
-    // =====================================================
-    // PAGE LOAD
-    // =====================================================
-
-    window.addEventListener(
-        "load",
-        () => {
-
-            const savedSecret =
-                getAdminSecret();
-
-            if (savedSecret) {
-
-                adminSecretInput.value =
-                    savedSecret;
-
-                testAdminConnection();
-
-            }
-
+            tbody.innerHTML = html;
         }
-    );
 
-</script>
+        function filterMarkets() {
+            renderMarkets();
+        }
 
+        // Initial fetch + interval
+        fetchMarkets();
+        setInterval(fetchMarkets, 2500);
+    </script>
 </body>
 </html>

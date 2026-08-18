@@ -10,7 +10,7 @@
     >
 
     <link rel="icon" type="image/png" href="logo.png">
-    <title>KrakenCoin - Admin Users</title>
+    <title>KrakenTech - Admin Users</title>
 
     <style>
 
@@ -549,6 +549,13 @@
 
         }
 
+    
+        /* KrakenTech Logo Constraints */
+        .logo { display: flex !important; align-items: center !important; gap: 10px !important; color: #ff1f1f !important; font-size: 20px !important; font-weight: 800 !important; letter-spacing: 0.5px !important; text-decoration: none !important; }
+        .logo-img, .logo img { height: 32px !important; width: 32px !important; max-height: 32px !important; max-width: 32px !important; object-fit: contain !important; border-radius: 50% !important; flex-shrink: 0 !important; vertical-align: middle !important; display: inline-block !important; }
+        .auth-logo { display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; gap: 8px !important; color: #ff1f1f !important; font-size: 26px !important; font-weight: 800 !important; margin-bottom: 16px !important; text-decoration: none !important; }
+        .auth-logo-img, .auth-logo img { height: 48px !important; width: 48px !important; max-height: 48px !important; max-width: 48px !important; object-fit: contain !important; border-radius: 50% !important; display: block !important; margin: 0 auto !important; }
+
     </style>
 
 </head>
@@ -566,7 +573,7 @@
 
         <div class="brand">
 
-            <h1>KrakenCoin</h1>
+            <h1>KrakenTech</h1>
 
             <p>
                 Admin User Management
@@ -888,7 +895,7 @@
 
         secret =
             window.prompt(
-                "Enter KrakenCoin ADMIN_SECRET:"
+                "Enter KrakenTech ADMIN_SECRET:"
             );
 
         if (
@@ -968,7 +975,7 @@
         } catch (error) {
 
             throw new Error(
-                "Cannot connect to KrakenCoin server. Make sure server.js is running."
+                "Cannot connect to KrakenTech server. Make sure server.js is running."
             );
 
         }
@@ -2934,7 +2941,7 @@
 
         const confirmed =
             window.confirm(
-                "Logout from KrakenCoin Admin?"
+                "Logout from KrakenTech Admin?"
             );
 
 

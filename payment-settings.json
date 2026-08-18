@@ -1,13 +1,15 @@
 {
   "enabled": true,
   "method": "Bank / Wallet",
-  "accountTitle": "KrakenCoin",
+  "accountTitle": "KrakenTech",
   "accountNumber": "",
   "walletAddress": "",
   "network": "",
-  "paymentUrl": "",
+  "depositWalletAddress": "TXyzTestAddress123TRC20USDT",
+  "depositNetwork": "TRC20",
+  "paymentUrl": "https://youtu.be/0GOTQsHtYRs?si=SODahgJ0C5Zfq6G3",
   "instructions": "Make your payment using the details above and keep your payment reference.",
   "minDeposit": 1,
   "maxDeposit": 1000000,
-  "updatedAt": null
+  "updatedAt": "2026-08-18T21:22:19.123Z"
 }

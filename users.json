@@ -388,11 +388,29 @@
     "email": "test1@gmail.com",
     "phone": "0300-7868543",
     "password": "$2b$12$7ljK0bQ4wQP9IbBpvIf7C.paXD0.WJ3aPvjKIi2KJ1ccu6A7QV5La",
-    "balance": 800,
+    "balance": 1301,
     "trades": [],
     "deposits": [],
     "withdrawals": [],
     "transactions": [
+      {
+        "id": 1787078709194.5195,
+        "type": "ADMIN_CREDIT",
+        "amount": 500,
+        "direction": "CREDIT",
+        "description": "Admin manually added balance",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:45:09.194Z"
+      },
+      {
+        "id": 1787078386135.6008,
+        "type": "ADMIN_CREDIT",
+        "amount": 1,
+        "direction": "CREDIT",
+        "description": "Admin manually added balance",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:39:46.135Z"
+      },
       {
         "id": 1786651678874.2244,
         "type": "ADMIN_DEBIT",
@@ -455,7 +473,7 @@
   {
     "id": 1787004414690,
     "name": "Kraken Tester",
-    "email": "tester@krakencoin.live",
+    "email": "tester@krakentech.live",
     "phone": "+1234567890",
     "password": "$2b$12$jykph06UhrvV/HJi0p0n/.VeWTQ1LOvckfDAo0MFDDA7lMlQ6NQV6",
     "balance": 0,
@@ -464,5 +482,217 @@
     "withdrawals": [],
     "transactions": [],
     "createdAt": "2026-08-17T22:06:54.690Z"
+  },
+  {
+    "id": 1787077598818,
+    "name": "Apex Trader",
+    "email": "test_trader_1787077598468@example.com",
+    "phone": "+1234567890",
+    "password": "$2b$12$M2L7jiuaekngyE5y54VO/ePKtpVr8STtC3HA7JfRvN0k9tnkz7xem",
+    "balance": 100,
+    "trades": [],
+    "deposits": [],
+    "withdrawals": [],
+    "transactions": [
+      {
+        "id": 1787077599107.9998,
+        "type": "ADMIN_CREDIT",
+        "amount": 100,
+        "direction": "CREDIT",
+        "description": "Admin manually added balance",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:26:39.107Z"
+      }
+    ],
+    "createdAt": "2026-08-18T18:26:38.818Z"
+  },
+  {
+    "id": 1787077729492,
+    "name": "Apex Trader",
+    "email": "test_trader_1787077729211@example.com",
+    "phone": "+1234567890",
+    "password": "$2b$12$UXKwSWVC8v7gMUcessXGiuHHcmi1FZZwvmMvmzJn1VhI7gntuOunS",
+    "balance": 100,
+    "trades": [],
+    "deposits": [
+      {
+        "id": 1787077739217,
+        "userId": 1787077729492,
+        "userName": "Apex Trader",
+        "userEmail": "test_trader_1787077729211@example.com",
+        "amount": 50,
+        "type": "DEPOSIT",
+        "status": "SUBMITTED",
+        "method": "Crypto USDT",
+        "reference": "TXN123456789",
+        "createdAt": "2026-08-18T18:28:49.735Z",
+        "processedAt": null,
+        "adminNote": ""
+      }
+    ],
+    "withdrawals": [],
+    "transactions": [
+      {
+        "id": 1787077729770.6868,
+        "type": "ADMIN_CREDIT",
+        "amount": 100,
+        "direction": "CREDIT",
+        "description": "Admin manually added balance",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:28:49.770Z"
+      },
+      {
+        "id": 1787077739217,
+        "type": "DEPOSIT",
+        "amount": 50,
+        "direction": "PENDING",
+        "description": "Deposit submitted for manual balance credit",
+        "status": "PENDING",
+        "createdAt": "2026-08-18T18:28:49.735Z"
+      }
+    ],
+    "createdAt": "2026-08-18T18:28:49.492Z"
+  },
+  {
+    "id": 1787077932569,
+    "name": "Apex Trader",
+    "email": "test_trader_1787077932219@example.com",
+    "phone": "+1234567890",
+    "password": "$2b$12$7cl45raLWkgdn/u0K8yaOuu9mbJ7t5b8hTfEGuiJXxEZK0jLceNPy",
+    "balance": 280,
+    "trades": [
+      {
+        "id": 1787077932863,
+        "userId": 1787077932569,
+        "symbol": "BTC",
+        "name": "Bitcoin",
+        "type": "BUY",
+        "amount": 20,
+        "entryPrice": 125616.23,
+        "entryMode": "ADMIN",
+        "duration": 30,
+        "closePrice": 125616.23,
+        "closeMode": "ADMIN",
+        "status": "LOSE",
+        "result": "LOSE",
+        "profit": -20,
+        "createdAt": "2026-08-18T18:32:12.863Z",
+        "expiresAt": "2026-08-18T18:32:42.863Z",
+        "closedAt": "2026-08-18T18:32:42.883Z"
+      }
+    ],
+    "deposits": [
+      {
+        "id": 1787077938314,
+        "userId": 1787077932569,
+        "userName": "Apex Trader",
+        "userEmail": "test_trader_1787077932219@example.com",
+        "amount": 50,
+        "type": "DEPOSIT",
+        "status": "SUBMITTED",
+        "method": "Crypto USDT",
+        "reference": "TXN123456789",
+        "createdAt": "2026-08-18T18:32:12.874Z",
+        "processedAt": null,
+        "adminNote": ""
+      }
+    ],
+    "withdrawals": [],
+    "transactions": [
+      {
+        "id": 1787078356787.346,
+        "type": "ADMIN_CREDIT",
+        "amount": 50,
+        "direction": "CREDIT",
+        "description": "Admin manually added balance",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:39:16.787Z"
+      },
+      {
+        "id": 1787078294127.6733,
+        "type": "ADMIN_CREDIT",
+        "amount": 50,
+        "direction": "CREDIT",
+        "description": "Admin manually added balance",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:38:14.127Z"
+      },
+      {
+        "id": 1787077962883.9495,
+        "type": "TRADE_RESULT",
+        "amount": 20,
+        "direction": "DEBIT",
+        "description": "BTC BUY trade lost",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:32:42.883Z"
+      },
+      {
+        "id": 1787077938314,
+        "type": "DEPOSIT",
+        "amount": 50,
+        "direction": "PENDING",
+        "description": "Deposit submitted for manual balance credit",
+        "status": "PENDING",
+        "createdAt": "2026-08-18T18:32:12.874Z"
+      },
+      {
+        "id": 1787077932863.4082,
+        "type": "TRADE",
+        "amount": 20,
+        "direction": "DEBIT",
+        "description": "BTC BUY trade",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:32:12.863Z"
+      },
+      {
+        "id": 1787077932818.8923,
+        "type": "ADMIN_CREDIT",
+        "amount": 200,
+        "direction": "CREDIT",
+        "description": "Admin manually added balance",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-18T18:32:12.818Z"
+      }
+    ],
+    "createdAt": "2026-08-18T18:32:12.569Z"
+  },
+  {
+    "id": 1787078484031,
+    "name": "test3",
+    "email": "test3@gmail.com",
+    "phone": "9797",
+    "password": "$2b$12$5Oz.9BdYJu1P0WxYN4w9kuRoF8H219Ctztt5w.m2LxsRFdyTxDu7m",
+    "balance": 0,
+    "trades": [],
+    "deposits": [],
+    "withdrawals": [],
+    "transactions": [],
+    "createdAt": "2026-08-18T18:41:24.031Z"
+  },
+  {
+    "id": 1787078596408,
+    "name": "test4",
+    "email": "test4@gmail.com",
+    "phone": "9786",
+    "password": "$2b$12$cGrfr4U8/fwRuYVr0Z5Q/eefYwku8d1bHx5RGqF6Ak6FdLmBTlGvW",
+    "balance": 0,
+    "trades": [],
+    "deposits": [],
+    "withdrawals": [],
+    "transactions": [],
+    "createdAt": "2026-08-18T18:43:16.408Z"
+  },
+  {
+    "id": 1787086200209,
+    "name": "cgvhjkm",
+    "email": "hgvfhjvjg@gmail.com",
+    "phone": "345678986",
+    "password": "$2b$12$F8MZBdNe.ZfrmvJCT3lyYO0VdvQgs9L9VDtRZNy3wwZbuH/1a8nkG",
+    "balance": 0,
+    "trades": [],
+    "deposits": [],
+    "withdrawals": [],
+    "transactions": [],
+    "createdAt": "2026-08-18T20:50:00.209Z"
   }
 ]

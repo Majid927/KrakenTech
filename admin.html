@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="icon" type="image/png" href="logo.png">
-    <title>KraKencoin.live Admin</title>
+    <title>krakentech.live Admin</title>
 
 <style>
 
@@ -659,6 +659,13 @@ tr:hover td {
     }
 }
 
+
+        /* KrakenTech Logo Constraints */
+        .logo { display: flex !important; align-items: center !important; gap: 10px !important; color: #ff1f1f !important; font-size: 20px !important; font-weight: 800 !important; letter-spacing: 0.5px !important; text-decoration: none !important; }
+        .logo-img, .logo img { height: 32px !important; width: 32px !important; max-height: 32px !important; max-width: 32px !important; object-fit: contain !important; border-radius: 50% !important; flex-shrink: 0 !important; vertical-align: middle !important; display: inline-block !important; }
+        .auth-logo { display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; gap: 8px !important; color: #ff1f1f !important; font-size: 26px !important; font-weight: 800 !important; margin-bottom: 16px !important; text-decoration: none !important; }
+        .auth-logo-img, .auth-logo img { height: 48px !important; width: 48px !important; max-height: 48px !important; max-width: 48px !important; object-fit: contain !important; border-radius: 50% !important; display: block !important; margin: 0 auto !important; }
+
 </style>
 </head>
 
@@ -671,9 +678,7 @@ tr:hover td {
 ===================================================== -->
 
 <header class="header">
-    <div class="logo">
-        KraKencoin.live Admin
-    </div>
+    <div class="logo"><img src="logo.png" alt="KrakenTech" class="logo-img" onerror="this.style.display='none'"><span>KrakenTech Admin</span></div>
 
     <div class="header-right">
         <div class="server-status">
@@ -730,7 +735,7 @@ tr:hover td {
 
 <section id="section-dashboard" class="section active">
     <h1 class="page-title">Admin Dashboard</h1>
-    <div class="page-subtitle">KrakenCoin system overview and real-time activity</div>
+    <div class="page-subtitle">KrakenTech system overview and real-time activity</div>
 
     <div class="stats-grid">
         <div class="card">
@@ -785,7 +790,7 @@ tr:hover td {
 
 <section id="section-users" class="section">
     <h1 class="page-title">Users Directory</h1>
-    <div class="page-subtitle">Manage KrakenCoin registered users, balances and login activity.</div>
+    <div class="page-subtitle">Manage KrakenTech registered users, balances and login activity.</div>
 
     <div class="toolbar">
         <input id="userSearch" class="search" type="text" placeholder="Search name, email, phone or ID..." oninput="renderUsers()">
@@ -889,104 +894,66 @@ tr:hover td {
 
 <section id="section-payments" class="section">
     <h1 class="page-title">Payment Settings</h1>
-    <div class="page-subtitle">Configure deposit accounts displayed to users in their wallet.</div>
+    <div class="page-subtitle">Set the deposit wallet address that clients see in their wallet.</div>
 
-    <!-- ─── PAYMENT REDIRECT LINK ─────────────────────────────── -->
+    <!-- ─── WALLET ADDRESS CARD ─────────────────────────────── -->
     <div class="card" style="border:2px solid #d60000; margin-bottom:25px;">
-        <h2 style="color:#ff1f1f; margin-top:0;">💳 Payment Redirect Link</h2>
-        <p style="color:#aaa; margin-bottom:18px;">
-            This URL is used by the client's <strong>Wallet → Payment</strong> button.
-            When a client clicks Pay, they will be redirected to this link.
-            Change it any time without redeploying the site.
+        <h2 style="color:#ff1f1f; margin-top:0;">🔑 Deposit Wallet Address</h2>
+        <p style="color:#aaa; margin-bottom:18px; line-height:1.5;">
+            Enter the crypto wallet address you want clients to send payments to.
+            When a client opens their <strong>Wallet → Payment</strong> tab, they will see this address
+            with a <strong>Copy</strong> button. You can update it at any time.
         </p>
 
-        <div id="currentPaymentLinkBox" style="
+        <!-- Currently active address display -->
+        <div id="currentWalletAddrBox" style="
             background:#1a1a1a; border:1px solid #333; border-radius:8px;
             padding:14px 18px; margin-bottom:16px; display:none;
         ">
-            <div style="color:#888; font-size:12px; margin-bottom:4px;">Currently Active URL:</div>
-            <div id="currentPaymentLinkDisplay" style="color:#00ff88; word-break:break-all; font-size:14px;"></div>
+            <div style="color:#888; font-size:12px; margin-bottom:6px;">Currently Active Wallet Address:</div>
+            <div id="currentWalletAddrDisplay" style="
+                color:#00ff88; word-break:break-all; font-size:14px;
+                font-family:'Courier New',Courier,monospace; font-weight:600; line-height:1.6;
+            "></div>
+            <div id="currentWalletNetworkDisplay" style="color:#666; font-size:11px; margin-top:4px;"></div>
         </div>
-        <div id="noPaymentLinkBox" style="
+        <div id="noWalletAddrBox" style="
             background:#1a1a1a; border:1px solid #555; border-radius:8px;
             padding:14px 18px; margin-bottom:16px; color:#888; font-size:13px;
         ">
-            ⚠ No payment link set yet. Clients will see an unavailable message.
+            ⚠ No deposit wallet address set yet. Clients will see a "not configured" message.
         </div>
 
         <div class="form-group" style="margin-bottom:14px;">
-            <label class="label">Payment / Redirect URL</label>
+            <label class="label">Wallet Address</label>
             <input
-                id="paymentUrlInput"
+                id="depositWalletAddrInput"
                 class="input"
-                type="url"
-                placeholder="https://payment-example.com/pay/123"
+                type="text"
+                placeholder="e.g. TRC20: TXyz123... or BTC: bc1q..."
+                style="font-size:14px; font-family:'Courier New',Courier,monospace;"
+            >
+            <div style="color:#666; font-size:11px; margin-top:5px;">
+                Paste the full crypto wallet address. Clients will copy this to send their payment.
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:18px;">
+            <label class="label">Network (optional)</label>
+            <input
+                id="depositNetworkInput"
+                class="input"
+                type="text"
+                placeholder="e.g. TRC20, ERC20, BEP20, Bitcoin"
                 style="font-size:14px;"
             >
             <div style="color:#666; font-size:11px; margin-top:5px;">
-                Must start with https:// — clients are redirected here when they click Payment.
+                Shown as a small label under the address on the client side.
             </div>
         </div>
 
-        <button class="btn btn-green" onclick="savePaymentUrl()" style="min-width:180px;">
-            Save / Update Link
-        </button>
-    </div>
-
-    <!-- ─── DEPOSIT ACCOUNT DETAILS ───────────────────────────── -->
-    <div class="card">
-        <div class="form-grid">
-            <div class="form-group">
-                <label class="label">Deposits Status</label>
-                <select id="paymentEnabled" class="select">
-                    <option value="true">Enabled</option>
-                    <option value="false">Disabled</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="label">Payment Method Name</label>
-                <input id="paymentMethod" class="input" placeholder="Bank Transfer / Crypto USDT">
-            </div>
-
-            <div class="form-group">
-                <label class="label">Account Title</label>
-                <input id="accountTitle" class="input" placeholder="Account holder title">
-            </div>
-
-            <div class="form-group">
-                <label class="label">Account / IBAN Number</label>
-                <input id="accountNumber" class="input" placeholder="Bank account / wallet number">
-            </div>
-
-            <div class="form-group">
-                <label class="label">Crypto Wallet Address (if crypto)</label>
-                <input id="walletAddress" class="input" placeholder="USDT / BTC address">
-            </div>
-
-            <div class="form-group">
-                <label class="label">Network</label>
-                <input id="network" class="input" placeholder="TRC20 / ERC20 / BEP20">
-            </div>
-
-            <div class="form-group">
-                <label class="label">Minimum Deposit Limit ($)</label>
-                <input id="minDeposit" class="input" type="number" min="0" step="0.01">
-            </div>
-
-            <div class="form-group">
-                <label class="label">Maximum Deposit Limit ($)</label>
-                <input id="maxDeposit" class="input" type="number" min="0" step="0.01">
-            </div>
-
-            <div class="form-group full">
-                <label class="label">Payment Instructions for Users</label>
-                <textarea id="paymentInstructions" class="textarea" placeholder="Enter instructions displayed on deposit page..."></textarea>
-            </div>
-        </div>
-
-        <button class="btn btn-green" onclick="savePaymentSettings()">
-            Save Payment Settings
+        <button class="btn btn-green" onclick="saveWalletAddress()" style="min-width:200px; padding:12px 24px; font-size:14px;">
+            💾 Save Wallet Address
         </button>
     </div>
 </section>
@@ -1098,6 +1065,10 @@ async function apiFetch(endpoint, options = {}) {
     }
 
     if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem("tradeXAdminSecret");
+            window.location.href = "/admin-login.html?error=session_expired";
+        }
         throw new Error(data.message || `Request failed with status ${response.status}`);
     }
 
@@ -1119,36 +1090,109 @@ function showToast(message, type = "success") {
 }
 
 /* ======================================================
-   ADMIN SECRET & AUTH CHECK
+   ADMIN SECRET & AUTH CHECK (MODAL + AUTO-RECOVERY)
 ====================================================== */
 
-function requestAdminSecret() {
-    if (ADMIN_SECRET) {
-        return true;
+function showAuthModal(errorMessage = "") {
+    const modal = document.getElementById("adminAuthModal");
+    const errDiv = document.getElementById("adminAuthError");
+    const input = document.getElementById("adminSecretModalInput");
+
+    if (errorMessage && errDiv) {
+        errDiv.textContent = errorMessage;
+        errDiv.style.display = "block";
+    } else if (errDiv) {
+        errDiv.style.display = "none";
     }
 
-    const secret = prompt("Enter Krakencoin.live Admin Secret Key:");
+    if (modal) {
+        modal.style.display = "flex";
+        setTimeout(() => { if (input) input.focus(); }, 100);
+    }
+}
+
+function hideAuthModal() {
+    const modal = document.getElementById("adminAuthModal");
+    if (modal) modal.style.display = "none";
+}
+
+function toggleSecretVisibility() {
+    const input = document.getElementById("adminSecretModalInput");
+    if (!input) return;
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+async function submitAdminSecret() {
+    const input = document.getElementById("adminSecretModalInput");
+    const btn = document.getElementById("adminLoginBtn");
+    const errDiv = document.getElementById("adminAuthError");
+
+    const secret = (input ? input.value : "").trim();
     if (!secret) {
-        showToast("Admin secret is required.", "error");
-        return false;
+        if (errDiv) {
+            errDiv.textContent = "Please enter your admin secret key.";
+            errDiv.style.display = "block";
+        }
+        return;
     }
 
-    ADMIN_SECRET = secret.trim();
-    localStorage.setItem("tradeXAdminSecret", ADMIN_SECRET);
-    return true;
+    if (btn) {
+        btn.textContent = "Verifying...";
+        btn.disabled = true;
+    }
+
+    try {
+        const response = await fetch(API_URL + "/api/admin/verify", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-admin-secret": secret
+            },
+            body: JSON.stringify({ secret })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (response.ok && data.success) {
+            ADMIN_SECRET = secret;
+            localStorage.setItem("tradeXAdminSecret", secret);
+            hideAuthModal();
+            showToast("Admin access granted.", "success");
+            await loadDashboard();
+        } else {
+            if (errDiv) {
+                errDiv.textContent = data.message || "Invalid Admin Secret Key. Please try again.";
+                errDiv.style.display = "block";
+            }
+        }
+    } catch (err) {
+        if (errDiv) {
+            errDiv.textContent = "Unable to connect to server. Please ensure server is running.";
+            errDiv.style.display = "block";
+        }
+    } finally {
+        if (btn) {
+            btn.textContent = "Unlock Admin Panel";
+            btn.disabled = false;
+        }
+    }
 }
 
 function checkAuth() {
-    return requestAdminSecret();
+    if (!ADMIN_SECRET) {
+        window.location.href = "/admin-login.html";
+        return false;
+    }
+    return true;
 }
 
 function logoutAdmin() {
     localStorage.removeItem("tradeXAdminSecret");
     ADMIN_SECRET = "";
-    showToast("Admin logged out.", "success");
+    showToast("Logged out from admin.", "success");
     setTimeout(() => {
-        window.location.reload();
-    }, 1000);
+        window.location.href = "/admin-login.html";
+    }, 400);
 }
 
 /* ======================================================
@@ -1156,19 +1200,28 @@ function logoutAdmin() {
 ====================================================== */
 
 async function checkServer() {
-    try {
-        const response = await fetch(API_URL + "/api/health");
-        const data = await response.json();
+    const dot = document.getElementById("statusDot");
+    const label = document.getElementById("serverStatus");
 
-        if (data.success || response.ok) {
-            document.getElementById("statusDot").classList.add("online");
-            document.getElementById("serverStatus").textContent = "Server Online";
+    try {
+        const response = await fetch(API_URL + "/api/health", { cache: "no-store" });
+        const data = await response.json().catch(() => ({}));
+
+        if (response.ok && (data.success || data.status === "online")) {
+            dot.classList.add("online");
+            label.textContent = "Server Online";
+        } else {
+            dot.classList.remove("online");
+            label.textContent = "Server Offline";
         }
     } catch (error) {
-        document.getElementById("statusDot").classList.remove("online");
-        document.getElementById("serverStatus").textContent = "Server Offline";
+        dot.classList.remove("online");
+        label.textContent = "Server Offline";
     }
 }
+
+// Poll every 10 seconds to keep status live
+setInterval(checkServer, 10000);
 
 /* ======================================================
    NAVIGATION
@@ -1626,41 +1679,62 @@ async function loadPaymentSettings() {
         const data = await apiFetch("/admin/payment-settings");
         const settings = data.settings || {};
 
-        document.getElementById("paymentEnabled").value = settings.enabled ? "true" : "false";
-        document.getElementById("paymentMethod").value = settings.method || "";
-        document.getElementById("accountTitle").value = settings.accountTitle || "";
-        document.getElementById("accountNumber").value = settings.accountNumber || "";
-        document.getElementById("walletAddress").value = settings.walletAddress || "";
-        document.getElementById("network").value = settings.network || "";
-        document.getElementById("minDeposit").value = settings.minDeposit ?? "";
-        document.getElementById("maxDeposit").value = settings.maxDeposit ?? "";
-        document.getElementById("paymentInstructions").value = settings.instructions || "";
+        const addrInput = document.getElementById("depositWalletAddrInput");
+        const netInput = document.getElementById("depositNetworkInput");
+        if (addrInput) addrInput.value = settings.depositWalletAddress || settings.walletAddress || "";
+        if (netInput) netInput.value = settings.depositNetwork || settings.network || "";
 
-        // Payment redirect link display
-        const url = settings.paymentUrl || "";
-        document.getElementById("paymentUrlInput").value = url;
-        if (url) {
-            document.getElementById("currentPaymentLinkDisplay").textContent = url;
-            document.getElementById("currentPaymentLinkBox").style.display = "block";
-            document.getElementById("noPaymentLinkBox").style.display = "none";
+        const addr = settings.depositWalletAddress || settings.walletAddress || "";
+        const net = settings.depositNetwork || settings.network || "";
+
+        const addrBox = document.getElementById("currentWalletAddrBox");
+        const noAddrBox = document.getElementById("noWalletAddrBox");
+        const addrDisplay = document.getElementById("currentWalletAddrDisplay");
+        const netDisplay = document.getElementById("currentWalletNetworkDisplay");
+
+        if (addr) {
+            if (addrDisplay) addrDisplay.textContent = addr;
+            if (netDisplay) netDisplay.textContent = net ? "Network: " + net : "";
+            if (addrBox) addrBox.style.display = "block";
+            if (noAddrBox) noAddrBox.style.display = "none";
         } else {
-            document.getElementById("currentPaymentLinkBox").style.display = "none";
-            document.getElementById("noPaymentLinkBox").style.display = "block";
+            if (addrBox) addrBox.style.display = "none";
+            if (noAddrBox) noAddrBox.style.display = "block";
+        }
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+} else if (linkBox && noLinkBox) {
+            linkBox.style.display = "none";
+            noLinkBox.style.display = "block";
         }
     } catch (error) {
         showToast(error.message, "error");
     }
 }
 
-async function savePaymentUrl() {
+async function saveWalletAddress() {
     if (!checkAuth()) return;
 
-    const url = (document.getElementById("paymentUrlInput").value || "").trim();
+    const addr = (document.getElementById("depositWalletAddrInput")?.value || "").trim();
+    const net = (document.getElementById("depositNetworkInput")?.value || "").trim();
 
-    if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
-        showToast("Payment URL must start with http:// or https://", "error");
+    if (!addr) {
+        showToast("Please enter a wallet address.", "error");
         return;
     }
+
+    try {
+        const data = await apiFetch("/admin/payment-settings", {
+            method: "POST",
+            body: JSON.stringify({ depositWalletAddress: addr, depositNetwork: net })
+        });
+        showToast(data.message || "Wallet address saved successfully!", "success");
+        await loadPaymentSettings();
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
 
     try {
         const data = await apiFetch("/admin/payment-settings", {
@@ -1778,9 +1852,18 @@ function escapeAttr(value) {
 ====================================================== */
 
 document.addEventListener("DOMContentLoaded", async () => {
+    // Run health check immediately and again after 1.5s (fast green dot after login redirect)
     checkServer();
-    if (checkAuth()) {
+    setTimeout(checkServer, 1500);
+
+    if (!ADMIN_SECRET) {
+        window.location.href = "/admin-login.html";
+        return;
+    }
+    try {
         await loadDashboard();
+    } catch (e) {
+        console.error("Dashboard load error:", e);
     }
 });
 
@@ -1798,6 +1881,70 @@ setInterval(async () => {
 }, 10000);
 
 </script>
+
+
+<!-- =====================================================
+     ADMIN AUTH MODAL
+===================================================== -->
+<div id="adminAuthModal" style="
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9);
+    z-index:99999; align-items:center; justify-content:center;
+    backdrop-filter:blur(6px); padding:20px;
+">
+    <div style="
+        background:#111; border:1px solid #ff1f1f; border-radius:14px;
+        padding:32px 28px; width:min(440px, 94%); text-align:center;
+        box-shadow:0 12px 50px rgba(0,0,0,0.9), 0 0 20px rgba(255,31,31,0.15);
+    ">
+        <div style="display:flex; justify-content:center; margin-bottom:14px;">
+            <img src="logo.png" alt="KrakenTech" style="width:48px; height:48px; border-radius:50%; object-fit:contain;">
+        </div>
+        <h2 style="color:#ff1f1f; margin:0 0 6px 0; font-size:22px; font-weight:800;">KrakenTech Admin</h2>
+        <p style="color:#888; font-size:13px; margin:0 0 22px 0;">Enter your Admin Secret Key to unlock the control panel.</p>
+
+        <div style="margin-bottom:18px; text-align:left;">
+            <label style="color:#aaa; font-size:11px; font-weight:700; letter-spacing:0.5px; display:block; margin-bottom:6px; text-transform:uppercase;">
+                Admin Secret Key
+            </label>
+            <div style="position:relative;">
+                <input
+                    type="password"
+                    id="adminSecretModalInput"
+                    placeholder="Enter admin secret key..."
+                    style="
+                        width:100%; box-sizing:border-box; background:#000;
+                        border:1px solid #333; color:#fff; padding:12px 42px 12px 14px;
+                        border-radius:8px; font-size:14px; outline:none;
+                    "
+                    onkeydown="if(event.key==='Enter') submitAdminSecret()"
+                >
+                <button
+                    type="button"
+                    onclick="toggleSecretVisibility()"
+                    style="
+                        position:absolute; right:10px; top:50%; transform:translateY(-50%);
+                        background:none; border:none; color:#777; cursor:pointer; font-size:16px;
+                        padding:4px; line-height:1;
+                    "
+                    title="Toggle Visibility"
+                >👁</button>
+            </div>
+            <div id="adminAuthError" style="color:#ff4545; font-size:12px; margin-top:8px; display:none; line-height:1.4;"></div>
+        </div>
+
+        <button
+            id="adminLoginBtn"
+            onclick="submitAdminSecret()"
+            style="
+                width:100%; background:#ff1f1f; color:#fff; border:none;
+                padding:12px; border-radius:8px; font-weight:700; font-size:14px;
+                cursor:pointer; transition:all 0.2s;
+            "
+        >
+            Unlock Admin Panel
+        </button>
+    </div>
+</div>
 
 </body>
 </html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>KrakenTech - Admin Portal Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #050505;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background radial glow */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 31, 31, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 1;
+            background: #0d0d0d;
+            border: 1px solid #222222;
+            border-radius: 16px;
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 31, 31, 0.5);
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-img {
+            width: 52px !important;
+            height: 52px !important;
+            max-width: 52px !important;
+            max-height: 52px !important;
+            object-fit: contain !important;
+            border-radius: 50% !important;
+            box-shadow: 0 0 20px rgba(255, 31, 31, 0.35);
+        }
+
+        .badge-tag {
+            display: inline-block;
+            background: rgba(255, 31, 31, 0.12);
+            color: #ff1f1f;
+            border: 1px solid rgba(255, 31, 31, 0.3);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        p.subtitle {
+            font-size: 13px;
+            color: #888888;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #aaaaaa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field {
+            width: 100%;
+            background: #000000;
+            border: 1px solid #2e2e2e;
+            border-radius: 10px;
+            padding: 14px 44px 14px 16px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            border-color: #ff1f1f;
+            box-shadow: 0 0 0 3px rgba(255, 31, 31, 0.15);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .toggle-btn:hover {
+            color: #ff1f1f;
+        }
+
+        .alert-box {
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .alert-error {
+            background: rgba(255, 69, 69, 0.1);
+            border: 1px solid rgba(255, 69, 69, 0.3);
+            color: #ff4d5a;
+        }
+
+        .alert-success {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #ff1f1f;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(255, 31, 31, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #d60000;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 25px rgba(255, 31, 31, 0.5);
+        }
+
+        .btn-submit:disabled {
+            background: #441111;
+            color: #888;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .footer-note {
+            margin-top: 24px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .footer-note a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-note a:hover {
+            color: #ff1f1f;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo-container">
+            <img src="logo.png" alt="KrakenTech Logo" class="logo-img" onerror="this.style.display='none'">
+        </div>
+
+        <div class="badge-tag">Restricted Access</div>
+        <h1>Admin Portal</h1>
+        <p class="subtitle">Enter your Master Admin Secret Key to access the administration controls.</p>
+
+        <div id="alertBox" class="alert-box"></div>
+
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+            <div class="form-group">
+                <label for="adminSecretInput">Admin Secret Key</label>
+                <div class="input-wrapper">
+                    <input
+                        type="password"
+                        id="adminSecretInput"
+                        class="input-field"
+                        placeholder="Enter master secret key..."
+                        autocomplete="current-password"
+                        required
+                        autofocus
+                    >
+                    <button type="button" class="toggle-btn" onclick="toggleSecretVisibility()" title="Toggle secret visibility">
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">
+                <span class="spinner" id="btnSpinner"></span>
+                <span id="btnText">Unlock Admin Panel</span>
+            </button>
+        </form>
+
+        <div class="footer-note">
+            <a href="/login.html">← Back to Client Login</a>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = (typeof window !== "undefined" && window.location.protocol.startsWith("http"))
+            ? window.location.origin
+            : "http://localhost:3000";
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get("error") === "session_expired") {
+                showAlert("Your admin session has expired. Please re-enter your secret key.", "error");
+            } else if (params.get("error") === "unauthorized") {
+                showAlert("Admin authorization is required to access that page.", "error");
+            }
+
+            const existingSecret = localStorage.getItem("tradeXAdminSecret");
+            if (existingSecret) {
+                testExistingSecret(existingSecret);
+            }
+        });
+
+        async function testExistingSecret(secret) {
+            try {
+                const res = await fetch(API_URL + "/api/admin/verify", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-admin-secret": secret
+                    },
+                    body: JSON.stringify({ secret })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (res.ok && data.success) {
+                    window.location.href = "/admin.html";
+                } else {
+                    localStorage.removeItem("tradeXAdminSecret");
+                }
+            } catch (err) {
+                // Server might still be booting
+            }
+        }
+
+        function toggleSecretVisibility() {
+            const input = document.getElementById("adminSecretInput");
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        }
+
+        function showAlert(message, type = "error") {
+            const box = document.getElementById("alertBox");
+            box.textContent = message;
+            box.className = `alert-box alert-${type}`;
+            box.style.display = "block";
+        }
+
+        function hideAlert() {
+            const box = document.getElementById("alertBox");
+            box.style.display = "none";
+        }
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            hideAlert();
+
+            const input = document.getElementById("adminSecretInput");
+            const btn = document.getElementById("submitBtn");
+            const btnText = document.getElementById("btnText");
+            const spinner = document.getElementById("btnSpinner");
+
+            const secret = (input.value || "").trim();
+            if (!secret) {
+                showAlert("Please enter your admin secret key.", "error");
+                return;
+            }
+
+            btn.disabled = true;
+            spinner.style.display = "inline-block";
+            btnText.textContent = "Verifying...";
+
+            try {
+                const response = await fetch(API_URL + "/api/admin/verify", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-admin-secret": secret
+                    },
+                    body: JSON.stringify({ secret })
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (response.ok && data.success) {
+                    localStorage.setItem("tradeXAdminSecret", secret);
+                    showAlert("✓ Access granted! Redirecting to Admin Dashboard...", "success");
+                    btnText.textContent = "Access Granted";
+
+                    setTimeout(() => {
+                        window.location.href = "/admin.html";
+                    }, 500);
+                } else {
+                    showAlert(data.message || "Invalid Admin Secret Key. Please check and try again.", "error");
+                    btn.disabled = false;
+                    spinner.style.display = "none";
+                    btnText.textContent = "Unlock Admin Panel";
+                    input.focus();
+                }
+            } catch (err) {
+                showAlert("Unable to connect to backend server. Please verify the server is running.", "error");
+                btn.disabled = false;
+                spinner.style.display = "none";
+                btnText.textContent = "Unlock Admin Panel";
+            }
+        }
+    </script>
+</body>
+</html>

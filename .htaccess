@@ -1,0 +1,48 @@
+# ======================================================
+# KrakenTech (krakentech.live) - Hostinger Web Configuration
+# ======================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Force HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Serve existing files directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Clean URL rewrites
+    RewriteRule ^dashboard/?$ dashboard.html [L]
+    RewriteRule ^markets/?$ markets.html [L]
+    RewriteRule ^trade/?$ trade.html [L]
+    RewriteRule ^wallet/?$ wallet.html [L]
+    RewriteRule ^profile/?$ profile.html [L]
+    RewriteRule ^transactions/?$ transactions.html [L]
+    RewriteRule ^login/?$ login.html [L]
+    RewriteRule ^signup/?$ signup.html [L]
+    RewriteRule ^register/?$ signup.html [L]
+    RewriteRule ^admin-login/?$ admin-login.html [L]
+    RewriteRule ^admin/?$ admin.html [L]
+    RewriteRule ^admin-users/?$ admin-users.html [L]
+    RewriteRule ^admin-withdrawals/?$ admin-withdrawals.html [L]
+    RewriteRule ^admin-deposits/?$ admin-deposits.html [L]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# MIME types
+<IfModule mod_mime.c>
+    AddType application/json .json
+    AddType image/svg+xml .svg
+    AddType image/png .png
+    AddType image/jpeg .jpg .jpeg
+</IfModule>

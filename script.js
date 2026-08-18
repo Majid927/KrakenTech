@@ -55,7 +55,7 @@ function getAuthHeaders(
     if (includeAdmin) {
 
         headers["X-Admin-Secret"] =
-            "KrakenCoin-Admin-Change-This-Secret-2026";
+            "KrakenTech-Admin-Change-This-Secret-2026";
 
     }
 

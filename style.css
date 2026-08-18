@@ -1219,46 +1219,59 @@ tr:hover td {
 
 }
 
+
 /* =====================================================
-   KRAKENCOIN BRANDING & LOGO
+   KRAKENTECH BRANDING & LOGO - FIXED SIZING
 ===================================================== */
 
 .logo {
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 10px !important;
     color: #ff1f1f !important;
-    font-size: 26px !important;
+    font-size: 20px !important;
     font-weight: 800 !important;
     letter-spacing: 0.5px !important;
+    text-decoration: none !important;
 }
 
-.logo-img {
-    height: 38px;
-    width: auto;
-    max-width: 48px;
-    object-fit: contain;
-    border-radius: 8px;
+.logo-img,
+.logo img {
+    height: 32px !important;
+    width: 32px !important;
+    max-height: 32px !important;
+    max-width: 32px !important;
+    object-fit: contain !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+    vertical-align: middle !important;
 }
 
 .auth-logo {
     display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 12px !important;
+    gap: 8px !important;
     color: #ff1f1f !important;
-    font-size: 32px !important;
+    font-size: 26px !important;
     font-weight: 800 !important;
-    margin-bottom: 12px !important;
+    margin-bottom: 16px !important;
+    text-decoration: none !important;
 }
 
-.auth-logo-img {
-    height: 44px;
-    width: auto;
-    max-width: 52px;
-    object-fit: contain;
-    border-radius: 8px;
+.auth-logo-img,
+.auth-logo img {
+    height: 48px !important;
+    width: 48px !important;
+    max-height: 48px !important;
+    max-width: 48px !important;
+    object-fit: contain !important;
+    border-radius: 50% !important;
+    display: block !important;
+    margin: 0 auto !important;
 }
+
 
 /* Red accents on active elements & highlights */
 .highlight-red, .text-danger, .red-accent {

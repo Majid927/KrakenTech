@@ -2,7 +2,7 @@
 
 /*
 ==========================================================
-KrakenCoin - Live Engine
+KrakenTech - Live Engine
 ==========================================================
 
 Features:
@@ -121,7 +121,7 @@ function liveRound(value) {
 function liveLog(...args) {
 
     console.log(
-        "[KrakenCoin Live Engine]",
+        "[KrakenTech Live Engine]",
         ...args
     );
 
@@ -285,26 +285,11 @@ function liveUpdateModeDisplay() {
     }
 
 
-    if (
-        liveMarketMode ===
-        "ADMIN"
-    ) {
+    element.textContent =
+        "Live Market";
 
-        element.textContent =
-            "Market mode: ADMIN CONTROL";
-
-        element.className =
-            "market-mode admin";
-
-    } else {
-
-        element.textContent =
-            "Market mode: REAL MARKET";
-
-        element.className =
-            "market-mode";
-
-    }
+    element.className =
+        "market-mode";
 
 }
 

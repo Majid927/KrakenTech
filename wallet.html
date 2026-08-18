@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="icon" type="image/png" href="logo.png">
-    <title>KrakenCoin - Wallet</title>
+    <title>KrakenTech - Wallet</title>
 
     <style>
         * {
@@ -533,6 +533,13 @@
                 text-align: left;
             }
         }
+    
+        /* KrakenTech Logo Constraints */
+        .logo { display: flex !important; align-items: center !important; gap: 10px !important; color: #ff1f1f !important; font-size: 20px !important; font-weight: 800 !important; letter-spacing: 0.5px !important; text-decoration: none !important; }
+        .logo-img, .logo img { height: 32px !important; width: 32px !important; max-height: 32px !important; max-width: 32px !important; object-fit: contain !important; border-radius: 50% !important; flex-shrink: 0 !important; vertical-align: middle !important; display: inline-block !important; }
+        .auth-logo { display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; gap: 8px !important; color: #ff1f1f !important; font-size: 26px !important; font-weight: 800 !important; margin-bottom: 16px !important; text-decoration: none !important; }
+        .auth-logo-img, .auth-logo img { height: 48px !important; width: 48px !important; max-height: 48px !important; max-width: 48px !important; object-fit: contain !important; border-radius: 50% !important; display: block !important; margin: 0 auto !important; }
+
     </style>
 </head>
 
@@ -540,7 +547,7 @@
 
 <header>
 
-    <div class="logo"><img src="logo.png" alt="KrakenCoin" class="logo-img" onerror="this.style.display='none'"><span>KrakenCoin</span></div>
+    <div class="logo"><img src="logo.png" alt="KrakenTech" class="logo-img" onerror="this.style.display='none'"><span>KrakenTech</span></div>
 
     <div class="header-right">
 
@@ -650,7 +657,7 @@
             </div>
 
             <div class="balance-note">
-                Your available KrakenCoin balance
+                Your available KrakenTech balance
             </div>
 
         </div>
@@ -660,12 +667,7 @@
 
         <div class="tabs">
 
-            <button
-                class="tab-btn active"
-                onclick="showTab('depositTab', this)"
-            >
-                Add Amount
-            </button>
+            <button class="tab-btn active" onclick="showTab('depositTab', this)">Payment</button>
 
             <button
                 class="tab-btn"
@@ -699,247 +701,111 @@
 
 
         <!-- ==========================================
-             DEPOSIT
-        =========================================== -->
+     DEPOSIT / PAYMENT
+=========================================== -->
 
-        <section
-            id="depositTab"
-            class="tab-section active"
-        >
+<section id="depositTab" class="tab-section active">
 
-            <!-- ── PAYMENT BUTTON CARD ── -->
-            <div class="card" style="
-                border: 2px solid #d60000;
-                text-align: center;
-                margin-bottom: 20px;
-                padding: 30px 20px;
+    <!-- ── WALLET ADDRESS CARD ── -->
+    <div class="card" style="
+        border: 2px solid #d60000;
+        margin-bottom: 20px;
+        padding: 36px 28px;
+        border-radius: 14px;
+        background: #0d0d0d;
+        text-align: center;
+    ">
+        <div style="font-size:44px; margin-bottom:12px;">🔑</div>
+        <h2 style="color:#ff1f1f; margin:0 0 8px 0; font-size:22px; font-weight:800;">Deposit Wallet Address</h2>
+        <p style="color:#aaa; margin:0 auto 24px auto; font-size:13px; max-width:500px; line-height:1.6;">
+            Send your crypto to the address below. After sending, contact support with your transaction ID.
+        </p>
+
+        <!-- Loading state -->
+        <div id="walletAddrLoading" style="color:#888; font-size:14px; margin-bottom:16px;">
+            Loading wallet address...
+        </div>
+
+        <!-- Address display box (hidden until loaded) -->
+        <div id="walletAddrBox" style="display:none;">
+
+            <div style="
+                background: #111;
+                border: 1px solid #333;
+                border-radius: 10px;
+                padding: 16px 20px;
+                margin: 0 auto 16px auto;
+                max-width: 560px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                text-align: left;
             ">
-                <div style="font-size:40px; margin-bottom:8px;">💳</div>
-                <h2 style="color:#ff1f1f; margin:0 0 8px 0;">Make a Payment</h2>
-                <p style="color:#aaa; margin:0 0 20px 0; font-size:14px;">
-                    Click the button below to be redirected to our secure payment page.
-                </p>
+                <div id="walletAddrText" style="
+                    flex: 1;
+                    font-family: 'Courier New', Courier, monospace;
+                    font-size: 14px;
+                    color: #00ff88;
+                    word-break: break-all;
+                    letter-spacing: 0.5px;
+                    line-height: 1.6;
+                "></div>
+
                 <button
-                    class="btn btn-primary"
-                    onclick="handlePaymentRedirect()"
+                    id="copyAddrBtn"
+                    onclick="copyWalletAddress()"
+                    title="Copy wallet address"
                     style="
-                        background: linear-gradient(135deg,#d60000,#ff1f1f);
-                        border:none;
-                        padding: 14px 40px;
-                        font-size: 16px;
+                        flex-shrink: 0;
+                        background: #ff1f1f;
+                        border: none;
                         border-radius: 8px;
-                        cursor: pointer;
+                        padding: 10px 16px;
                         color: #fff;
-                        font-weight: bold;
-                        letter-spacing: 0.5px;
-                        box-shadow: 0 4px 20px rgba(214,0,0,0.4);
+                        font-size: 13px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: background 0.2s;
+                        white-space: nowrap;
                     "
+                    onmouseover="this.style.background='#d60000'"
+                    onmouseout="this.style.background='#ff1f1f'"
                 >
-                    💳 Pay Now
+                    📋 Copy
                 </button>
-                <div id="paymentUnavailableMsg" style="
-                    display:none; color:#ff4444; margin-top:14px; font-size:13px;
-                ">
-                    ⚠ Payment link is currently unavailable. Please try again later.
-                </div>
             </div>
 
-            <div class="card">
+            <!-- Network label if set -->
+            <div id="walletNetworkLabel" style="
+                display:none;
+                color:#888;
+                font-size:12px;
+                margin-bottom:12px;
+                letter-spacing:0.5px;
+            "></div>
 
-                <h2>
-                    Add Amount
-                </h2>
+            <!-- Copy success feedback -->
+            <div id="copySuccessMsg" style="
+                display:none;
+                color:#00ff88;
+                font-size:13px;
+                font-weight:600;
+                margin-bottom:12px;
+            ">✓ Wallet address copied to clipboard!</div>
 
-                <div class="card-subtitle">
-                    Transfer the amount to the payment account below and submit your payment reference.
-                </div>
+        </div>
 
+        <!-- Not configured message -->
+        <div id="walletAddrUnavailable" style="display:none; color:#ff4444; font-size:13px;">
+            ⚠ Deposit wallet address is not configured yet. Please contact support.
+        </div>
+    </div>
 
-                <div
-                    id="paymentLoading"
-                    class="loading"
-                >
-                    Loading payment details...
-                </div>
-
-
-
-                <div
-                    id="paymentDetails"
-                    style="display:none;"
-                >
-
-                    <div class="payment-box">
-
-                        <div class="payment-row">
-
-                            <div class="label">
-                                Method
-                            </div>
-
-                            <div
-                                class="value"
-                                id="paymentMethod"
-                            >
-                                -
-                            </div>
-
-                        </div>
+</section>
 
 
-                        <div class="payment-row">
-
-                            <div class="label">
-                                Account Title
-                            </div>
-
-                            <div
-                                class="value"
-                                id="accountTitle"
-                            >
-                                -
-                            </div>
-
-                        </div>
-
-
-                        <div class="payment-row">
-
-                            <div class="label">
-                                Account Number
-                            </div>
-
-                            <div
-                                class="value"
-                                id="accountNumber"
-                            >
-                                -
-                            </div>
-
-                        </div>
-
-
-                        <div class="payment-row">
-
-                            <div class="label">
-                                Wallet Address
-                            </div>
-
-                            <div
-                                class="value"
-                                id="walletAddress"
-                            >
-                                -
-                            </div>
-
-                        </div>
-
-
-                        <div class="payment-row">
-
-                            <div class="label">
-                                Network
-                            </div>
-
-                            <div
-                                class="value"
-                                id="network"
-                            >
-                                -
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="instruction-box"
-                        id="instructions"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <br>
-
-
-                <form
-                    id="depositForm"
-                >
-
-                    <div class="form-group">
-
-                        <label>
-                            Deposit Amount
-                        </label>
-
-                        <input
-                            id="depositAmount"
-                            class="form-control"
-                            type="number"
-                            min="1"
-                            step="0.01"
-                            placeholder="Enter amount"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Payment Method
-                        </label>
-
-                        <input
-                            id="depositMethod"
-                            class="form-control"
-                            type="text"
-                            placeholder="e.g. Bank Transfer / USDT"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Payment Reference / Transaction ID
-                        </label>
-
-                        <input
-                            id="depositReference"
-                            class="form-control"
-                            type="text"
-                            placeholder="Enter transaction ID / reference"
-                            required
-                        >
-
-                    </div>
-
-
-                    <button
-                        id="depositBtn"
-                        class="submit-btn"
-                        type="submit"
-                    >
-                        Submit Deposit
-                    </button>
-
-                </form>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==========================================
-             WITHDRAW
+<!-- ==========================================
+     WITHDRAW
         =========================================== -->
 
         <section
@@ -1533,45 +1399,86 @@
     // PAYMENT SETTINGS
     // ==================================================
 
-    async function loadPaymentSettings() {
+    // =====================================================
+    // WALLET ADDRESS
+    // =====================================================
 
-        const loading =
-            document.getElementById(
-                "paymentLoading"
-            );
-
-        const details =
-            document.getElementById(
-                "paymentDetails"
-            );
-
+    async function loadWalletAddress() {
+        const loadingEl = document.getElementById("walletAddrLoading");
+        const boxEl = document.getElementById("walletAddrBox");
+        const textEl = document.getElementById("walletAddrText");
+        const networkEl = document.getElementById("walletNetworkLabel");
+        const unavailEl = document.getElementById("walletAddrUnavailable");
 
         try {
+            const response = await fetch(API_URL + "/api/wallet-address");
+            const data = await response.json().catch(() => ({}));
 
-            const response =
-                await fetch(
+            if (loadingEl) loadingEl.style.display = "none";
 
-                    API_URL +
-                    "/payment-settings"
-
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to load payment details."
-                );
-
+            if (data.success && data.address) {
+                if (textEl) textEl.textContent = data.address;
+                if (networkEl && data.network) {
+                    networkEl.textContent = "Network: " + data.network;
+                    networkEl.style.display = "block";
+                }
+                if (boxEl) boxEl.style.display = "block";
+            } else {
+                if (unavailEl) unavailEl.style.display = "block";
             }
+        } catch (err) {
+            if (loadingEl) loadingEl.style.display = "none";
+            if (unavailEl) unavailEl.style.display = "block";
+        }
+    }
+
+    function copyWalletAddress() {
+        const textEl = document.getElementById("walletAddrText");
+        const successEl = document.getElementById("copySuccessMsg");
+        const copyBtn = document.getElementById("copyAddrBtn");
+        const addr = textEl ? textEl.textContent.trim() : "";
+
+        if (!addr) return;
+
+        navigator.clipboard.writeText(addr).then(() => {
+            if (successEl) {
+                successEl.style.display = "block";
+                setTimeout(() => { successEl.style.display = "none"; }, 3000);
+            }
+            if (copyBtn) {
+                const orig = copyBtn.innerHTML;
+                copyBtn.innerHTML = "✓ Copied!";
+                copyBtn.style.background = "#008844";
+                setTimeout(() => {
+                    copyBtn.innerHTML = orig;
+                    copyBtn.style.background = "#ff1f1f";
+                }, 2500);
+            }
+        }).catch(() => {
+            // Fallback for older browsers
+            const ta = document.createElement("textarea");
+            ta.value = addr;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            if (successEl) {
+                successEl.style.display = "block";
+                setTimeout(() => { successEl.style.display = "none"; }, 3000);
+            }
+        });
+    }
+
+    async function loadPaymentSettings() {
+        // Now handled by loadWalletAddress
+        await loadWalletAddress();
+    }
+        } catch (error) {
+            console.warn("Payment settings load notice:", error);
+        }
+    }
 
 
             const settings =
@@ -1718,7 +1625,7 @@
     }
 
 
-    async function handlePaymentRedirect() {
+    async function loadWalletAddress() {
 
         const msgEl = document.getElementById("paymentUnavailableMsg");
         if (msgEl) msgEl.style.display = "none";
